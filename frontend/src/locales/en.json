@@ -62,8 +62,8 @@
     "contact": "Contact & Support",
     "professional": "For professional collaborations and contributions:",
     "support": "☕ Support the Project",
-    "support_desc": "You can contribute for the AI simulation engine and new features.",
-    "donate_btn": "Buy Me a Coffee",
+    "support_desc": "You can contribute to sustain the AI prediction engine and help deploy new features.",
+    "donate_btn": "Tip the Architect ☕",
     "donate_alert": "Tip integration coming soon! 🏆",
     "copyright": "© {{year}} FollowTheWorldCup.com — All Rights Reserved"
   },
