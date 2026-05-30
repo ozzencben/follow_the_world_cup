@@ -15,12 +15,19 @@ interface TournamentState {
   loading: boolean;
   error: string | null;
   seed: number;
+  isReadOnly: boolean;
+  isPublishing: boolean;
+  publishError: string | null;
 
   initializeStore: () => Promise<void>;
   overrideMatchScore: (matchId: string, homeScore: number, awayScore: number) => void;
   resetMatch: (matchId: string) => void;
   resetAllMatches: () => void;
   reRollSeed: () => void;
+  generateShareableLink: () => string;
+  loadBracketFromUrl: (queryString?: string) => Promise<void>;
+  cloneBracket: () => void;
+  publishCreatorBracket: (token: string) => Promise<void>;
 }
 
 // ── NAME NORMALIZATION HELPER ────────────────────────────────────
@@ -68,6 +75,9 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
   loading: false,
   error: null,
   seed: 2026,
+  isReadOnly: false,
+  isPublishing: false,
+  publishError: null,
 
   initializeStore: async () => {
     set({ loading: true, error: null });
@@ -173,6 +183,12 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
         loading: false,
         error: null,
       });
+
+      // Hydrate if bracket parameter exists in URL
+      const hasBracket = window.location.href.includes("bracket=");
+      if (hasBracket) {
+        await get().loadBracketFromUrl();
+      }
     } catch (err: any) {
       set({
         loading: false,
@@ -182,6 +198,7 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
   },
 
   overrideMatchScore: (matchId: string, homeScore: number, awayScore: number) => {
+    if (get().isReadOnly) return;
     const { teams, matches, seed } = get();
     if (teams.length === 0 || matches.length === 0) return;
 
@@ -215,6 +232,7 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
   },
 
   resetMatch: (matchId: string) => {
+    if (get().isReadOnly) return;
     const { teams, matches, seed } = get();
     if (teams.length === 0 || matches.length === 0) return;
 
@@ -248,6 +266,7 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
   },
 
   resetAllMatches: () => {
+    if (get().isReadOnly) return;
     const { teams, matches, seed } = get();
     if (teams.length === 0 || matches.length === 0) return;
 
@@ -277,6 +296,7 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
   },
 
   reRollSeed: () => {
+    if (get().isReadOnly) return;
     const { teams, matches } = get();
     if (teams.length === 0 || matches.length === 0) return;
 
@@ -309,5 +329,155 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
       groupStandings: standings,
       bestThirds,
     });
+  },
+
+  generateShareableLink: () => {
+    const { matches } = get();
+    const overridden = matches.filter((m) => m.isOverridden);
+    if (overridden.length === 0) {
+      return window.location.href.split("?")[0];
+    }
+    const serialized = overridden
+      .map((m) => `${m.id}_${m.userHomeScore}-${m.userAwayScore}`)
+      .join("|");
+    const baseUrl = window.location.href.split("?")[0];
+    return `${baseUrl}?bracket=${encodeURIComponent(serialized)}`;
+  },
+
+  loadBracketFromUrl: async (queryString?: string) => {
+    let bracketData = "";
+    if (queryString) {
+      const params = new URLSearchParams(queryString);
+      bracketData = params.get("bracket") || "";
+    } else {
+      const href = window.location.href;
+      const match = href.match(/[?&]bracket=([^&#]*)/);
+      if (match) {
+        bracketData = decodeURIComponent(match[1]);
+      }
+    }
+
+    if (!bracketData) return;
+
+    // Ensure store is loaded before loading bracket
+    if (get().teams.length === 0) {
+      await get().initializeStore();
+    }
+
+    const { teams, matches, seed } = get();
+    if (teams.length === 0 || matches.length === 0) return;
+
+    const overridesMap = new Map<string, { home: number; away: number }>();
+    bracketData.split("|").forEach((item) => {
+      const parts = item.split("_");
+      if (parts.length === 2) {
+        const matchId = parts[0];
+        const scores = parts[1].split("-");
+        if (scores.length === 2) {
+          const home = parseInt(scores[0], 10);
+          const away = parseInt(scores[1], 10);
+          if (!isNaN(home) && !isNaN(away)) {
+            overridesMap.set(matchId, { home, away });
+          }
+        }
+      }
+    });
+
+    if (overridesMap.size === 0) return;
+
+    const updatedMatches = matches.map((m) => {
+      const override = overridesMap.get(m.id);
+      if (override) {
+        return {
+          ...m,
+          isOverridden: true,
+          userHomeScore: override.home,
+          userAwayScore: override.away,
+          winnerCode: override.home > override.away ? m.homeTeamCode : m.awayTeamCode,
+        };
+      }
+      return m;
+    });
+
+    const engine = new TournamentEngine(teams);
+    const cascadedMatches = engine.runFullCascade(updatedMatches, seed);
+    const standings = engine.calculateGroupStandings(
+      cascadedMatches.filter((m) => m.stage === "GROUP")
+    );
+    const bestThirds = engine.getBestThirdPlacedTeams(standings);
+
+    set({
+      matches: cascadedMatches,
+      groupStandings: standings,
+      bestThirds,
+      isReadOnly: true,
+    });
+  },
+
+  cloneBracket: () => {
+    set({ isReadOnly: false });
+    
+    // Clean up ?bracket= from window URL using history.replaceState
+    const url = new URL(window.location.href);
+    url.searchParams.delete("bracket");
+    
+    let newHash = url.hash;
+    if (newHash.includes("?")) {
+      const parts = newHash.split("?");
+      const hashParams = new URLSearchParams(parts[1]);
+      hashParams.delete("bracket");
+      const cleanParams = hashParams.toString();
+      newHash = parts[0] + (cleanParams ? "?" + cleanParams : "");
+    }
+    url.hash = newHash;
+
+    window.history.replaceState({}, "", url.toString());
+  },
+
+  publishCreatorBracket: async (token: string) => {
+    set({ isPublishing: true, publishError: null });
+    try {
+      const { matches } = get();
+      const overridden = matches.filter((m) => m.isOverridden);
+      const serialized = overridden
+        .map((m) => `${m.id}_${m.userHomeScore}-${m.userAwayScore}`)
+        .join("|");
+
+      const response = await fetch("/api/creators/publish", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token, bracketString: serialized }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Yayınlama başarısız oldu (Durum kodu: ${response.status})`);
+      }
+
+      // Başarılıysa:
+      // 1. isReadOnly durumunu ANINDA true yap
+      set({ isReadOnly: true });
+
+      // 2. window.history.replaceState kullanarak URL'deki ?token=... parametresini temizle
+      const url = new URL(window.location.href);
+      url.searchParams.delete("token");
+      
+      let newHash = url.hash;
+      if (newHash.includes("?")) {
+        const parts = newHash.split("?");
+        const hashParams = new URLSearchParams(parts[1]);
+        hashParams.delete("token");
+        const cleanParams = hashParams.toString();
+        newHash = parts[0] + (cleanParams ? "?" + cleanParams : "");
+      }
+      url.hash = newHash;
+
+      window.history.replaceState({}, "", url.toString());
+    } catch (err: any) {
+      set({ publishError: err.message || "Tahmin kaydedilirken bilinmeyen bir hata oluştu." });
+    } finally {
+      set({ isPublishing: false });
+    }
   },
 }));

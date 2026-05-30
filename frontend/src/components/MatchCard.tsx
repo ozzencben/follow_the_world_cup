@@ -7,7 +7,7 @@ interface MatchCardProps {
 }
 
 export default function MatchCard({ match }: MatchCardProps) {
-  const { teams, overrideMatchScore, resetMatch } = useTournamentStore();
+  const { teams, overrideMatchScore, resetMatch, isReadOnly } = useTournamentStore();
   const [isEditing, setIsEditing] = useState(false);
 
   // Retrieve team profile metadata from store
@@ -137,15 +137,17 @@ export default function MatchCard({ match }: MatchCardProps) {
           ) : (
             <div
               onClick={() => {
-                if (match.homeTeamCode !== "TBD" && match.awayTeamCode !== "TBD") {
+                if (!isReadOnly && match.homeTeamCode !== "TBD" && match.awayTeamCode !== "TBD") {
                   setEditHome(homeScore !== null ? homeScore : 0);
                   setEditAway(awayScore !== null ? awayScore : 0);
                   setIsEditing(true);
                 }
               }}
-              className={`flex items-center space-x-2 px-3 py-1.5 cursor-pointer bg-zinc-950 border border-zinc-800 transition-colors ${
-                match.homeTeamCode !== "TBD" && match.awayTeamCode !== "TBD"
-                  ? "hover:border-[#00FF87] hover:bg-black"
+              className={`flex items-center space-x-2 px-3 py-1.5 bg-zinc-950 border border-zinc-800 transition-colors ${
+                isReadOnly
+                  ? "cursor-not-allowed opacity-80"
+                  : match.homeTeamCode !== "TBD" && match.awayTeamCode !== "TBD"
+                  ? "cursor-pointer hover:border-[#00FF87] hover:bg-black"
                   : "cursor-not-allowed opacity-50"
               }`}
             >
@@ -191,7 +193,7 @@ export default function MatchCard({ match }: MatchCardProps) {
       </div>
 
       {/* Floating reset hover buttons to discard overrides */}
-      {match.isOverridden && !isEditing && (
+      {match.isOverridden && !isEditing && !isReadOnly && (
         <button
           onClick={handleReset}
           className="absolute -top-2 -right-2 w-5 h-5 bg-[#FF2D78] hover:bg-[#D8105B] border border-black flex items-center justify-center text-white font-extrabold text-[9px] shadow-[1.5px_1.5px_0_#000] cursor-pointer"

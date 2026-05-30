@@ -29,7 +29,27 @@ const STAGE_COLORS: Record<StageType, string> = {
 export default function Simulator() {
   const [subTab, setSubTab] = useState<SubTabType>("groups");
   const [activeStage, setActiveStage] = useState<StageType>("GROUP");
-  const { teams, matches, resetAllMatches, reRollSeed, seed, loading, error } = useTournamentStore();
+  const [copied, setCopied] = useState(false);
+  const {
+    teams,
+    matches,
+    resetAllMatches,
+    reRollSeed,
+    seed,
+    loading,
+    error,
+    isReadOnly,
+    generateShareableLink,
+    cloneBracket,
+  } = useTournamentStore();
+
+  const handleShare = () => {
+    const link = generateShareableLink();
+    navigator.clipboard.writeText(link).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   const handleSubTabChange = (id: string) => {
     if (id === "groups" || id === "matches" || id === "analytics" || id === "guide") {
@@ -47,6 +67,29 @@ export default function Simulator() {
   return (
     <MainLayout currentRoute={subTab} onRouteChange={handleSubTabChange}>
       <div className="space-y-8 animate-fade-up text-white">
+        {/* ══ READ ONLY VIEWER MODE BANNER ══ */}
+        {isReadOnly && (
+          <div className="bg-black border-[3px] border-[#FF2D78] p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-[4px_4px_0_#FF2D78] animate-pulse">
+            <div className="flex items-center space-x-3.5">
+              <span className="text-2xl animate-bounce">👁️</span>
+              <div>
+                <h3 className="text-sm font-mono font-black text-[#FF2D78] uppercase tracking-wider">
+                  İZLEYİCİ MODU (SALT OKUNUR)
+                </h3>
+                <p className="text-[10px] text-zinc-400 font-medium">
+                  Şu an başka bir kullanıcının paylaştığı turnuva tahmin ağacını inceliyorsunuz. Skor değişiklikleri kilitlenmiştir.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={cloneBracket}
+              className="swiss-btn-primary bg-[#00FF87] hover:bg-[#00D06E] text-zinc-950 border-black shadow-[3px_3px_0px_#FFF] uppercase text-[10px] tracking-widest font-black shrink-0 px-4 py-2 cursor-pointer"
+            >
+              🎮 Kendi Tahminini Yap (Klonla)
+            </button>
+          </div>
+        )}
+
         {/* ══ DOCKPIT HEADER ══ */}
         <div className="relative overflow-hidden p-6 md:p-10 bg-zinc-900 border-[3px] border-black shadow-[6px_6px_0_#00FF87]">
           <div
@@ -79,22 +122,45 @@ export default function Simulator() {
             </div>
 
             <div className="flex items-center space-x-3 flex-wrap gap-2.5">
-              <button
-                onClick={reRollSeed}
-                className="swiss-btn-primary bg-[#00E5FF] hover:bg-[#00B4D8] text-zinc-950 border-black shadow-[3px_3px_0px_#00FF87] uppercase text-[10px] tracking-widest font-black"
-                title={`Mevcut Tohum (Seed): ${seed}. Yeni olasılıklarla tekrar simüle et.`}
-              >
-                🎲 TAHMİNİ YENİLE ({seed})
-              </button>
+              {!isReadOnly && (
+                <>
+                  <button
+                    onClick={reRollSeed}
+                    className="swiss-btn-primary bg-[#00E5FF] hover:bg-[#00B4D8] text-zinc-950 border-black shadow-[3px_3px_0px_#00FF87] uppercase text-[10px] tracking-widest font-black"
+                    title={`Mevcut Tohum (Seed): ${seed}. Yeni olasılıklarla tekrar simüle et.`}
+                  >
+                    🎲 TAHMİNİ YENİLE ({seed})
+                  </button>
 
-              {overriddenCount > 0 && (
+                  {overriddenCount > 0 && (
+                    <button
+                      onClick={resetAllMatches}
+                      className="swiss-btn-primary bg-[#FF2D78] hover:bg-[#D8105B] text-white border-[#FF2D78] shadow-[4px_4px_0px_#FFF] uppercase text-[10px] tracking-widest font-black"
+                    >
+                      🔄 SIFIRLA ({overriddenCount})
+                    </button>
+                  )}
+
+                  <button
+                    onClick={handleShare}
+                    className="swiss-btn-primary bg-[#00FF87] hover:bg-[#00D06E] text-zinc-950 border-black shadow-[3px_3px_0px_#FFE600] uppercase text-[10px] tracking-widest font-black flex items-center gap-1.5"
+                    title="Mevcut tahmin ağacınızı arkadaşlarınızla paylaşmak için kopyalanabilir bir link oluşturur."
+                  >
+                    <span>🔗</span>
+                    <span>{copied ? "KOPYALANDI!" : "TAHMİNİ PAYLAŞ"}</span>
+                  </button>
+                </>
+              )}
+
+              {isReadOnly && (
                 <button
-                  onClick={resetAllMatches}
-                  className="swiss-btn-primary bg-[#FF2D78] hover:bg-[#D8105B] text-white border-[#FF2D78] shadow-[4px_4px_0px_#FFF] uppercase text-[10px] tracking-widest font-black"
+                  onClick={cloneBracket}
+                  className="swiss-btn-primary bg-[#00FF87] hover:bg-[#00D06E] text-zinc-950 border-black shadow-[3px_3px_0px_#FFF] uppercase text-[10px] tracking-widest font-black"
                 >
-                  🔄 SIFIRLA ({overriddenCount})
+                  🎮 BU TAHMİNİ KLONLA
                 </button>
               )}
+
               <a
                 href="#/home"
                 className="swiss-btn-secondary text-white border-zinc-700 hover:bg-zinc-800 uppercase text-[10px] tracking-widest font-black"
