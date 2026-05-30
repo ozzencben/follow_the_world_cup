@@ -30,6 +30,12 @@ export default function Simulator() {
   const [subTab, setSubTab] = useState<SubTabType>("groups");
   const [activeStage, setActiveStage] = useState<StageType>("GROUP");
   const [copied, setCopied] = useState(false);
+  const [token, setToken] = useState<string | null>(() => {
+    const href = window.location.href;
+    const match = href.match(/[?&]token=([^&#]*)/);
+    return match ? decodeURIComponent(match[1]) : null;
+  });
+
   const {
     teams,
     matches,
@@ -41,6 +47,9 @@ export default function Simulator() {
     isReadOnly,
     generateShareableLink,
     cloneBracket,
+    isPublishing,
+    publishError,
+    publishCreatorBracket,
   } = useTournamentStore();
 
   const handleShare = () => {
@@ -67,8 +76,74 @@ export default function Simulator() {
   return (
     <MainLayout currentRoute={subTab} onRouteChange={handleSubTabChange}>
       <div className="space-y-8 animate-fade-up text-white">
+        {/* ══ VERIFIED CREATOR PUBLISHING PANEL ══ */}
+        {token && !isReadOnly && (
+          <div className="bg-zinc-900 border-[3px] border-[#FFE600] p-6 relative overflow-hidden shadow-[6px_6px_0_#FFE600] space-y-4 animate-fade-up">
+            <div className="absolute top-0 right-0 bg-[#FFE600] text-black font-mono font-black text-[9px] px-3 py-1 uppercase tracking-widest">
+              Verified Creator Console
+            </div>
+            
+            <div className="border-l-4 border-[#FFE600] pl-4 space-y-1">
+              <h3 className="text-base font-black text-white uppercase tracking-tight flex items-center gap-2">
+                <span>🎙️ YORUMCU YAYINLAMA KONSOLU</span>
+                <span className="w-2 h-2 bg-[#FFE600] rounded-full animate-pulse" />
+              </h3>
+              <p className="text-[10px] text-zinc-400 font-medium max-w-[80ch]">
+                Hoş geldiniz! Turnuva tahminlerinizi tamamladıktan sonra aşağıdaki butona basarak tahmin ağacınızı sunucuya kalıcı olarak gönderebilirsiniz. <b>Önemli:</b> Yorumcuların yalnızca <b>TEK TAHMİN HAKKI</b> vardır. Kaydettiğiniz an tahminleriniz kilitlenecek ve tokenınız geçersiz kılınacaktır!
+              </p>
+            </div>
+
+            {publishError && (
+              <div className="p-3 bg-red-950/20 border border-red-900 text-[#FF2D78] text-[10px] font-mono font-bold uppercase tracking-wider">
+                ⚠️ HATA: {publishError}
+              </div>
+            )}
+
+            <div className="flex items-center gap-3">
+              <button
+                onClick={async () => {
+                  await publishCreatorBracket(token);
+                }}
+                disabled={isPublishing}
+                className={`swiss-btn-primary bg-[#FF2D78] hover:bg-[#D8105B] text-white border-black shadow-[3px_3px_0px_#FFE600] uppercase text-[10px] tracking-widest font-black flex items-center gap-2 px-5 py-3 cursor-pointer ${
+                  isPublishing ? "opacity-50 cursor-wait" : ""
+                }`}
+              >
+                {isPublishing ? (
+                  <>
+                    <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>YAYINLANIYOR...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>🔴</span>
+                    <span>TAHMİNİMİ RESMİ OLARAK KİLİTLE & YAYINLA</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ══ SUCCESSFUL PUBLISH BANNER ══ */}
+        {isReadOnly && !window.location.href.includes("bracket=") && (
+          <div className="bg-black border-[3px] border-[#00FF87] p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-[4px_4px_0_#00FF87] animate-fade-up">
+            <div className="flex items-center space-x-3.5">
+              <span className="text-2xl animate-bounce">🏆</span>
+              <div>
+                <h3 className="text-sm font-mono font-black text-[#00FF87] uppercase tracking-wider">
+                  TAHMİNİNİZ RESMİ OLARAK YAYINLANDI VE KİLİTLENDİ!
+                </h3>
+                <p className="text-[10px] text-zinc-400 font-medium">
+                  Tahmin ağacınız başarıyla sunucuya kaydedildi. One-Shot Lock (Tek Hak) kuralı gereği artık tahminlerinizi değiştiremezsiniz.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* ══ READ ONLY VIEWER MODE BANNER ══ */}
-        {isReadOnly && (
+        {isReadOnly && window.location.href.includes("bracket=") && (
           <div className="bg-black border-[3px] border-[#FF2D78] p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-[4px_4px_0_#FF2D78] animate-pulse">
             <div className="flex items-center space-x-3.5">
               <span className="text-2xl animate-bounce">👁️</span>
