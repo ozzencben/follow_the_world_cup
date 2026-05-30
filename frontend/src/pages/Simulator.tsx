@@ -160,13 +160,6 @@ export default function Simulator() {
                   🎮 BU TAHMİNİ KLONLA
                 </button>
               )}
-
-              <a
-                href="#/home"
-                className="swiss-btn-secondary text-white border-zinc-700 hover:bg-zinc-800 uppercase text-[10px] tracking-widest font-black"
-              >
-                ← Normal Siteye Dön
-              </a>
             </div>
           </div>
         </div>
