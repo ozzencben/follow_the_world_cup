@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import WorldCupBackground from "./components/WorldCupBackground";
 import TeamDetailModal from "./components/TeamDetailModal";
+import { useTournamentStore } from "./services/useTournamentStore";
 
 // Lazy-loaded pages for bundle splitting
 const Home = lazy(() => import("./pages/Home"));
@@ -12,6 +13,7 @@ const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Matches = lazy(() => import("./pages/Matches"));
 const EloPage = lazy(() => import("./pages/EloPage"));
+const Simulator = lazy(() => import("./pages/Simulator"));
 
 const PageLoading = () => (
   <div className="flex flex-col items-center justify-center py-32 space-y-4 animate-fade-up"
@@ -22,10 +24,12 @@ const PageLoading = () => (
 );
 
 export default function App() {
-  // Simple, robust hash router implementation
+  const { initializeStore } = useTournamentStore();
+
+  // Simple, robust hash router implementation supporting simulator cockpit
   const [route, setRoute] = useState<string>(() => {
     const hash = window.location.hash.replace("#/", "");
-    return ["home", "teams", "groups", "matches", "about", "contact", "elo"].includes(hash) ? hash : "home";
+    return ["home", "teams", "groups", "matches", "about", "contact", "elo", "simulator"].includes(hash) ? hash : "home";
   });
 
   // Global Modal State Management
@@ -38,9 +42,12 @@ export default function App() {
   };
 
   useEffect(() => {
+    // Silently initialize simulation engine store on app boot
+    initializeStore();
+
     const handleHashChange = () => {
       const hash = window.location.hash.replace("#/", "");
-      if (["home", "teams", "groups", "matches", "about", "contact", "elo"].includes(hash)) {
+      if (["home", "teams", "groups", "matches", "about", "contact", "elo", "simulator"].includes(hash)) {
         setRoute(hash);
       }
     };
@@ -52,7 +59,7 @@ export default function App() {
 
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
-  }, []);
+  }, [initializeStore]);
 
   const handleRouteChange = (newRoute: string) => {
     window.location.hash = `#/${newRoute}`;
@@ -87,6 +94,26 @@ export default function App() {
     );
   };
 
+  const isSimulator = route === "simulator";
+
+  // Fullscreen isolated Simulator Cockpit view
+  if (isSimulator) {
+    return (
+      <Suspense fallback={<PageLoading />}>
+        <Simulator />
+        {selectedTeamName && (
+          <TeamDetailModal
+            teamName={selectedTeamName}
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onSelectTeam={handleSelectTeam}
+          />
+        )}
+      </Suspense>
+    );
+  }
+
+  // Pure, pristine, original Light-themed layouts for normal page routes
   return (
     <div
       className="min-h-screen flex flex-col relative"

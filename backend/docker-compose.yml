@@ -11,6 +11,7 @@ services:
     volumes:
       # Mount the logs directory on the host for persistency and auditing
       - ./logs:/app/logs
+      - ./app:/app/app
     env_file:
       - .env
     restart: unless-stopped

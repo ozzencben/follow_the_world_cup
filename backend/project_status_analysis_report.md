@@ -1,5 +1,8 @@
 # 📋 FollowTheWorldCup.com - Kapsamlı Proje Durum Analizi, Veri & Optimizasyon Raporu
 
+- `[x]` 8. Veri Entegrasyonu: Tüm veri dosyalarının (%100) doğrulanması, Bosnia isimlendirmesinin standardize edilmesi ve Docker container'ının güncel kodlarla yeniden derlenip sağlıklı bir şekilde ayağa kaldırılması.
+- `[x]` 9. Simülasyon Altyapısı: Kompozit Güç Puanı (CSR), Truncated Poisson (Maks 6 gol sınırlamalı), En İyi 3.ler sıralayıcısı ve dinamik zincirleme dalgalanma (Cascade) algoritmalarını içeren `TournamentEngine.ts` ve Zustand tabanlı `useTournamentStore.ts` altyapılarının saf TypeScript ile kodlanması.
+
 Bu rapor; **FollowTheWorldCup.com** projesinin mevcut mimarisini, teknik gücünü, veri kullanım kalitesini, optimizasyon darboğazlarını ve kullanıcı deneyimini (UX) en ince detayına kadar incelemektedir. Yapay Zeka Sistem Mimarı, Kıdemli Veri Bilimci ve Ürün Yöneticisi perspektifinden hazırlanan bu belge; projenin mevcut gücünü koruyarak dünya çapında bir ürüne dönüşmesi için atılması gereken adımları ve **AI Tahmin & "What-If" Simülatör (v2.0)** entegrasyonu öncesi çözülmesi gereken kritik eksiklikleri listeler.
 
 ---

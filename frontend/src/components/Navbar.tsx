@@ -83,10 +83,11 @@ export default function Navbar({ currentRoute, onRouteChange, onSelectTeam }: Na
   const getFlagUrl = (f?: string) => f ? f.replace("{format}", "sq").replace("{size}", "1") : "";
 
   const navLinks = [
-    { id: "home",    label: "Ana Sayfa"  },
-    { id: "about",   label: "Turnuva"    },
-    { id: "elo",     label: "ELO Rating" },
-    { id: "contact", label: "İletişim"   },
+    { id: "home",      label: "Ana Sayfa" },
+    { id: "about",     label: "Turnuva" },
+    { id: "elo",       label: "ELO Rating" },
+    { id: "simulator", label: "⚡ Simüle Et" },
+    { id: "contact",   label: "İletişim" },
   ];
 
   return (
@@ -369,13 +370,14 @@ export default function Navbar({ currentRoute, onRouteChange, onSelectTeam }: Na
           style={{ background: "#F8F7F2", borderBottom: "2px solid #1A1916" }}
         >
           {[
-            { id: "home",    label: "Ana Sayfa"       },
-            { id: "teams",   label: "Tüm Takımlar"    },
-            { id: "groups",  label: "Gruplar & Puanlar"},
-            { id: "matches", label: "Fikstür & Maçlar" },
-            { id: "about",   label: "Turnuva"          },
-            { id: "elo",     label: "ELO Rating"       },
-            { id: "contact", label: "İletişim"         },
+            { id: "home",      label: "Ana Sayfa" },
+            { id: "teams",     label: "Tüm Takımlar" },
+            { id: "groups",    label: "Gruplar & Puanlar" },
+            { id: "matches",   label: "Fikstür & Maçlar" },
+            { id: "about",     label: "Turnuva" },
+            { id: "elo",       label: "ELO Rating" },
+            { id: "simulator", label: "⚡ Simüle Et (Kokpit)" },
+            { id: "contact",   label: "İletişim" },
           ].map(item => (
             <a
               key={item.id}
