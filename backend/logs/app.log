@@ -6184,3 +6184,487 @@
 2026-05-30 16:28:49.926 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:40428 - "GET /api/v1/teams/flags/flags-sq-1/CUW HTTP/1.1" 200
 2026-05-30 16:28:49.927 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:40462 - "GET /api/v1/teams/flags/flags-sq-1/GHA HTTP/1.1" 200
 2026-05-30 16:28:49.938 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:40472 - "GET /api/v1/teams/flags/flags-sq-1/QAT HTTP/1.1" 200
+2026-05-30 16:32:26.304 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:32:26.311 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:32:26.332 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:59894 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:32:26.335 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:59932 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:32:26.340 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:32:26.340 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:32:26.349 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:59942 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:32:26.355 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:59910 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:32:26.351 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:59918 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:32:26.359 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:32:26.375 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:59894 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:32:26.375 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:32:26.381 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:32:26.386 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:59942 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:32:26.401 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:59948 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:32:26.415 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:32:26.425 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:59918 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:32:26.428 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:59932 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:32:28.110 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:32:28.124 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:59932 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:32:28.132 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:32:28.144 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:59918 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:33:07.438 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:33:07.453 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:53530 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:33:07.461 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:33:07.474 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:53530 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:33:11.864 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:33:11.865 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:33:11.879 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:53530 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:33:11.882 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:53544 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:33:11.889 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:33:11.892 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:33:11.903 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:53530 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:33:11.908 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:53554 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:36:25.629 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:36:25.629 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:36:25.651 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:38094 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:36:25.657 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:36:25.666 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:38082 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:36:25.675 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:36:25.680 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:38098 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:36:25.687 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:36:25.695 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:38094 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:36:25.697 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:38118 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:36:25.701 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:36:25.714 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:38082 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:36:25.716 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:38106 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:36:25.726 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:36:25.728 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:38106 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:36:25.735 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:38102 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:36:25.740 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:36:25.755 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:38098 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:36:25.760 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:36:25.763 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:36:25.781 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:38102 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:36:25.783 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:38106 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:40:08.366 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:40:08.366 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:40:08.378 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:36952 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:40:08.380 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:36940 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:40:08.387 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:40:08.402 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:36964 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:40:08.409 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:40:08.403 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:40:08.416 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:36990 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:40:08.419 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:36952 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:40:08.421 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:40:08.435 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:36940 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:40:08.447 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:40:08.456 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:36964 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:40:08.459 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:40:08.471 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:37004 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:40:08.480 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:40:08.492 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:36964 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:40:08.494 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:36978 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:40:08.511 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:40:08.528 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:37004 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:40:08.549 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:36978 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:40:20.367 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:40:20.369 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:40:20.385 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51168 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:40:20.392 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51180 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:40:20.398 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:40:20.415 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:40:20.417 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51192 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:40:20.428 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:40:20.435 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51218 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:40:20.438 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51224 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:40:20.446 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:40:20.446 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:40:20.460 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51180 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:40:20.460 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51168 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:40:20.462 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51202 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:40:20.482 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51202 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:40:20.488 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:40:20.498 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51192 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:40:20.502 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:40:20.519 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:40:20.524 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51224 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:40:20.528 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:40:20.540 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51202 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:40:20.539 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51192 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:40:20.551 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:40:20.581 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51218 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:40:20.591 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:40:20.589 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:40:20.607 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51180 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:40:20.610 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51202 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:40:20.613 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:40:20.627 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51224 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:40:20.632 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:40:20.645 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51180 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:40:20.648 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:40:20.652 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:40:20.665 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51218 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:40:20.665 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51192 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:40:20.667 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51168 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:40:20.681 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51168 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:40:24.048 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:40:24.049 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:40:24.097 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51180 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:40:24.104 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51168 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:40:24.113 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:40:24.145 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51218 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:40:24.152 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:40:24.151 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:40:24.168 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51224 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:40:24.182 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:40:24.186 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51202 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:40:24.219 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51180 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:40:24.312 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51192 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:40:24.336 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:40:24.355 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51192 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:40:24.350 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51168 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:40:24.369 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:40:24.379 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51202 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:40:24.382 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:40:24.404 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51218 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:40:24.412 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:40:24.429 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51168 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:41:12.752 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:41:12.755 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:41:12.767 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:43318 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:41:12.770 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:41:12.770 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:43326 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:41:12.785 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:43342 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:41:12.789 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:41:12.793 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:41:12.799 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:43318 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:41:12.802 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:43356 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:41:12.804 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:41:12.807 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:41:12.815 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:43368 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:41:12.820 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:41:12.826 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:43326 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:41:12.839 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:43342 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:41:12.862 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:41:12.871 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:43318 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:41:12.873 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:43348 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:41:12.879 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:41:12.885 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:43348 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:41:12.892 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:43326 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:42:09.491 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:42:09.493 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:42:09.504 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:60512 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:42:09.506 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:60498 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:42:09.509 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:42:09.522 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:60514 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:42:09.527 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:42:09.536 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:42:09.545 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:60512 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:42:09.548 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:60530 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:42:09.552 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:42:09.554 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:42:09.566 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:60536 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:42:09.568 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:60498 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:42:09.591 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:42:09.600 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:60512 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:42:09.604 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:60522 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:42:09.615 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:60522 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:44:27.694 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:44:27.698 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:44:27.712 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56338 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:44:27.714 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56334 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:44:27.721 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:44:27.746 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56342 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:44:27.757 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:44:27.772 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56338 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:44:27.767 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:44:27.799 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56358 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:44:27.814 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:44:27.815 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:44:27.847 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56334 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:44:27.849 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56364 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:44:27.856 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:44:27.857 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:44:27.875 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56358 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:44:27.883 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:44:27.891 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56342 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:44:27.920 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56334 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:44:27.927 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:44:27.957 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56358 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:44:27.970 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:44:27.977 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:44:28.004 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56334 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:44:28.007 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56338 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:44:28.023 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:44:28.026 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:44:28.058 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56364 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:44:28.069 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56350 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:44:28.075 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:44:28.078 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56358 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:44:28.111 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56338 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:44:28.118 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:44:28.139 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:44:28.155 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56334 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:44:28.159 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56342 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:44:28.174 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:44:28.174 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:44:28.198 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56358 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:44:28.216 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56364 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:44:28.221 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:44:28.250 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56334 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:44:28.255 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:44:28.266 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:44:28.287 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56338 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:44:28.287 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56358 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:44:28.293 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:44:28.322 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56342 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:44:28.342 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56350 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:44:28.338 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:44:28.359 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56334 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:44:28.369 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56350 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:44:28.400 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:44:28.414 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56342 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:44:28.426 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56350 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:44:28.442 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56350 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:44:28.469 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:56350 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:44:51.994 | INFO     | uvicorn.server:shutdown:272 - Shutting down
+2026-05-30 16:44:52.006 | INFO     | uvicorn.server:shutdown:272 - Shutting down
+2026-05-30 16:44:52.110 | INFO     | uvicorn.lifespan.on:shutdown:67 - Waiting for application shutdown.
+2026-05-30 16:44:52.115 | INFO     | app.core.lifespan:lifespan:22 - Shutting down FollowTheWorldCup.com Backend Application...
+2026-05-30 16:45:09.594 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-05-30 16:45:09.595 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-05-30 16:45:09.596 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-05-30 16:45:09.596 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-05-30 16:45:09.671 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-05-30 16:45:09.674 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-05-30 16:45:09.675 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-05-30 16:45:09.676 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-05-30 16:45:12.919 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:45:12.926 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:45:12.944 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35882 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:45:12.955 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35892 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:45:12.987 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:45:13.022 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35904 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:45:13.037 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:45:13.038 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:45:13.061 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35882 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:45:13.073 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35928 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:45:13.103 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:45:13.123 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35892 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:45:13.125 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35924 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:45:13.132 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:45:13.147 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:45:13.157 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35928 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:45:13.165 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35916 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:45:13.213 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:45:13.244 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35892 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:45:13.282 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:45:13.308 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35904 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:45:13.316 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:45:13.329 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35916 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:45:13.356 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:45:13.385 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35882 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:45:13.385 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:45:13.406 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:45:13.406 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35928 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:45:13.411 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:45:13.427 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35904 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:45:13.472 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:45:13.483 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35882 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:45:13.480 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35892 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:45:13.508 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35924 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:45:13.512 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:45:13.551 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35928 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:45:13.562 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:45:13.575 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:45:13.579 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35916 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:45:13.606 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:45:13.621 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35892 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:45:13.627 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35904 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:45:13.634 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:45:13.651 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35916 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:45:13.659 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:45:13.670 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:45:13.674 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35904 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:45:13.680 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35928 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:45:13.686 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:45:13.702 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35892 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:45:13.708 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:45:13.721 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35904 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:45:13.725 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35924 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:45:13.757 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:45:13.765 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35892 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:45:13.779 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35924 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:45:13.791 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35924 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:45:13.806 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:35924 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:45:32.268 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:45:32.270 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:45:32.294 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51144 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:45:32.296 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51128 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:45:32.305 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:45:32.306 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:45:32.316 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51148 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:45:32.325 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:45:32.327 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51128 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:45:32.333 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51144 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:45:32.359 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:45:32.368 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51166 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:45:32.373 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:45:32.387 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51170 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:45:32.397 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:45:32.406 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51144 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:45:32.408 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51160 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:45:32.409 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51148 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:47:03.485 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:47:03.486 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:47:03.503 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:48284 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:47:03.520 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:48296 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:47:03.529 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:47:03.552 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:48310 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:47:03.560 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:47:03.572 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:47:03.587 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:48334 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:47:03.586 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:48284 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:47:03.598 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:47:03.622 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:48296 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:47:03.657 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:47:03.672 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:48310 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:47:03.674 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:48324 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:47:03.704 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:47:03.710 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:48324 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:47:03.718 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:48340 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:47:43.397 | INFO     | uvicorn.server:shutdown:272 - Shutting down
+2026-05-30 16:47:43.477 | INFO     | uvicorn.server:shutdown:272 - Shutting down
+2026-05-30 16:47:43.579 | INFO     | uvicorn.lifespan.on:shutdown:67 - Waiting for application shutdown.
+2026-05-30 16:47:58.861 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-05-30 16:47:58.861 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-05-30 16:47:58.861 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-05-30 16:47:58.862 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-05-30 16:47:59.109 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-05-30 16:47:59.109 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-05-30 16:47:59.110 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-05-30 16:47:59.111 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-05-30 16:48:03.378 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:48:03.380 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:48:03.393 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:42954 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:48:03.397 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:42938 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:48:03.427 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:48:03.446 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:42970 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:48:03.454 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:48:03.459 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:48:03.465 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:42954 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:48:03.471 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:42996 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:48:03.497 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:48:03.513 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:42938 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:48:03.563 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:48:03.593 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:42970 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:48:03.619 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:48:03.634 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:43008 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:48:03.646 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:42986 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:48:03.663 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:42986 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:48:29.913 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:48:29.930 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44222 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:48:29.943 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:48:29.954 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:48:29.970 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44254 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:48:29.977 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44238 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:48:29.991 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:48:30.039 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44222 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:48:30.084 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:48:30.101 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44262 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:48:30.112 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:48:30.112 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:48:30.128 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44254 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:48:30.136 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:48:30.136 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44238 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:48:30.159 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44274 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:48:30.162 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44250 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:48:30.170 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:48:30.187 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44238 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:48:30.196 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:48:30.211 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44222 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:48:30.219 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:48:30.238 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44262 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:48:30.245 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:48:30.270 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44254 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:48:30.273 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:48:30.290 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44274 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:48:30.292 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:48:30.305 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:48:30.313 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44238 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:48:30.332 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44262 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:48:30.361 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:48:30.372 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44274 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:48:30.375 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44250 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:48:30.389 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44250 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:48:30.434 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:44250 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:49:43.375 | INFO     | uvicorn.server:shutdown:272 - Shutting down
+2026-05-30 16:49:43.377 | INFO     | uvicorn.server:shutdown:272 - Shutting down
+2026-05-30 16:49:43.477 | INFO     | uvicorn.lifespan.on:shutdown:67 - Waiting for application shutdown.
+2026-05-30 16:49:43.478 | INFO     | uvicorn.lifespan.on:shutdown:67 - Waiting for application shutdown.
+2026-05-30 16:49:43.478 | INFO     | app.core.lifespan:lifespan:22 - Shutting down FollowTheWorldCup.com Backend Application...
+2026-05-30 16:49:43.479 | INFO     | app.core.lifespan:lifespan:22 - Shutting down FollowTheWorldCup.com Backend Application...
+2026-05-30 16:49:43.480 | INFO     | app.core.lifespan:lifespan:23 - Closing all external active connections & sessions...
+2026-05-30 16:50:11.789 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-05-30 16:50:11.790 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-05-30 16:50:11.790 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-05-30 16:50:11.791 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-05-30 16:50:11.793 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-05-30 16:50:11.793 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-05-30 16:50:11.794 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-05-30 16:50:11.796 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-05-30 16:51:34.689 | INFO     | uvicorn.server:shutdown:272 - Shutting down
+2026-05-30 16:51:34.703 | INFO     | uvicorn.server:shutdown:272 - Shutting down
+2026-05-30 16:51:34.790 | INFO     | uvicorn.lifespan.on:shutdown:67 - Waiting for application shutdown.
+2026-05-30 16:51:42.592 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-05-30 16:51:42.593 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-05-30 16:51:42.593 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-05-30 16:51:42.594 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-05-30 16:51:42.726 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-05-30 16:51:42.727 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-05-30 16:51:42.728 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-05-30 16:51:42.729 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-05-30 16:52:11.114 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:52:11.117 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:52:11.123 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51110 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:52:11.136 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51096 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:52:11.170 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:52:11.188 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51122 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:52:11.195 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:52:11.194 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:52:11.208 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51148 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:52:11.214 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51110 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:52:11.232 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:52:11.258 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51096 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:52:11.264 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:52:11.282 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51160 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:52:11.415 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:52:11.427 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51122 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:52:11.446 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51136 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:52:11.461 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51136 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:53:37.304 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:53:37.310 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:53:37.332 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51974 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:53:37.338 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51984 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:53:37.343 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:53:37.362 | INFO     | app.services.get_teams:fetch_world_cup_participants:22 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-30 16:53:37.435 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51996 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:53:37.455 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:52002 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-30 16:53:37.462 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:22 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-30 16:53:37.462 | INFO     | app.services.get_squads:fetch_world_cup_squads:22 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-30 16:53:37.500 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51974 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-30 16:53:37.507 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51984 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-30 16:53:37.535 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:53:37.546 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:52000 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:53:37.549 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51988 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:53:37.588 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51988 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-30 16:53:37.609 | INFO     | app.services.get_elo:get_elo_ratings:228 - ELO Ratings yüklendi: 48 takım
+2026-05-30 16:53:37.621 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:51984 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-30 16:54:28.624 | INFO     | uvicorn.server:shutdown:272 - Shutting down
+2026-05-30 16:54:28.648 | INFO     | uvicorn.server:shutdown:272 - Shutting down
+2026-05-30 16:54:28.726 | INFO     | uvicorn.lifespan.on:shutdown:67 - Waiting for application shutdown.
+2026-05-30 16:54:28.726 | INFO     | app.core.lifespan:lifespan:22 - Shutting down FollowTheWorldCup.com Backend Application...
+2026-05-30 16:54:28.749 | INFO     | uvicorn.lifespan.on:shutdown:67 - Waiting for application shutdown.
+2026-05-30 16:54:43.476 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-05-30 16:54:43.477 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-05-30 16:54:43.478 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-05-30 16:54:43.479 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-05-30 16:54:43.590 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-05-30 16:54:43.591 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-05-30 16:54:43.591 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-05-30 16:54:43.591 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
