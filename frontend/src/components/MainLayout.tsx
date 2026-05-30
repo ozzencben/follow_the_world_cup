@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useTournamentStore } from "../services/useTournamentStore";
 
 interface MainLayoutProps {
@@ -8,6 +9,7 @@ interface MainLayoutProps {
 }
 
 export default function MainLayout({ children, currentRoute, onRouteChange }: MainLayoutProps) {
+    const { t, i18n } = useTranslation();
     const { matches } = useTournamentStore();
 
     // Compute live statistics from the state store to display in the neon sidebar widgets
@@ -18,8 +20,8 @@ export default function MainLayout({ children, currentRoute, onRouteChange }: Ma
     const navItems = [
         {
             id: "home",
-            label: "ANA SAYFA",
-            description: "Genel Kupa Görünümü",
+            label: t("menu.home"),
+            description: t("menu.home_desc"),
             icon: (active: boolean) => (
                 <svg className={`w-5 h-5 ${active ? "text-[#00FF87]" : "text-zinc-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -28,8 +30,8 @@ export default function MainLayout({ children, currentRoute, onRouteChange }: Ma
         },
         {
             id: "groups",
-            label: "GRUP TABLOLARI",
-            description: "Puan Durumu & Simülasyon",
+            label: t("menu.groups"),
+            description: t("menu.groups_desc"),
             icon: (active: boolean) => (
                 <svg className={`w-5 h-5 ${active ? "text-[#00FF87]" : "text-zinc-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
@@ -38,8 +40,8 @@ export default function MainLayout({ children, currentRoute, onRouteChange }: Ma
         },
         {
             id: "matches",
-            label: "FİKSTÜR & ELEMELER",
-            description: "Cascade Simülatör Oyunu",
+            label: t("menu.matches"),
+            description: t("menu.matches_desc"),
             icon: (active: boolean) => (
                 <svg className={`w-5 h-5 ${active ? "text-[#00FF87]" : "text-zinc-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -48,8 +50,8 @@ export default function MainLayout({ children, currentRoute, onRouteChange }: Ma
         },
         {
             id: "analytics",
-            label: "ANALİZ & ORANLAR",
-            description: "Gizli Potansiyel & İstatistikler",
+            label: t("menu.analytics"),
+            description: t("menu.analytics_desc"),
             icon: (active: boolean) => (
                 <svg className={`w-5 h-5 ${active ? "text-[#00FF87]" : "text-zinc-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M11 3.055A9.003 9.003 0 1020.95 12H11V3.055z" />
@@ -59,8 +61,8 @@ export default function MainLayout({ children, currentRoute, onRouteChange }: Ma
         },
         {
             id: "guide",
-            label: "KILAVUZ & REHBER",
-            description: "Motor Nasıl Çalışır?",
+            label: t("menu.guide"),
+            description: t("menu.guide_desc"),
             icon: (active: boolean) => (
                 <svg className={`w-5 h-5 ${active ? "text-[#00FF87]" : "text-zinc-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -69,8 +71,8 @@ export default function MainLayout({ children, currentRoute, onRouteChange }: Ma
         },
         {
             id: "creators",
-            label: "YORUMCULAR",
-            description: "Onaylı Analist Tahminleri",
+            label: t("menu.creators"),
+            description: t("menu.creators_desc"),
             icon: (active: boolean) => (
                 <svg className={`w-5 h-5 ${active ? "text-[#00FF87]" : "text-zinc-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
@@ -78,6 +80,8 @@ export default function MainLayout({ children, currentRoute, onRouteChange }: Ma
             )
         }
     ];
+
+    const currentLang = i18n.language || "en";
 
     return (
         <div className="min-h-screen bg-zinc-950 text-white font-sans flex flex-col md:flex-row relative overflow-x-hidden select-none">
@@ -95,7 +99,7 @@ export default function MainLayout({ children, currentRoute, onRouteChange }: Ma
 
             {/* ── DESKTOP SIDEBAR (Hidden on mobile) ────────────────── */}
             <aside className="hidden md:flex flex-col w-72 shrink-0 bg-zinc-900 border-r-[3px] border-black z-20 sticky top-0 h-screen justify-between p-6 select-none shadow-[4px_0_0_#1A1916]">
-                <div className="flex flex-col space-y-8">
+                <div className="flex flex-col space-y-8 overflow-y-auto pr-1">
                     {/* Logo Widget */}
                     <div className="flex items-center space-x-3 border-b-2 border-zinc-800 pb-5">
                         <div className="w-10 h-10 bg-[#00FF87] flex items-center justify-center font-black text-black text-xl border-2 border-black shadow-[2px_2px_0px_#000]">
@@ -109,7 +113,7 @@ export default function MainLayout({ children, currentRoute, onRouteChange }: Ma
 
                     {/* Navigation Links */}
                     <nav className="flex flex-col space-y-3">
-                        <span className="text-[9px] font-bold text-zinc-500 tracking-[0.25em] mb-1">MENÜ SEÇENEKLERİ</span>
+                        <span className="text-[9px] font-bold text-zinc-500 tracking-[0.25em] mb-1">{t("menu.title")}</span>
                         {navItems.map((item) => {
                             const active = currentRoute === item.id;
                             return (
@@ -140,31 +144,35 @@ export default function MainLayout({ children, currentRoute, onRouteChange }: Ma
                     </nav>
                 </div>
 
-                {/* Live Terminal HUD Statistics Widget */}
-                <div className="bg-black/40 border-2 border-zinc-800 p-4 space-y-3 font-mono relative overflow-hidden">
-                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#00E5FF] animate-pulse" />
-                    <div className="flex items-center space-x-2 text-[10px] text-[#00E5FF] font-bold">
-                        <span className="w-2 h-2 bg-[#00FF87] animate-pulse rounded-full" />
-                        <span>SIM MOTOR STATUS: ON</span>
+                <div className="space-y-4 mt-auto pt-4 border-t border-zinc-800">
+                    {/* Live Terminal HUD Statistics Widget */}
+                    <div className="bg-black/40 border-2 border-zinc-800 p-4 space-y-3 font-mono relative overflow-hidden">
+                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#00E5FF] animate-pulse" />
+                        <div className="flex items-center space-x-2 text-[10px] text-[#00E5FF] font-bold">
+                            <span className="w-2 h-2 bg-[#00FF87] animate-pulse rounded-full" />
+                            <span>{t("hud.sim_status")}</span>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2 text-[10px] text-zinc-400">
+                            <div className="flex flex-col border-r border-zinc-800 pr-2">
+                                <span className="text-zinc-600 font-bold uppercase text-[8px]">{t("hud.total_matches")}</span>
+                                <span className="text-white text-xs font-black">{totalMatches}</span>
+                            </div>
+                            <div className="flex flex-col pl-1">
+                                <span className="text-zinc-600 font-bold uppercase text-[8px]">{t("hud.simulated")}</span>
+                                <span className="text-white text-xs font-black">{simulatedMatches}</span>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-between border-t border-zinc-800 pt-2 text-[9px]">
+                            <span className="text-[#00FF87] font-bold">{t("hud.user_overrides")}:</span>
+                            <span className={`px-1.5 py-0.5 font-bold ${overriddenMatches > 0 ? "bg-[#00FF87] text-black" : "bg-zinc-800 text-zinc-400"}`}>
+                                {overriddenMatches} {t("hud.matches_suffix")}
+                            </span>
+                        </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 text-[10px] text-zinc-400">
-                        <div className="flex flex-col border-r border-zinc-800 pr-2">
-                            <span className="text-zinc-600 font-bold uppercase text-[8px]">Toplam Maç</span>
-                            <span className="text-white text-xs font-black">{totalMatches}</span>
-                        </div>
-                        <div className="flex flex-col pl-1">
-                            <span className="text-zinc-600 font-bold uppercase text-[8px]">Simüle Edilen</span>
-                            <span className="text-white text-xs font-black">{simulatedMatches}</span>
-                        </div>
-                    </div>
 
-                    <div className="flex items-center justify-between border-t border-zinc-800 pt-2 text-[9px]">
-                        <span className="text-[#00FF87] font-bold">KULLANICI MÜDAHALESİ:</span>
-                        <span className={`px-1.5 py-0.5 font-bold ${overriddenMatches > 0 ? "bg-[#00FF87] text-black" : "bg-zinc-800 text-zinc-400"}`}>
-                            {overriddenMatches} MAÇ
-                        </span>
-                    </div>
                 </div>
             </aside>
 
@@ -180,11 +188,15 @@ export default function MainLayout({ children, currentRoute, onRouteChange }: Ma
                     </div>
                 </div>
 
-                {/* Small Mobile HUD stats */}
-                <div className="flex items-center space-x-3 bg-black border border-zinc-800 px-2.5 py-1 text-[9px] font-mono">
-                    <span className="w-1.5 h-1.5 bg-[#00FF87] rounded-full animate-ping" />
-                    <span className="text-zinc-400">T: <b className="text-white">{totalMatches}</b></span>
-                    <span className="text-zinc-400">M: <b className="text-[#00FF87]">{overriddenMatches}</b></span>
+                <div className="flex items-center space-x-3">
+
+
+                    {/* Small Mobile HUD stats */}
+                    <div className="flex items-center space-x-3 bg-black border border-zinc-800 px-2.5 py-1 text-[9px] font-mono">
+                        <span className="w-1.5 h-1.5 bg-[#00FF87] rounded-full animate-ping" />
+                        <span className="text-zinc-400">T: <b className="text-white">{totalMatches}</b></span>
+                        <span className="text-zinc-400">M: <b className="text-[#00FF87]">{overriddenMatches}</b></span>
+                    </div>
                 </div>
             </header>
 
@@ -224,3 +236,4 @@ export default function MainLayout({ children, currentRoute, onRouteChange }: Ma
         </div>
     );
 }
+

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useTournamentStore } from "../services/useTournamentStore";
 import type { MatchState } from "../services/TournamentEngine";
 
@@ -7,6 +8,7 @@ interface MatchCardProps {
 }
 
 export default function MatchCard({ match }: MatchCardProps) {
+  const { t, i18n } = useTranslation();
   const { teams, overrideMatchScore, resetMatch, isReadOnly } = useTournamentStore();
   const [isEditing, setIsEditing] = useState(false);
 
@@ -43,6 +45,8 @@ export default function MatchCard({ match }: MatchCardProps) {
   const isHomeWinner = homeScore !== null && awayScore !== null && homeScore > awayScore;
   const isAwayWinner = homeScore !== null && awayScore !== null && awayScore > homeScore;
 
+  const currentLang = i18n.language || "en";
+
   return (
     <div
       className={`relative bg-zinc-900 border-2 select-none transition-all duration-200 ${
@@ -77,7 +81,7 @@ export default function MatchCard({ match }: MatchCardProps) {
           {homeTeam ? (
             <img
               src={getFlagUrl(homeTeam.code)}
-              alt={homeTeam.nameTr}
+              alt={currentLang.startsWith("tr") ? homeTeam.nameTr : homeTeam.nameEn}
               className="w-9 h-9 object-cover border-[1.5px] border-black shadow-[2px_2px_0px_#000]"
               onError={(e) => {
                 // Fallback inside error boundary
@@ -93,10 +97,12 @@ export default function MatchCard({ match }: MatchCardProps) {
           {/* Names and metadata */}
           <div className="flex flex-col">
             <span className={`text-xs font-black tracking-wide truncate max-w-[100px] md:max-w-[140px] ${isHomeWinner ? "text-[#00FF87] font-black" : "text-white"}`}>
-              {homeTeam ? homeTeam.nameTr.toUpperCase() : "TBD KAZANANI"}
+              {homeTeam 
+                ? (currentLang.startsWith("tr") ? homeTeam.nameTr : homeTeam.nameEn).toUpperCase() 
+                : t("match.tbd_winner")}
             </span>
             <span className="text-[9px] text-zinc-500 font-mono tracking-widest uppercase">
-              {homeTeam ? `CSR: ${Math.round(homeTeam.rating)}` : "BEKLEYEN EŞLEŞME"}
+              {homeTeam ? `CSR: ${Math.round(homeTeam.rating)}` : t("match.waiting_match")}
             </span>
           </div>
         </div>
@@ -131,7 +137,7 @@ export default function MatchCard({ match }: MatchCardProps) {
                 className="p-1.5 bg-[#00FF87] hover:bg-[#00D06E] text-black font-black font-mono text-[9px] border border-black shadow-[1px_1px_0px_#000]"
                 style={{ borderRadius: "0" }}
               >
-                KAYDET
+                {t("match.save")}
               </button>
             </form>
           ) : (
@@ -167,10 +173,12 @@ export default function MatchCard({ match }: MatchCardProps) {
           {/* Names and metadata */}
           <div className="flex flex-col items-end">
             <span className={`text-xs font-black tracking-wide truncate max-w-[100px] md:max-w-[140px] ${isAwayWinner ? "text-[#00FF87] font-black" : "text-white"}`}>
-              {awayTeam ? awayTeam.nameTr.toUpperCase() : "TBD KAZANANI"}
+              {awayTeam 
+                ? (currentLang.startsWith("tr") ? awayTeam.nameTr : awayTeam.nameEn).toUpperCase() 
+                : t("match.tbd_winner")}
             </span>
             <span className="text-[9px] text-zinc-500 font-mono tracking-widest uppercase">
-              {awayTeam ? `CSR: ${Math.round(awayTeam.rating)}` : "BEKLEYEN EŞLEŞME"}
+              {awayTeam ? `CSR: ${Math.round(awayTeam.rating)}` : t("match.waiting_match")}
             </span>
           </div>
 
@@ -178,7 +186,7 @@ export default function MatchCard({ match }: MatchCardProps) {
           {awayTeam ? (
             <img
               src={getFlagUrl(awayTeam.code)}
-              alt={awayTeam.nameTr}
+              alt={currentLang.startsWith("tr") ? awayTeam.nameTr : awayTeam.nameEn}
               className="w-9 h-9 object-cover border-[1.5px] border-black shadow-[2px_2px_0px_#000]"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = `https://placehold.co/40x40/222/00FF87?text=${awayTeam.abbr}`;
@@ -198,7 +206,7 @@ export default function MatchCard({ match }: MatchCardProps) {
           onClick={handleReset}
           className="absolute -top-2 -right-2 w-5 h-5 bg-[#FF2D78] hover:bg-[#D8105B] border border-black flex items-center justify-center text-white font-extrabold text-[9px] shadow-[1.5px_1.5px_0_#000] cursor-pointer"
           style={{ borderRadius: "0" }}
-          title="Simülasyon Değerine Geri Dön"
+          title={t("match.restore_tooltip")}
         >
           ✖
         </button>

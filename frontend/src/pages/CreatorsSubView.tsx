@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useTournamentStore } from "../services/useTournamentStore";
 import type { Creator } from "../services/useTournamentStore";
 
@@ -12,6 +13,9 @@ function CreatorCard({
   rank: number;
   onView: (bracketString: string, name: string) => void;
 }) {
+  const { i18n } = useTranslation();
+  const isTr = (i18n.language || "en").startsWith("tr");
+
   const hasPrediction =
     creator.bracketString !== null && creator.bracketString.trim() !== "";
   const overrideCount = hasPrediction
@@ -73,7 +77,7 @@ function CreatorCard({
             className="shrink-0 text-[8px] font-black tracking-widest px-2 py-1 border"
             style={{ background: "#00FF8712", color: "#00FF87", borderColor: "#00FF8740" }}
           >
-            ✓ VERİFİED
+            ✓ VERIFIED
           </div>
         </div>
 
@@ -84,10 +88,10 @@ function CreatorCard({
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <div className="flex flex-col">
               <span className="text-[9px] font-black tracking-widest uppercase" style={{ color: "#00FF87" }}>
-                ● TAHMİN YAYINDA
+                {isTr ? "● TAHMİN YAYINDA" : "● PREDICTION LIVE"}
               </span>
               <span className="text-[10px] text-zinc-400 font-mono mt-0.5">
-                <span className="text-white font-black">{overrideCount}</span> maç override
+                <span className="text-white font-black">{overrideCount}</span> {isTr ? "maç override" : "matches overridden"}
               </span>
             </div>
 
@@ -110,23 +114,23 @@ function CreatorCard({
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
               </svg>
-              TAHMİNİ İNCELE
+              {isTr ? "TAHMİNİ İNCELE" : "INSPECT PREDICTION"}
             </button>
           </div>
         ) : (
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <div className="flex flex-col">
               <span className="text-[9px] font-black tracking-widest uppercase" style={{ color: "#00E5FF" }}>
-                ⏳ TAHMİN BEKLENİYOR
+                {isTr ? "⏳ TAHMİN BEKLENİYOR" : "⏳ PREDICTION PENDING"}
               </span>
-              <span className="text-[10px] text-zinc-500 font-mono mt-0.5">Henüz yayınlanmadı</span>
+              <span className="text-[10px] text-zinc-500 font-mono mt-0.5">{isTr ? "Henüz yayınlanmadı" : "Not published yet"}</span>
             </div>
             <button
               disabled
               className="flex items-center gap-2 px-5 py-2.5 font-black text-xs tracking-widest border-2 border-zinc-700 text-zinc-600 cursor-not-allowed uppercase"
               style={{ background: "#18181b", boxShadow: "4px 4px 0px #27272a" }}
             >
-              ⏳ BEKLEMEDE
+              {isTr ? "⏳ BEKLEMEDE" : "⏳ PENDING"}
             </button>
           </div>
         )}
@@ -142,6 +146,9 @@ interface CreatorsSubViewProps {
 }
 
 export default function CreatorsSubView({ onViewCreator }: CreatorsSubViewProps) {
+  const { i18n } = useTranslation();
+  const isTr = (i18n.language || "en").startsWith("tr");
+
   const { creatorsList, fetchCreators, viewCreatorPrediction, viewingCreatorName } =
     useTournamentStore();
 
@@ -174,20 +181,20 @@ export default function CreatorsSubView({ onViewCreator }: CreatorsSubViewProps)
           <div className="flex items-center gap-3">
             <div className="h-px w-10 shrink-0" style={{ background: "#00FF87" }} />
             <span className="text-[9px] font-black tracking-[0.3em] uppercase" style={{ color: "#00FF87" }}>
-              VERİFİED CREATORS PLATFORM
+              VERIFIED CREATORS PLATFORM
             </span>
           </div>
           <h2
             className="text-4xl md:text-5xl font-black tracking-tight leading-none text-white uppercase"
             style={{ letterSpacing: "-0.03em" }}
           >
-            ONAYLI{" "}
-            <span style={{ color: "#00FF87" }}>YORUMCULAR</span>
+            {isTr ? "ONAYLI" : "VERIFIED"}{" "}
+            <span style={{ color: "#00FF87" }}>{isTr ? "YORUMCULAR" : "CREATORS"}</span>
           </h2>
           <p className="text-zinc-400 text-sm font-mono max-w-xl leading-relaxed">
-            Uzman analistlerin Dünya Kupası 2026 tahminlerini incele.{" "}
-            <span className="text-white font-bold">One-Shot Lock</span> sistemi
-            ile her yorumcunun yalnızca tek yayınlama hakkı vardır.
+            {isTr ? "Uzman analistlerin Dünya Kupası 2026 tahminlerini incele." : "Review tournament predictions of expert analysts."}{" "}
+            <span className="text-white font-bold">One-Shot Lock</span>{" "}
+            {isTr ? "sistemi ile her yorumcunun yalnızca tek yayınlama hakkı vardır." : "system guarantees each creator has only one submission right."}
           </p>
         </div>
       </div>
@@ -198,9 +205,9 @@ export default function CreatorsSubView({ onViewCreator }: CreatorsSubViewProps)
         style={{ boxShadow: "5px 5px 0px #27272a" }}
       >
         {[
-          { label: "TOPLAM YORUMCU", value: creatorsList.length, color: "#ffffff" },
-          { label: "TAHMİN YAYINDA", value: publishedCount, color: "#00FF87" },
-          { label: "BEKLEYEN", value: pendingCount, color: "#00E5FF" },
+          { label: isTr ? "TOPLAM YORUMCU" : "TOTAL CREATORS", value: creatorsList.length, color: "#ffffff" },
+          { label: isTr ? "TAHMİN YAYINDA" : "PREDICTIONS LIVE", value: publishedCount, color: "#00FF87" },
+          { label: isTr ? "BEKLEYEN" : "PENDING", value: pendingCount, color: "#00E5FF" },
         ].map(({ label, value, color }, i) => (
           <div key={label} className={`bg-black p-5 text-center ${i < 2 ? "border-r-2 border-zinc-800" : ""}`}>
             <div className="text-4xl md:text-5xl font-black tabular-nums leading-none" style={{ color }}>
@@ -213,10 +220,10 @@ export default function CreatorsSubView({ onViewCreator }: CreatorsSubViewProps)
 
       {/* ── SECTION DIVIDER ─────────────────────────────────────── */}
       <div className="flex items-center gap-4">
-        <span className="text-[9px] font-black text-zinc-500 tracking-[0.25em] uppercase">LİDERLİK TABLOSU</span>
+        <span className="text-[9px] font-black text-zinc-500 tracking-[0.25em] uppercase">{isTr ? "LİDERLİK TABLOSU" : "LEADERBOARD"}</span>
         <div className="flex-1 border-t-2 border-dashed border-zinc-800" />
         <span className="text-[8px] font-mono px-2 py-0.5" style={{ background: "#00FF8720", color: "#00FF87" }}>
-          {publishedCount} / {creatorsList.length} YAYINDA
+          {publishedCount} / {creatorsList.length} {isTr ? "YAYINDA" : "LIVE"}
         </span>
       </div>
 
@@ -228,7 +235,7 @@ export default function CreatorsSubView({ onViewCreator }: CreatorsSubViewProps)
             style={{ borderColor: "#00FF87", borderTopColor: "transparent" }}
           />
           <span className="text-zinc-500 text-xs font-mono tracking-widest uppercase">
-            Yorumcular yükleniyor...
+            {isTr ? "Yorumcular yükleniyor..." : "Loading creators..."}
           </span>
         </div>
       ) : (
@@ -247,9 +254,9 @@ export default function CreatorsSubView({ onViewCreator }: CreatorsSubViewProps)
         >
           <span className="w-2 h-2 rounded-full animate-pulse shrink-0" style={{ background: "#00E5FF" }} />
           <span className="text-[10px] font-mono text-zinc-400 tracking-wider">
-            Son yüklenen tahmin:{" "}
+            {isTr ? "Son yüklenen tahmin: " : "Last loaded prediction: "}{" "}
             <span className="text-[#00E5FF] font-black">{viewingCreatorName}</span>
-            {" "} — GRUP TABLOLARI sekmesine geçerek inceleyebilirsiniz.
+            {" "}{isTr ? " — GRUP TABLOLARI sekmesine geçerek inceleyebilirsiniz." : " — you can review it in the GROUP STANDINGS tab."}
           </span>
         </div>
       )}
@@ -257,8 +264,9 @@ export default function CreatorsSubView({ onViewCreator }: CreatorsSubViewProps)
       {/* ── ONE-SHOT FOOTER ─────────────────────────────────────── */}
       <div className="border-t-2 border-zinc-800 pt-4 flex items-center gap-2 text-[9px] font-mono text-zinc-600 tracking-widest">
         <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: "#00FF87" }} />
-        ONE-SHOT LOCK SİSTEMİ AKTİF — Her yorumcunun yalnızca{" "}
-        <span className="text-white font-bold">tek bir</span> yayınlama hakkı vardır.
+        {isTr
+          ? "ONE-SHOT LOCK SİSTEMİ AKTİF — Her yorumcunun yalnızca tek bir yayınlama hakkı vardır."
+          : "ONE-SHOT LOCK SYSTEM ACTIVE — Each creator has only one submission right."}
       </div>
     </div>
   );

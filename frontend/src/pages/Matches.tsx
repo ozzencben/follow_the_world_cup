@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import api from "../services/api";
 
 interface Match {
@@ -54,12 +55,21 @@ interface MatchesProps {
   onSelectTeam: (teamName: string) => void;
 }
 
-const STAGE_LABELS: Record<string, string> = {
+const STAGE_LABELS_TR: Record<string, string> = {
   GROUP: "Grup Turu",
   R32:   "Son 32",
   R16:   "Son 16",
   QF:    "Çeyrek Final",
   SF:    "Yarı Final",
+  F:     "Final",
+};
+
+const STAGE_LABELS_EN: Record<string, string> = {
+  GROUP: "Group Stage",
+  R32:   "Round of 32",
+  R16:   "Round of 16",
+  QF:    "Quarter Finals",
+  SF:    "Semi Finals",
   F:     "Final",
 };
 
@@ -72,20 +82,38 @@ const STAGE_ACCENTS: Record<string, string> = {
   F:     "#A78BFA",
 };
 
+const normalizeName = (name: string) => {
+  if (!name) return "";
+  return name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]/g, "")
+    .replace("and", "");
+};
+
 export default function Matches({ onSelectTeam }: MatchesProps) {
+  const { t, i18n } = useTranslation();
+  const isTr = (i18n.language || "en").startsWith("tr");
+
   const [rounds, setRounds] = useState<Round[]>([]);
   const [teamsMap, setTeamsMap] = useState<{ [name: string]: Team }>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeRoundTab, setActiveRoundTab] = useState<number>(1);
+  const [eloData, setEloData] = useState<any[]>([]);
+
+  const STAGE_LABELS = isTr ? STAGE_LABELS_TR : STAGE_LABELS_EN;
 
   useEffect(() => {
     Promise.all([
       api.get<Round[]>("/rounds"),
       api.get<FifaDataResponse>("/teams"),
+      api.get<any[]>("/elo/ratings"),
     ])
-      .then(([roundsRes, teamsRes]) => {
+      .then(([roundsRes, teamsRes, eloRes]) => {
         setRounds(roundsRes.data);
+        setEloData(eloRes.data || []);
         const map: { [name: string]: Team } = {};
         teamsRes.data.teams.forEach(t => {
           const key = t.teamName === "Bosnia-Herzegovina" ? "Bosnia and Herzegovina" : t.teamName;
@@ -94,16 +122,26 @@ export default function Matches({ onSelectTeam }: MatchesProps) {
         setTeamsMap(map);
         setError(null);
       })
-      .catch(err => setError(err.message || "Fikstür verileri yüklenemedi."))
+      .catch(err => setError(err.message || (isTr ? "Fikstür verileri yüklenemedi." : "Failed to load fixtures data.")))
       .finally(() => setLoading(false));
-  }, []);
+  }, [isTr]);
+
+  const getTeamName = (englishName: string) => {
+    if (!englishName) return "";
+    const cleanName = normalizeName(englishName);
+    const found = eloData.find(e => normalizeName(e.nameEn) === cleanName);
+    if (found) {
+      return isTr ? found.nameTr : found.nameEn;
+    }
+    return englishName;
+  };
 
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-32 space-y-4 animate-fade-up"
         style={{ border: "1.5px solid #1A1916", background: "#F2F0E8" }}>
         <div style={{ width: 36, height: 36, border: "3px solid #FFE600", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
-        <p className="swiss-label animate-retro-blink" style={{ color: "#5C5A54" }}>Fikstür Yükleniyor...</p>
+        <p className="swiss-label animate-retro-blink" style={{ color: "#5C5A54" }}>{isTr ? "Fikstür Yükleniyor..." : "Loading Fixtures..."}</p>
       </div>
     );
   }
@@ -112,8 +150,8 @@ export default function Matches({ onSelectTeam }: MatchesProps) {
     return (
       <div className="p-12 text-center animate-fade-up" style={{ border: "1.5px solid #E53E3E", background: "#FFF5F5" }}>
         <div style={{ fontSize: "2.5rem" }}>⚠️</div>
-        <h4 style={{ fontWeight: 900, fontSize: "1rem", color: "#E53E3E", marginTop: 12 }}>Veri Bağlantı Hatası</h4>
-        <p style={{ fontSize: "0.7rem", color: "#E53E3E", marginTop: 6 }}>{error || "Fikstür verilerine ulaşılamadı."}</p>
+        <h4 style={{ fontWeight: 900, fontSize: "1rem", color: "#E53E3E", marginTop: 12 }}>{isTr ? "Veri Bağlantı Hatası" : "Data Connection Error"}</h4>
+        <p style={{ fontSize: "0.7rem", color: "#E53E3E", marginTop: 6 }}>{error || (isTr ? "Fikstür verilerine ulaşılamadı." : "Failed to reach fixtures data.")}</p>
       </div>
     );
   }
@@ -122,10 +160,10 @@ export default function Matches({ onSelectTeam }: MatchesProps) {
   const currentAccent = STAGE_ACCENTS[currentRound?.stage || "GROUP"] ?? "#00FF87";
 
   const formatDate = (iso: string) =>
-    new Date(iso).toLocaleDateString("tr-TR", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+    new Date(iso).toLocaleDateString(isTr ? "tr-TR" : "en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
 
   const formatTime = (iso: string) =>
-    new Date(iso).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
+    new Date(iso).toLocaleTimeString(isTr ? "tr-TR" : "en-US", { hour: "2-digit", minute: "2-digit" });
 
   const getMapped = (name: string) => name === "Bosnia-Herzegovina" ? "Bosnia and Herzegovina" : name;
   const getFlagUrl = (f?: string) => f ? f.replace("{format}", "sq").replace("{size}", "1") : "";
@@ -146,17 +184,18 @@ export default function Matches({ onSelectTeam }: MatchesProps) {
 
         <div className="relative space-y-3">
           <div className="flex items-center gap-3 flex-wrap">
-            <span className="neon-badge neon-badge-yellow">104 MAÇ</span>
-            <span className="neon-badge neon-badge-green">7 TUR</span>
+            <span className="neon-badge neon-badge-yellow">{isTr ? "104 MAÇ" : "104 MATCHES"}</span>
+            <span className="neon-badge neon-badge-green">{isTr ? "7 TUR" : "7 ROUNDS"}</span>
           </div>
           <h1 style={{ fontSize: "clamp(1.8rem, 5vw, 3.5rem)", fontWeight: 900, letterSpacing: "-0.04em", color: "#F8F7F2", lineHeight: 1.1 }}>
-            MAÇ
+            {isTr ? "MAÇ" : "MATCH"}
             <br />
-            <span style={{ color: "#FFE600", textShadow: "0 0 20px rgba(255,230,0,0.35)" }}>FİKSTÜRÜ</span>
+            <span style={{ color: "#FFE600", textShadow: "0 0 20px rgba(255,230,0,0.35)" }}>{isTr ? "FİKSTÜRÜ" : "FIXTURES"}</span>
           </h1>
           <p style={{ color: "#8C8A84", fontSize: "0.72rem", fontWeight: 500, lineHeight: 1.7, maxWidth: "44ch" }}>
-            Dünya Kupası 2026'daki tüm grup turlarını, eleme aşamalarını ve
-            stadyum detaylarını inceleyin.
+            {isTr
+              ? "Dünya Kupası 2026'daki tüm grup turlarını, eleme aşamalarını ve stadyum detaylarını inceleyin."
+              : "Explore all group rounds, knockout stages, and stadium details in the World Cup 2026."}
           </p>
         </div>
       </div>
@@ -166,7 +205,7 @@ export default function Matches({ onSelectTeam }: MatchesProps) {
         {rounds.map(round => {
           const isActive = round.id === activeRoundTab;
           const label = round.stage === "GROUP"
-            ? `Grup ${round.id}`
+            ? (isTr ? `Grup ${round.id}` : `Group ${round.id}`)
             : (STAGE_LABELS[round.stage] ?? round.stage);
           const acc = STAGE_ACCENTS[round.stage] ?? "#00FF87";
 
@@ -202,16 +241,18 @@ export default function Matches({ onSelectTeam }: MatchesProps) {
         >
           <div>
             <div className="neon-badge" style={{ color: currentAccent, borderColor: `${currentAccent}60`, background: `${currentAccent}10`, display: "inline-flex", marginBottom: 8 }}>
-              {currentRound.stage === "GROUP" ? `Grup Aşaması — Tur ${currentRound.id}` : "Eleme Aşamaları"}
+              {currentRound.stage === "GROUP"
+                ? (isTr ? `Grup Aşaması — Tur ${currentRound.id}` : `Group Stage — Round ${currentRound.id}`)
+                : (isTr ? "Eleme Aşamaları" : "Knockout Stages")}
             </div>
             <div style={{ fontWeight: 900, fontSize: "0.9rem", color: "#1A1916", letterSpacing: "-0.01em" }}>
               {currentRound.stage === "GROUP"
                 ? `${formatDate(currentRound.startDate)} — ${formatDate(currentRound.endDate)}`
-                : "Eleme Aşamaları"}
+                : (isTr ? "Eleme Aşamaları" : "Knockout Stages")}
             </div>
           </div>
           <div className="swiss-label">
-            Toplam: <span style={{ color: currentAccent, fontWeight: 900 }}>{currentRound.tournaments?.length || 0}</span> Karşılaşma
+            {isTr ? "Toplam: " : "Total: "}<span style={{ color: currentAccent, fontWeight: 900 }}>{currentRound.tournaments?.length || 0}</span> {isTr ? "Karşılaşma" : "Matches"}
           </div>
         </div>
       )}
@@ -262,7 +303,7 @@ export default function Matches({ onSelectTeam }: MatchesProps) {
                     onClick={() => onSelectTeam(match.homeSquadName)}
                   >
                     {homeInfo?.teamFlag && (
-                      <img src={getFlagUrl(homeInfo.teamFlag)} alt={match.homeSquadName}
+                      <img src={getFlagUrl(homeInfo.teamFlag)} alt={getTeamName(match.homeSquadName)}
                         style={{ width: 24, height: 15, objectFit: "cover", border: "1px solid #E0DDD0", flexShrink: 0 }}
                         onError={e => { (e.target as HTMLImageElement).style.display = "none"; }}
                       />
@@ -271,7 +312,7 @@ export default function Matches({ onSelectTeam }: MatchesProps) {
                       onMouseEnter={e => (e.currentTarget.style.color = "#00C060")}
                       onMouseLeave={e => (e.currentTarget.style.color = "#1A1916")}
                     >
-                      {match.homeSquadName}
+                      {getTeamName(match.homeSquadName)}
                     </span>
                   </div>
 
@@ -315,10 +356,10 @@ export default function Matches({ onSelectTeam }: MatchesProps) {
                       onMouseEnter={e => (e.currentTarget.style.color = "#00C060")}
                       onMouseLeave={e => (e.currentTarget.style.color = "#1A1916")}
                     >
-                      {match.awaySquadName}
+                      {getTeamName(match.awaySquadName)}
                     </span>
                     {awayInfo?.teamFlag && (
-                      <img src={getFlagUrl(awayInfo.teamFlag)} alt={match.awaySquadName}
+                      <img src={getFlagUrl(awayInfo.teamFlag)} alt={getTeamName(match.awaySquadName)}
                         style={{ width: 24, height: 15, objectFit: "cover", border: "1px solid #E0DDD0", flexShrink: 0 }}
                         onError={e => { (e.target as HTMLImageElement).style.display = "none"; }}
                       />
@@ -341,10 +382,12 @@ export default function Matches({ onSelectTeam }: MatchesProps) {
         <div className="py-20 text-center space-y-3" style={{ border: "1.5px solid #E0DDD0", background: "#F2F0E8" }}>
           <div style={{ fontSize: "2.5rem" }}>⏳</div>
           <h4 style={{ fontWeight: 900, fontSize: "0.8rem", letterSpacing: "0.06em", textTransform: "uppercase", color: "#1A1916" }}>
-            Karşılaşmalar Belirlenmedi
+            {isTr ? "Karşılaşmalar Belirlenmedi" : "Matches Not Determined"}
           </h4>
           <p style={{ fontSize: "0.65rem", color: "#8C8A84", maxWidth: "36ch", margin: "0 auto", lineHeight: 1.7 }}>
-            Bu eleme turunun eşleşmeleri, grup aşaması sonuçlarına göre otomatik belirlenecektir.
+            {isTr
+              ? "Bu eleme turunun eşleşmeleri, grup aşaması sonuçlarına göre otomatik belirlenecektir."
+              : "The matchups for this knockout stage will be automatically determined based on group stage results."}
           </p>
         </div>
       )}

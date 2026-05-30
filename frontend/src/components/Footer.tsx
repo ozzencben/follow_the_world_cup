@@ -1,4 +1,7 @@
+import { useTranslation } from "react-i18next";
+
 export default function Footer() {
+    const { t } = useTranslation();
     const year = new Date().getFullYear();
 
     // İletişim linkleri objesi
@@ -50,8 +53,7 @@ export default function Footer() {
                         </div>
 
                         <p style={{ color: "#5C5A54", fontSize: "0.7rem", lineHeight: 1.7, fontWeight: 500, maxWidth: "32ch" }}>
-                            Dünya Kupası 2026 heyecanını en modern teknolojilerle yansıtmak amacıyla
-                            açık kaynaklı olarak geliştirilmektedir.
+                            {t("footer.desc")}
                         </p>
 
                         <div className="flex gap-2 flex-wrap">
@@ -66,16 +68,16 @@ export default function Footer() {
 
                     {/* Links — 3 cols */}
                     <div className="md:col-span-3 space-y-4">
-                        <div className="swiss-label" style={{ color: "#5C5A54" }}>Platform</div>
+                        <div className="swiss-label" style={{ color: "#5C5A54" }}>{t("footer.platform")}</div>
                         <div style={{ height: 1, background: "rgba(255,255,255,0.08)" }} />
                         <nav className="space-y-2">
                             {[
-                                { href: "#/home", label: "Ana Sayfa" },
-                                { href: "#/teams", label: "Milli Takımlar" },
-                                { href: "#/groups", label: "Gruplar & Puanlar" },
-                                { href: "#/matches", label: "Fikstür & Maçlar" },
-                                { href: "#/elo", label: "ELO Analizi" },
-                                { href: "#/about", label: "Turnuva Hakkında" },
+                                { href: "#/home", label: t("menu.home") },
+                                { href: "#/teams", label: t("footer.teams") },
+                                { href: "#/groups", label: t("menu.groups") },
+                                { href: "#/matches", label: t("menu.matches") },
+                                { href: "#/elo", label: t("footer.elo") },
+                                { href: "#/about", label: t("footer.about") },
                             ].map(link => (
                                 <a
                                     key={link.href}
@@ -101,7 +103,7 @@ export default function Footer() {
 
                     {/* Contact — 4 cols */}
                     <div className="md:col-span-4 space-y-4">
-                        <div className="swiss-label" style={{ color: "#5C5A54" }}>İletişim & Destek</div>
+                        <div className="swiss-label" style={{ color: "#5C5A54" }}>{t("footer.contact")}</div>
                         <div style={{ height: 1, background: "rgba(255,255,255,0.08)" }} />
 
                         <div className="space-y-2">
@@ -114,10 +116,9 @@ export default function Footer() {
                                 ozencben@gmail.com
                             </a>
                             <div style={{ fontSize: "0.6rem", color: "#5C5A54", fontWeight: 600 }}>
-                                Profesyonel iş birlikleri ve katkılar için:
+                                {t("footer.professional")}
                             </div>
                             <div className="flex gap-2 flex-wrap mt-3">
-                                {/* Güncellenmiş Dinamik Link Yapısı */}
                                 {socialLinks.map(s => (
                                     <a
                                         key={s.name}
@@ -153,10 +154,10 @@ export default function Footer() {
                             style={{ border: "1px solid rgba(255,230,0,0.2)", background: "rgba(255,230,0,0.03)" }}
                         >
                             <div style={{ fontSize: "0.55rem", fontWeight: 900, letterSpacing: "0.18em", textTransform: "uppercase", color: "#B8A800", marginBottom: 6 }}>
-                                ☕ Projeyi Destekle
+                                {t("footer.support")}
                             </div>
                             <p style={{ fontSize: "0.6rem", color: "#5C5A54", lineHeight: 1.6, marginBottom: 10, fontWeight: 500 }}>
-                                AI tahmin motoru ve yeni özellikler için katkıda bulunabilirsiniz.
+                                {t("footer.support_desc")}
                             </p>
                             <button
                                 className="swiss-btn-primary w-full justify-center"
@@ -166,9 +167,9 @@ export default function Footer() {
                                     borderColor: "#FFE600",
                                     boxShadow: "3px 3px 0 rgba(255,230,0,0.25)",
                                 }}
-                                onClick={() => alert("Bağış entegrasyonu yakında! 🏆")}
+                                onClick={() => alert(t("footer.donate_alert"))}
                             >
-                                Bahşiş Bırak / Donate ☕
+                                {t("footer.donate_btn")} ☕
                             </button>
                         </div>
                     </div>
@@ -180,7 +181,7 @@ export default function Footer() {
                     style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
                 >
                     <span style={{ fontSize: "0.55rem", fontWeight: 900, letterSpacing: "0.18em", textTransform: "uppercase", color: "#5C5A54" }}>
-                        © {year} FollowTheWorldCup.com — Tüm Hakları Saklıdır
+                        {t("footer.copyright", { year })}
                     </span>
                     <div className="flex items-center gap-4">
                         <span className="animate-retro-blink" style={{ color: "#00FF87", fontSize: "0.55rem", fontWeight: 900, letterSpacing: "0.18em" }}>

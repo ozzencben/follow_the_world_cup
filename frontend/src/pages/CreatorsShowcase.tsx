@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useTournamentStore } from "../services/useTournamentStore";
 import type { Creator } from "../services/useTournamentStore";
 import MainLayout from "../components/MainLayout";
@@ -43,6 +44,9 @@ function CreatorCard({
   rank: number;
   onView: (bracketString: string, name: string) => void;
 }) {
+  const { i18n } = useTranslation();
+  const isTr = (i18n.language || "en").startsWith("tr");
+
   const hasPrediction =
     creator.bracketString !== null && creator.bracketString.trim() !== "";
   const overrideCount = hasPrediction
@@ -101,7 +105,7 @@ function CreatorCard({
               borderColor: "#00FF8740",
             }}
           >
-            ✓ VERİFİED
+            ✓ VERIFIED
           </div>
         </div>
 
@@ -118,10 +122,10 @@ function CreatorCard({
                   className="text-[9px] font-black tracking-widest uppercase"
                   style={{ color: "#00FF87" }}
                 >
-                  ● TAHMİN YAYINDA
+                  {isTr ? "● TAHMİN YAYINDA" : "● PREDICTION LIVE"}
                 </span>
                 <span className="text-[10px] text-zinc-400 font-mono mt-0.5">
-                  <span className="text-white font-black">{overrideCount}</span> maç override
+                  <span className="text-white font-black">{overrideCount}</span> {isTr ? "maç override" : "matches overridden"}
                 </span>
               </div>
             </div>
@@ -163,7 +167,7 @@ function CreatorCard({
                   d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                 />
               </svg>
-              TAHMİNİ İNCELE
+              {isTr ? "TAHMİNİ İNCELE" : "INSPECT PREDICTION"}
             </button>
           </div>
         ) : (
@@ -173,10 +177,10 @@ function CreatorCard({
                 className="text-[9px] font-black tracking-widest uppercase"
                 style={{ color: "#00E5FF" }}
               >
-                ⏳ TAHMİN BEKLENİYOR
+                {isTr ? "⏳ TAHMİN BEKLENİYOR" : "⏳ PREDICTION PENDING"}
               </span>
               <span className="text-[10px] text-zinc-500 font-mono mt-0.5">
-                Henüz yayınlanmadı
+                {isTr ? "Henüz yayınlanmadı" : "Not published yet"}
               </span>
             </div>
 
@@ -185,7 +189,7 @@ function CreatorCard({
               className="flex items-center gap-2 px-5 py-2.5 font-black text-xs tracking-widest border-2 border-zinc-700 text-zinc-600 cursor-not-allowed uppercase"
               style={{ background: "#18181b", boxShadow: "4px 4px 0px #27272a" }}
             >
-              ⏳ BEKLEMEDE
+              {isTr ? "⏳ BEKLEMEDE" : "⏳ PENDING"}
             </button>
           </div>
         )}
@@ -199,6 +203,9 @@ export default function CreatorsShowcase({
   onNavigateToSimulator,
   onRouteChange,
 }: CreatorsShowcaseProps) {
+  const { i18n } = useTranslation();
+  const isTr = (i18n.language || "en").startsWith("tr");
+
   const {
     creatorsList,
     fetchCreators,
@@ -246,7 +253,7 @@ export default function CreatorsShowcase({
                 className="text-[9px] font-black tracking-[0.3em] uppercase"
                 style={{ color: "#00FF87" }}
               >
-                VERİFİED CREATORS PLATFORM
+                VERIFIED CREATORS PLATFORM
               </span>
             </div>
 
@@ -255,29 +262,29 @@ export default function CreatorsShowcase({
               className="text-4xl md:text-6xl font-black tracking-tight leading-none text-white uppercase"
               style={{ letterSpacing: "-0.03em" }}
             >
-              ONAYLI
+              {isTr ? "ONAYLI" : "VERIFIED"}
               <br />
               <span style={{ color: "#00FF87", WebkitTextStroke: "0px" }}>
-                YORUMCULAR
+                {isTr ? "YORUMCULAR" : "CREATORS"}
               </span>
             </h1>
 
             {/* Subtitle */}
             <p className="text-zinc-400 text-sm font-mono max-w-xl leading-relaxed">
-              Uzman analistlerin Dünya Kupası 2026 tahminlerini incele.{" "}
-              <span className="text-white font-bold">One-Shot Lock</span> sistemi
-              ile her yorumcunun yalnızca tek yayınlama hakkı vardır.
+              {isTr ? "Uzman analistlerin Dünya Kupası 2026 tahminlerini incele." : "Review tournament predictions of expert analysts."}{" "}
+              <span className="text-white font-bold">One-Shot Lock</span>{" "}
+              {isTr ? "sistemi ile her yorumcunun yalnızca tek yayınlama hakkı vardır." : "system guarantees each creator has only one submission right."}
             </p>
           </div>
         </div>
 
-        {/* ── KPI STATS STRIP ──────────────────────────────────── */}
+        {/* ── HERO KPI STATS STRIP ──────────────────────────────────── */}
         <div className="grid grid-cols-3 gap-0 border-2 border-zinc-800 overflow-hidden"
           style={{ boxShadow: "5px 5px 0px #27272a" }}>
           {[
-            { label: "TOPLAM YORUMCU", value: creatorsList.length, color: "#ffffff" },
-            { label: "TAHMİN YAYINDA", value: publishedCount, color: "#00FF87" },
-            { label: "BEKLEYEN", value: pendingCount, color: "#00E5FF" },
+            { label: isTr ? "TOPLAM YORUMCU" : "TOTAL CREATORS", value: creatorsList.length, color: "#ffffff" },
+            { label: isTr ? "TAHMİN YAYINDA" : "PREDICTIONS LIVE", value: publishedCount, color: "#00FF87" },
+            { label: isTr ? "BEKLEYEN" : "PENDING", value: pendingCount, color: "#00E5FF" },
           ].map(({ label, value, color }, i) => (
             <div
               key={label}
@@ -299,14 +306,14 @@ export default function CreatorsShowcase({
         {/* ── SECTION LABEL ────────────────────────────────────── */}
         <div className="flex items-center gap-4">
           <span className="text-[9px] font-black text-zinc-500 tracking-[0.25em] uppercase">
-            LİDERLİK TABLOSU
+            {isTr ? "LİDERLİK TABLOSU" : "LEADERBOARD"}
           </span>
           <div className="flex-1 border-t-2 border-dashed border-zinc-800" />
           <span
             className="text-[8px] font-mono px-2 py-0.5"
             style={{ background: "#00FF8720", color: "#00FF87" }}
           >
-            {publishedCount} / {creatorsList.length} YAYINDA
+            {publishedCount} / {creatorsList.length} {isTr ? "YAYINDA" : "LIVE"}
           </span>
         </div>
 
@@ -321,7 +328,7 @@ export default function CreatorsShowcase({
               }}
             />
             <span className="text-zinc-500 text-xs font-mono tracking-widest uppercase">
-              Yorumcular yükleniyor...
+              {isTr ? "Yorumcular yükleniyor..." : "Loading creators..."}
             </span>
           </div>
         ) : creatorsList.length === 0 ? (
@@ -331,7 +338,7 @@ export default function CreatorsShowcase({
           >
             <div className="text-5xl mb-4 opacity-40">🏆</div>
             <p className="text-zinc-500 font-mono text-sm tracking-wide">
-              Henüz onaylı yorumcu bulunmuyor.
+              {isTr ? "Henüz onaylı yorumcu bulunmuyor." : "No verified creators found yet."}
             </p>
           </div>
         ) : (
@@ -361,7 +368,7 @@ export default function CreatorsShowcase({
               style={{ background: "#00E5FF" }}
             />
             <span className="text-[10px] font-mono text-zinc-400 tracking-wider">
-              Son incelenen:{" "}
+              {isTr ? "Son incelenen: " : "Last inspected: "}{" "}
               <span className="text-[#00E5FF] font-black">
                 {viewingCreatorName}
               </span>
@@ -379,16 +386,16 @@ export default function CreatorsShowcase({
               style={{ background: "#00FF87" }}
             />
             <span>
-              ONE-SHOT LOCK SİSTEMİ AKTİF — Her yorumcunun yalnızca{" "}
-              <span className="text-white font-bold">tek bir</span> yayınlama
-              hakkı vardır.
+              {isTr
+                ? "ONE-SHOT LOCK SİSTEMİ AKTİF — Her yorumcunun yalnızca tek bir yayınlama hakkı vardır."
+                : "ONE-SHOT LOCK SYSTEM ACTIVE — Each creator has only one submission right."}
             </span>
           </div>
           <button
             onClick={() => onRouteChange("home")}
             className="text-[9px] font-black tracking-widest text-zinc-500 border border-zinc-700 px-3 py-1.5 uppercase hover:text-white hover:border-zinc-500 transition-colors"
           >
-            ← ANA SAYFAYA DÖN
+            {isTr ? "← ANA SAYFAYA DÖN" : "← RETURN TO HOME"}
           </button>
         </div>
       </div>

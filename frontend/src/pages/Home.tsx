@@ -1,46 +1,71 @@
+import { useTranslation } from "react-i18next";
+
 interface HomeProps {
   onSelectTeam: (teamName: string) => void;
 }
 
-const quickTeams = [
-  { name: "Argentina", tr: "Arjantin",  emoji: "🇦🇷", elo: "2046" },
-  { name: "Brazil",    tr: "Brezilya",  emoji: "🇧🇷", elo: "2044" },
-  { name: "Germany",   tr: "Almanya",   emoji: "🇩🇪", elo: "1952" },
-  { name: "France",    tr: "Fransa",    emoji: "🇫🇷", elo: "2000" },
-  { name: "Spain",     tr: "İspanya",   emoji: "🇪🇸", elo: "1976" },
-  { name: "Italy",     tr: "İtalya",    emoji: "🇮🇹", elo: "1909" },
-  { name: "England",   tr: "İngiltere", emoji: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", elo: "1961" },
-  { name: "Uruguay",   tr: "Uruguay",   emoji: "🇺🇾", elo: "1927" },
-];
-
-const features = [
-  {
-    icon: "48",
-    unit: "TAKIM",
-    label: "Katılımcı Milli Takım",
-    desc: "Kuzey Amerika kıtasındaki dev turnuvada yarışan tüm takımları, tohum torbalarını ve kadro değerlerini keşfedin.",
-    accent: "#00FF87",
-    route: "teams",
-  },
-  {
-    icon: "104",
-    unit: "MAÇ",
-    label: "Fikstür & Maç Takvimi",
-    desc: "A'dan L'ye 12 grubun güncel puan durumu, gol averajları ve stad detaylı fikstür takvimini takip edin.",
-    accent: "#00E5FF",
-    route: "matches",
-  },
-  {
-    icon: "AI",
-    unit: "VERİ",
-    label: "ELO Güç Analizi",
-    desc: "Tarihsel Elo skorları, Transfermarkt kadro değerleri ve 1 yıllık trend analizleriyle gücü rakamsal görün.",
-    accent: "#FFE600",
-    route: "elo",
-  },
-];
-
 export default function Home({ onSelectTeam }: HomeProps) {
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language || "en";
+  const isTr = currentLang.startsWith("tr");
+
+  const quickTeams = [
+    { name: "Argentina", tr: isTr ? "Arjantin" : "Argentina",  emoji: "🇦🇷", elo: "2046" },
+    { name: "Brazil",    tr: isTr ? "Brezilya" : "Brazil",    emoji: "🇧🇷", elo: "2044" },
+    { name: "Germany",   tr: isTr ? "Almanya" : "Germany",   emoji: "🇩🇪", elo: "1952" },
+    { name: "France",    tr: isTr ? "Fransa" : "France",    emoji: "🇫🇷", elo: "2000" },
+    { name: "Spain",     tr: isTr ? "İspanya" : "Spain",     emoji: "🇪🇸", elo: "1976" },
+    { name: "Italy",     tr: isTr ? "İtalya" : "Italy",      emoji: "🇮🇹", elo: "1909" },
+    { name: "England",   tr: isTr ? "İngiltere" : "England", emoji: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", elo: "1961" },
+    { name: "Uruguay",   tr: isTr ? "Uruguay" : "Uruguay",   emoji: "🇺🇾", elo: "1927" },
+  ];
+
+  const features = [
+    {
+      icon: "48",
+      unit: isTr ? "TAKIM" : "TEAMS",
+      label: isTr ? "Katılımcı Milli Takım" : "Qualified National Teams",
+      desc: isTr
+        ? "Kuzey Amerika kıtasındaki dev turnuvada yarışan tüm takımları, tohum torbalarını ve kadro değerlerini keşfedin."
+        : "Discover all teams competing in the massive North American tournament, seeding pots, and squad values.",
+      accent: "#00FF87",
+      route: "teams",
+    },
+    {
+      icon: "104",
+      unit: isTr ? "MAÇ" : "MATCHES",
+      label: isTr ? "Fikstür & Maç Takvimi" : "Fixtures & Match Schedule",
+      desc: isTr
+        ? "A'dan L'ye 12 grubun güncel puan durumu, gol averajları ve stad detaylı fikstür takvimini takip edin."
+        : "Follow the latest standings, goal differences, and detailed schedules with stadium info for all 12 groups.",
+      accent: "#00E5FF",
+      route: "matches",
+    },
+    {
+      icon: "AI",
+      unit: isTr ? "VERİ" : "DATA",
+      label: isTr ? "ELO Güç Analizi" : "ELO Power Analysis",
+      desc: isTr
+        ? "Tarihsel Elo skorları, Transfermarkt kadro değerleri ve 1 yıllık trend analizleriyle gücü rakamsal görün."
+        : "See real strengths numerically with historical ELO ratings, Transfermarkt values, and 1-year performance trends.",
+      accent: "#FFE600",
+      route: "elo",
+    },
+  ];
+
+  const stats = [
+    { num: "48", label: isTr ? "Katılımcı Takım" : "Qualified Teams",   sub: isTr ? "Tüm Zamanların En Büyüğü" : "Largest World Cup in History" },
+    { num: "104", label: isTr ? "Toplam Maç" : "Total Matches",       sub: isTr ? "Grup + Eleme Aşamaları" : "Group + Knockout Stages" },
+    { num: "16", label: isTr ? "Ev Sahibi Şehir" : "Host Cities",   sub: isTr ? "3 Ülke Boyunca" : "Across 3 Nations" },
+    { num: "12", label: isTr ? "Grup" : "Groups",              sub: isTr ? "A'dan L'ye Devler Ligi" : "Pots A through L" },
+  ];
+
+  const hosts = [
+    { flag: "🇺🇸", country: isTr ? "ABD" : "USA", cities: isTr ? "11 Şehir" : "11 Cities", host: isTr ? "Ana Ev Sahibi" : "Primary Host" },
+    { flag: "🇲🇽", country: isTr ? "Meksika" : "Mexico", cities: isTr ? "3 Şehir" : "3 Cities", host: isTr ? "Ortak Ev Sahibi" : "Co-Host" },
+    { flag: "🇨🇦", country: isTr ? "Kanada" : "Canada", cities: isTr ? "2 Şehir" : "2 Cities", host: isTr ? "Ortak Ev Sahibi" : "Co-Host" },
+  ];
+
   return (
     <div className="space-y-10 animate-fade-up" style={{ color: "#1A1916" }}>
 
@@ -55,7 +80,6 @@ export default function Home({ onSelectTeam }: HomeProps) {
           boxShadow: "6px 6px 0px #00FF87",
         }}
       >
-        {/* Swiss grid overlay inside hero */}
         <div
           className="absolute inset-0 opacity-[0.08]"
           style={{
@@ -67,25 +91,21 @@ export default function Home({ onSelectTeam }: HomeProps) {
           }}
         />
 
-        {/* Left neon accent bar */}
         <div
           className="absolute left-0 top-0 bottom-0 w-1"
           style={{ background: "#00FF87", boxShadow: "0 0 12px #00FF87" }}
         />
 
         <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-0">
-          {/* Left content */}
           <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-between" style={{ borderRight: "1px solid rgba(255,255,255,0.08)" }}>
-            {/* Top label */}
             <div className="flex items-center gap-3 mb-8">
               <span className="neon-badge neon-badge-green">FIFA 2026</span>
               <span style={{ color: "rgba(255,255,255,0.25)", fontSize: "0.6rem", fontWeight: 900 }}>•</span>
-              <span className="neon-badge neon-badge-cyan">48 TAKIM</span>
+              <span className="neon-badge neon-badge-green">{isTr ? "48 TAKIM" : "48 TEAMS"}</span>
               <span style={{ color: "rgba(255,255,255,0.25)", fontSize: "0.6rem", fontWeight: 900 }}>•</span>
-              <span className="neon-badge neon-badge-yellow">3 ÜLKE</span>
+              <span className="neon-badge neon-badge-yellow">{isTr ? "3 ÜLKE" : "3 COUNTRIES"}</span>
             </div>
 
-            {/* Main headline — Swiss bold typography */}
             <div className="space-y-4">
               <h1
                 className="leading-none"
@@ -96,27 +116,27 @@ export default function Home({ onSelectTeam }: HomeProps) {
                   color: "#F8F7F2",
                 }}
               >
-                DÜNYA
+                {isTr ? "DÜNYA" : "WORLD"}
                 <br />
-                <span style={{ color: "#00FF87", textShadow: "0 0 30px rgba(0,255,135,0.4)" }}>KUPASI</span>
+                <span style={{ color: "#00FF87", textShadow: "0 0 30px rgba(0,255,135,0.4)" }}>{isTr ? "KUPASI" : "CUP"}</span>
                 <br />
                 2026
               </h1>
 
               <p style={{ color: "#8C8A84", fontSize: "0.8rem", fontWeight: 500, lineHeight: 1.7, maxWidth: "38ch" }}>
-                Kanada, Meksika ve ABD ortak ev sahipliğindeki 48 takımlı dev turnuvanın
-                tüm istatistiklerini, AI destekli analizlerini ve ELO güç derecelerini keşfedin.
+                {isTr
+                  ? "Kanada, Meksika ve ABD ortak ev sahipliğindeki 48 takımlı dev turnuvanın tüm istatistiklerini, AI destekli analizlerini ve ELO güç derecelerini keşfedin."
+                  : "Discover all the statistics, AI-powered insights, and ELO power ratings of the massive 48-team tournament co-hosted by Canada, Mexico, and the USA."}
               </p>
             </div>
 
-            {/* CTA Buttons */}
             <div className="flex flex-wrap gap-4 mt-10">
               <a
                 href="#/teams"
                 className="swiss-btn-primary"
                 onClick={e => { e.preventDefault(); window.location.hash = "#/teams"; }}
               >
-                <span>⚽</span> Takımları Keşfet
+                <span>⚽</span> {isTr ? "Takımları Keşfet" : "Explore Teams"}
               </a>
               <a
                 href="#/elo"
@@ -126,19 +146,13 @@ export default function Home({ onSelectTeam }: HomeProps) {
                 onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.boxShadow = "4px 4px 0 rgba(255,255,255,0.2)"; }}
                 onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.boxShadow = "3px 3px 0 rgba(255,255,255,0.15)"; }}
               >
-                <span>📊</span> ELO Analizi
+                <span>📊</span> {isTr ? "ELO Analizi" : "ELO Analysis"}
               </a>
             </div>
           </div>
 
-          {/* Right stats panel */}
           <div className="flex flex-col" style={{ background: "rgba(255,255,255,0.02)" }}>
-            {[
-              { num: "48", label: "Katılımcı Takım",   sub: "Tüm Zamanların En Büyüğü" },
-              { num: "104", label: "Toplam Maç",       sub: "Grup + Eleme Aşamaları" },
-              { num: "16", label: "Ev Sahibi Şehir",   sub: "3 Ülke Boyunca" },
-              { num: "12", label: "Grup",              sub: "A'dan L'ye Devler Ligi" },
-            ].map((stat, i) => (
+            {stats.map((stat, i) => (
               <div
                 key={i}
                 className="flex-1 flex items-center gap-6 px-8 py-5"
@@ -165,11 +179,8 @@ export default function Home({ onSelectTeam }: HomeProps) {
         </div>
       </div>
 
-      {/* ═══════════════════════════════════════════════════════
-          FEATURE GRID — 3 Swiss cards with retro shadow
-      ══════════════════════════════════════════════════════════ */}
       <div>
-        <div className="swiss-divider mb-6">Platformun Temel Özellikleri</div>
+        <div className="swiss-divider mb-6">{isTr ? "Platformun Temel Özellikleri" : "Core Platform Features"}</div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {features.map((f, i) => (
             <a
@@ -183,7 +194,6 @@ export default function Home({ onSelectTeam }: HomeProps) {
               }}
               onClick={e => { e.preventDefault(); window.location.hash = `#/${f.route}`; }}
             >
-              {/* Number block */}
               <div className="flex items-end gap-2 mb-4">
                 <span
                   className="swiss-number"
@@ -205,7 +215,6 @@ export default function Home({ onSelectTeam }: HomeProps) {
                 </span>
               </div>
 
-              {/* Bottom neon accent line */}
               <div style={{ height: 2, background: f.accent, boxShadow: `0 0 6px ${f.accent}`, marginBottom: 12 }} />
 
               <div style={{ fontSize: "0.7rem", fontWeight: 900, letterSpacing: "0.05em", marginBottom: 6, color: "#1A1916" }}>
@@ -219,7 +228,7 @@ export default function Home({ onSelectTeam }: HomeProps) {
                 className="flex items-center gap-2 mt-5"
                 style={{ fontSize: "0.55rem", fontWeight: 900, letterSpacing: "0.15em", textTransform: "uppercase", color: f.accent }}
               >
-                <span>Keşfet</span>
+                <span>{isTr ? "Keşfet" : "Explore"}</span>
                 <span>→</span>
               </div>
             </a>
@@ -227,11 +236,8 @@ export default function Home({ onSelectTeam }: HomeProps) {
         </div>
       </div>
 
-      {/* ═══════════════════════════════════════════════════════
-          QUICK TEAM SELECTOR — Retro arcade grid
-      ══════════════════════════════════════════════════════════ */}
       <div>
-        <div className="swiss-divider mb-6">Efsanevi Takım Profilleri</div>
+        <div className="swiss-divider mb-6">{isTr ? "Efsanevi Takım Profilleri" : "Legendary Team Profiles"}</div>
 
         <div
           className="p-6 md:p-8"
@@ -240,15 +246,14 @@ export default function Home({ onSelectTeam }: HomeProps) {
             border: "1.5px solid #1A1916",
           }}
         >
-          {/* Section header */}
           <div className="flex items-center justify-between mb-6">
             <div>
-              <div className="swiss-label mb-1">Hızlı Erişim</div>
+              <div className="swiss-label mb-1">{isTr ? "Hızlı Erişim" : "Quick Access"}</div>
               <div style={{ fontSize: "0.85rem", fontWeight: 900, letterSpacing: "0.02em", color: "#1A1916" }}>
-                Tarihsel Güç Profilleri
+                {isTr ? "Tarihsel Güç Profilleri" : "Historical Strength Profiles"}
               </div>
             </div>
-            <span className="neon-badge neon-badge-green animate-neon-pulse">CANLI VERİ</span>
+            <span className="neon-badge neon-badge-green animate-neon-pulse">{isTr ? "CANLI VERİ" : "LIVE DATA"}</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -279,18 +284,11 @@ export default function Home({ onSelectTeam }: HomeProps) {
         </div>
       </div>
 
-      {/* ═══════════════════════════════════════════════════════
-          HOSTS — Compact info strip
-      ══════════════════════════════════════════════════════════ */}
       <div
         className="grid grid-cols-3 gap-0 overflow-hidden"
         style={{ border: "1.5px solid #1A1916" }}
       >
-        {[
-          { flag: "🇺🇸", country: "ABD", cities: "11 Şehir", host: "Ana Ev Sahibi" },
-          { flag: "🇲🇽", country: "Meksika", cities: "3 Şehir", host: "Ortak Ev Sahibi" },
-          { flag: "🇨🇦", country: "Kanada", cities: "2 Şehir", host: "Ortak Ev Sahibi" },
-        ].map((h, i) => (
+        {hosts.map((h, i) => (
           <div
             key={i}
             className="flex flex-col items-center justify-center p-4 md:p-6 text-center"

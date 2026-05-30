@@ -1,0 +1,74 @@
+{
+  "menu": {
+    "title": "MENÜ SEÇENEKLERİ",
+    "home": "ANA SAYFA",
+    "home_desc": "Genel Kupa Görünümü",
+    "groups": "GRUP TABLOLARI",
+    "groups_desc": "Puan Durumu & Simülasyon",
+    "matches": "FİKSTÜR & ELEMELER",
+    "matches_desc": "Cascade Simülatör Oyunu",
+    "analytics": "ANALİZ & ORANLAR",
+    "analytics_desc": "Gizli Potansiyel & İstatistikler",
+    "guide": "KILAVUZ & REHBER",
+    "guide_desc": "Motor Nasıl Çalışır?",
+    "creators": "YORUMCULAR",
+    "creators_desc": "Onaylı Analist Tahminleri",
+    "about": "TURNUVA",
+    "elo": "ELO RATING",
+    "contact": "İLETİŞİM",
+    "teams": "MİLLİ TAKIMLAR",
+    "all_teams": "TÜM TAKIMLAR",
+    "search_placeholder": "Takım ara...",
+    "results": "Sonuçlar ({{count}})",
+    "no_results": "Takım bulunamadı",
+    "countdown_prefix": "⏱ DÜNYA KUPASI AÇILIŞ MAÇINA:",
+    "countdown_started": "⚽ 2026 DÜNYA KUPASI BAŞLADI!",
+    "ticker_details": "48 Milli Takım • 104 Maç • 16 Şehir",
+    "ticker_location_title": "🏆 FIFA DÜNYA KUPASI 2026 • KANADA • ABD • MEKSİKA",
+    "simulator": "⚡ SİMÜLE ET",
+    "simulator_cockpit": "⚡ SİMÜLE ET (KOKPİT)"
+  },
+  "hud": {
+    "sim_status": "SIM MOTOR STATUS: ON",
+    "total_matches": "Toplam Maç",
+    "simulated": "Simüle Edilen",
+    "user_overrides": "KULLANICI MÜDAHALESİ",
+    "matches_suffix": "MAÇ"
+  },
+  "match": {
+    "tbd_winner": "TBD KAZANANI",
+    "waiting_match": "BEKLEYEN EŞLEŞME",
+    "save": "KAYDET",
+    "restore_tooltip": "Simülasyon Değerine Geri Dön"
+  },
+  "group_table": {
+    "standings_title": "GRUP {{group}} STANDINGS",
+    "live_standing": "LIVE STANDING",
+    "rank": "#",
+    "team": "TAKIM",
+    "stats": "O / G / B / M",
+    "gd": "AV",
+    "pts": "PTS",
+    "puan": "PUAN",
+    "direct_qualify": "DOĞRUDAN ELEMELER",
+    "third_placed": "EN İYİ 3.LER ADAYI"
+  },
+  "footer": {
+    "desc": "Dünya Kupası 2026 heyecanını en modern teknolojilerle yansıtmak amacıyla açık kaynaklı olarak geliştirilmektedir.",
+    "platform": "Platform",
+    "teams": "Milli Takımlar",
+    "elo": "ELO Analizi",
+    "about": "Turnuva Hakkında",
+    "contact": "İletişim & Destek",
+    "professional": "Profesyonel iş birlikleri ve katkılar için:",
+    "support": "☕ Projeyi Destekle",
+    "support_desc": "AI tahmin motoru ve yeni özellikler için katkıda bulunabilirsiniz.",
+    "donate_btn": "Kreosus / Destek Ol",
+    "donate_alert": "Bağış entegrasyonu yakında! 🏆",
+    "copyright": "© {{year}} FollowTheWorldCup.com — Tüm Hakları Saklıdır"
+  },
+  "creator_view": {
+    "locked_desc": "Onaylı yorumcunun kilitli tahmin ağacını inceliyorsunuz. Skor değişiklikleri kilitlenmiştir.",
+    "clone_btn": "🎮 BU TAHMİNİ KLONLA"
+  }
+}

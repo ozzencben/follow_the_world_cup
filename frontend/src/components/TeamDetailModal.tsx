@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import api from "../services/api";
 
 interface TeamDetailModalProps {
@@ -167,6 +168,8 @@ const StatBlock = ({ label, value, sub, accent = "#1A1916" }: { label: string; v
 );
 
 export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTeam }: TeamDetailModalProps) {
+  const { t, i18n } = useTranslation();
+  const isTr = i18n.language === "tr";
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"overview" | "matches" | "group" | "history" | "stats">("overview");
@@ -201,7 +204,7 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
         const foundTeam = teamsRes.data.teams.find(
           t => normalizeName(t.teamName) === normalizeName(teamName)
         );
-        if (!foundTeam) throw new Error("Takım veritabanında bulunamadı.");
+        if (!foundTeam) throw new Error(isTr ? "Takım veritabanında bulunamadı." : "Team not found in database.");
         setTeamInfo(foundTeam);
 
         const foundSquad = squadsRes.data.find(
@@ -255,14 +258,14 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
           setTrajectory([]);
         }
       })
-      .catch(err => setError(err.message || "Takım detayları yüklenirken hata oluştu."))
+      .catch(err => setError(err.message || (isTr ? "Takım detayları yüklenirken hata oluştu." : "An error occurred while loading team details.")))
       .finally(() => setLoading(false));
   }, [isOpen, teamName]);
 
   if (!isOpen) return null;
 
   const getFlagUrl = (f?: string) => f ? f.replace("{format}", "sq").replace("{size}", "2") : "";
-  const formatDate = (iso: string) => new Date(iso).toLocaleDateString("tr-TR", { month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" });
+  const formatDate = (iso: string) => new Date(iso).toLocaleDateString(isTr ? "tr-TR" : "en-US", { month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" });
 
   const primaryColor = teamInfo?.teamEnrichmentData?.primaryColor || "#1A1916";
   const primaryText  = teamInfo?.teamEnrichmentData?.primaryTextColor || "#FFFFFF";
@@ -279,22 +282,32 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
   const tacticalAnalysis = (() => {
     if (!teamInfo) return "";
     const n = teamInfo.teamName;
-    if (championships.length > 0)
-      return `${n}, Dünya Kupası tarihinin ${championships.length} şampiyonlukla en elit ekiplerindendir. 2026 kupasında da doğal şampiyonluk favorileri arasında gösterilmektedir.`;
-    if (teamInfo.worldRanking <= 15)
-      return `${n}, FIFA sıralamasında ${teamInfo.worldRanking}. sırada yer alarak modern futbolun en organize ekiplerinden biridir. Dengeli taktik disipliniyle yarı final ve ötesine uzanabilecek güçlü bir potansiyele sahiptir.`;
-    if (teamInfo.hostTeam)
-      return `${n}, 2026 turnuvasına ev sahipliği yapmanın getirdiği devasa taraftar coşkusu ve saha avantajına sahiptir. Gruplardan lider çıkarak sürpriz yapmaya hazırdır.`;
-    return `${n}, fiziksel gücü ve mücadeleci yapısıyla turnuvanın en dirençli takımlarındandır. ${teamInfo.confederationId} elemelerinden gelen bu kararlı ekip rakipleri zorlayacak puan almaya adaydır.`;
+    if (isTr) {
+      if (championships.length > 0)
+        return `${n}, Dünya Kupası tarihinin ${championships.length} şampiyonlukla en elit ekiplerindendir. 2026 kupasında da doğal şampiyonluk favorileri arasında gösterilmektedir.`;
+      if (teamInfo.worldRanking <= 15)
+        return `${n}, FIFA sıralamasında ${teamInfo.worldRanking}. sırada yer alarak modern futbolun en organize ekiplerinden biridir. Dengeli taktik disipliniyle yarı final ve ötesine uzanabilecek güçlü bir potansiyele sahiptir.`;
+      if (teamInfo.hostTeam)
+        return `${n}, 2026 turnuvasına ev sahipliği yapmanın getirdiği devasa taraftar coşkusu ve saha avantajına sahiptir. Gruplardan lider çıkarak sürpriz yapmaya hazırdır.`;
+      return `${n}, fiziksel gücü ve mücadeleci yapısıyla turnuvanın en dirençli takımlarındandır. ${teamInfo.confederationId} elemelerinden gelen bu kararlı ekip rakipleri zorlayacak puan almaya adaydır.`;
+    } else {
+      if (championships.length > 0)
+        return `${n} is one of the most elite teams in World Cup history with ${championships.length} titles. They are naturally considered among the title favorites in the 2026 Cup.`;
+      if (teamInfo.worldRanking <= 15)
+        return `${n} is ranked #${teamInfo.worldRanking} in FIFA standings, representing one of the most organized teams in modern football. With balanced tactical discipline, they have great potential to reach the semi-finals and beyond.`;
+      if (teamInfo.hostTeam)
+        return `${n} holds massive fan excitement and home advantage hosting the 2026 tournament. They are ready to surprise by finishing group leaders.`;
+      return `${n} is one of the most resilient teams in the tournament with its physical strength and combative style. This determined squad coming from the ${teamInfo.confederationId} qualifiers is a strong candidate to collect points and challenge opponents.`;
+    }
   })();
 
   // ── TAB DEFINITIONS ──────────────────────────────────────────
   const tabs = [
-    { id: "overview", label: "Genel Bakış" },
-    { id: "matches",  label: `Maçlar (${teamMatches.length})` },
-    { id: "group",    label: "Puan Durumu" },
-    ...(eloStats           ? [{ id: "stats",   label: "İstatistikler" }] : []),
-    ...(championships.length > 0 ? [{ id: "history", label: "Şampiyonluklar" }] : []),
+    { id: "overview", label: isTr ? "Genel Bakış" : "Overview" },
+    { id: "matches",  label: isTr ? `Maçlar (${teamMatches.length})` : `Matches (${teamMatches.length})` },
+    { id: "group",    label: isTr ? "Puan Durumu" : "Group Standings" },
+    ...(eloStats           ? [{ id: "stats",   label: isTr ? "İstatistikler" : "Stats" }] : []),
+    ...(championships.length > 0 ? [{ id: "history", label: isTr ? "Şampiyonluklar" : "Championships" }] : []),
   ];
 
   return (
@@ -345,7 +358,9 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
         {loading && (
           <div className="flex flex-col items-center justify-center py-32 space-y-4">
             <div style={{ width: 36, height: 36, border: `3px solid ${primaryColor}`, borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
-            <span className="swiss-label animate-retro-blink" style={{ color: "#5C5A54" }}>Takım Detayları Yükleniyor...</span>
+            <span className="swiss-label animate-retro-blink" style={{ color: "#5C5A54" }}>
+              {isTr ? "Takım Detayları Yükleniyor..." : "Loading Team Details..."}
+            </span>
           </div>
         )}
 
@@ -353,9 +368,15 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
         {!loading && (error || !teamInfo) && (
           <div className="p-12 text-center space-y-4">
             <span style={{ fontSize: "2.5rem" }}>⚠️</span>
-            <h4 style={{ fontWeight: 900, fontSize: "1rem", color: "#E53E3E" }}>Detaylar Yüklenemedi</h4>
-            <p style={{ fontSize: "0.7rem", color: "#5C5A54" }}>{error || "Takım bilgilerine şu anda erişilemiyor."}</p>
-            <button onClick={onClose} className="swiss-btn-secondary" style={{ margin: "0 auto" }}>Kapat</button>
+            <h4 style={{ fontWeight: 900, fontSize: "1rem", color: "#E53E3E" }}>
+              {isTr ? "Detaylar Yüklenemedi" : "Failed to Load Details"}
+            </h4>
+            <p style={{ fontSize: "0.7rem", color: "#5C5A54" }}>
+              {error || (isTr ? "Takım bilgilerine şu anda erişilemiyor." : "Team details are currently unavailable.")}
+            </p>
+            <button onClick={onClose} className="swiss-btn-secondary" style={{ margin: "0 auto" }}>
+              {isTr ? "Kapat" : "Close"}
+            </button>
           </div>
         )}
 
@@ -395,7 +416,7 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                     </span>
                     {teamInfo.hostTeam && (
                       <span style={{ fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.14em", textTransform: "uppercase", color: "#FFE600", border: "1px solid #FFE60050", padding: "2px 8px" }}>
-                        EV SAHİBİ
+                        {isTr ? "EV SAHİBİ" : "HOST TEAM"}
                       </span>
                     )}
                   </div>
@@ -406,7 +427,9 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                     )}
                   </h2>
                   <div style={{ fontSize: "0.6rem", color: primaryText, opacity: 0.7, marginTop: 4, fontWeight: 600 }}>
-                    FIFA Sıra #{teamInfo.worldRanking} · {teamInfo.appearances} Katılım
+                    {isTr
+                      ? `FIFA Sıra #${teamInfo.worldRanking} · ${teamInfo.appearances} Katılım`
+                      : `FIFA Rank #${teamInfo.worldRanking} · ${teamInfo.appearances} Appearances`}
                     {eloStats && ` · ELO ${eloStats.rating}`}
                   </div>
                 </div>
@@ -418,7 +441,7 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                   <div className="text-center" style={{ padding: "8px 14px", border: `1.5px solid rgba(255,230,0,0.4)`, background: "rgba(255,230,0,0.1)" }}>
                     <div style={{ fontSize: "1.5rem" }}>🏆</div>
                     <div style={{ fontSize: "0.5rem", fontWeight: 900, letterSpacing: "0.12em", textTransform: "uppercase", color: "#FFE600", marginTop: 2 }}>
-                      {championships.length}x Şampiyon
+                      {championships.length}x {isTr ? "Şampiyon" : "Winner"}
                     </div>
                   </div>
                 )}
@@ -439,7 +462,9 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                   </svg>
                   <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                     <span style={{ fontSize: "1rem", fontWeight: 900, color: primaryText, lineHeight: 1 }}>{strengthIndex}</span>
-                    <span style={{ fontSize: "0.38rem", fontWeight: 900, letterSpacing: "0.1em", color: confColor, textTransform: "uppercase" }}>GÜÇSKOR</span>
+                    <span style={{ fontSize: "0.38rem", fontWeight: 900, letterSpacing: "0.1em", color: confColor, textTransform: "uppercase" }}>
+                      {isTr ? "GÜÇSKOR" : "POWER SCORE"}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -487,11 +512,17 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                   {/* Quick stat row */}
                   <div style={{ border: "1.5px solid #1A1916", overflow: "hidden" }}>
                     <div className="grid grid-cols-2 md:grid-cols-4">
-                      <StatBlock label="Grup Torbası" value={squadInfo?.seed ? `${squadInfo.seed}. Torba` : "—"} accent={primaryColor} />
-                      <StatBlock label="Konfederasyon" value={teamInfo.confederationId} accent={confColor} />
-                      <StatBlock label="Katılım" value={`${teamInfo.appearances} Kez`} />
+                      <StatBlock
+                        label={isTr ? "Grup Torbası" : "Group Seed"}
+                        value={squadInfo?.seed ? (isTr ? `${squadInfo.seed}. Torba` : `Pot ${squadInfo.seed}`) : "—"}
+                        accent={primaryColor}
+                      />
+                      <StatBlock label={isTr ? "Konfederasyon" : "Confederation"} value={teamInfo.confederationId} accent={confColor} />
+                      <StatBlock label={isTr ? "Katılım" : "Appearances"} value={isTr ? `${teamInfo.appearances} Kez` : `${teamInfo.appearances} Times`} />
                       <div style={{ padding: "14px 12px" }}>
-                        <div style={{ fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.18em", textTransform: "uppercase", color: "#8C8A84", marginBottom: 4 }}>Aşama</div>
+                        <div style={{ fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.18em", textTransform: "uppercase", color: "#8C8A84", marginBottom: 4 }}>
+                          {isTr ? "Aşama" : "Stage"}
+                        </div>
                         <div style={{ fontSize: "0.85rem", fontWeight: 900, color: "#1A1916", letterSpacing: "-0.01em", lineHeight: 1.2 }}>{teamInfo.stage}</div>
                       </div>
                     </div>
@@ -502,15 +533,23 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                     <div style={{ border: "1.5px solid #1A1916", overflow: "hidden" }}>
                       <div className="flex items-center justify-between px-4 py-2" style={{ background: "#1A1916", borderBottom: "2px solid #00FF87" }}>
                         <span style={{ fontSize: "0.52rem", fontWeight: 900, letterSpacing: "0.15em", textTransform: "uppercase", color: "#00FF87" }}>
-                          Transfermarkt Kadro Profili
+                          {isTr ? "Transfermarkt Kadro Profili" : "Transfermarkt Squad Profile"}
                         </span>
-                        <span style={{ fontSize: "0.48rem", fontWeight: 900, color: "#5C5A54", letterSpacing: "0.1em" }}>FİNANSAL VERİ</span>
+                        <span style={{ fontSize: "0.48rem", fontWeight: 900, color: "#5C5A54", letterSpacing: "0.1em" }}>
+                          {isTr ? "FİNANSAL VERİ" : "FINANCIAL DATA"}
+                        </span>
                       </div>
                       <div className="grid grid-cols-3">
-                        <StatBlock label="Kadro Değeri" value={`${eloStats.squadValue.toLocaleString("tr-TR")} M€`} accent="#00C060" />
-                        <StatBlock label="Yaş Ortalaması" value={`${eloStats.averageAge} Yaş`} />
+                        <StatBlock
+                          label={isTr ? "Kadro Değeri" : "Squad Value"}
+                          value={isTr ? `${eloStats.squadValue.toLocaleString("tr-TR")} M€` : `€${eloStats.squadValue.toLocaleString("en-US")}M`}
+                          accent="#00C060"
+                        />
+                        <StatBlock label={isTr ? "Yaş Ortalaması" : "Average Age"} value={isTr ? `${eloStats.averageAge} Yaş` : `${eloStats.averageAge} Years`} />
                         <div style={{ padding: "14px 12px" }}>
-                          <div style={{ fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.18em", textTransform: "uppercase", color: "#8C8A84", marginBottom: 4 }}>Oyuncu Sayısı</div>
+                          <div style={{ fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.18em", textTransform: "uppercase", color: "#8C8A84", marginBottom: 4 }}>
+                            {isTr ? "Oyuncu Sayısı" : "Players Count"}
+                          </div>
                           <div style={{ fontSize: "1.1rem", fontWeight: 900, color: "#1A1916", letterSpacing: "-0.02em", fontVariantNumeric: "tabular-nums" }}>{eloStats.playerCount}</div>
                         </div>
                       </div>
@@ -520,7 +559,7 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                   {/* AI Tactical Analysis */}
                   <div style={{ border: "1.5px solid #1A1916", borderLeft: `4px solid ${confColor}`, padding: "16px 18px", background: "#F2F0E8" }}>
                     <div style={{ fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.18em", textTransform: "uppercase", color: confColor, marginBottom: 8 }}>
-                      🤖 AI Taktik Analizi
+                      {isTr ? "🤖 AI Taktik Analizi" : "🤖 AI Tactical Analysis"}
                     </div>
                     <p style={{ fontSize: "0.7rem", color: "#5C5A54", lineHeight: 1.8, fontStyle: "italic" }}>
                       "{tacticalAnalysis}"
@@ -589,8 +628,12 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                         {!isPlayed && homeProb !== null && awayProb !== null && drawProb !== null && (
                           <div className="px-4 pb-3 space-y-1" style={{ borderTop: "1px solid #EAE7DA", paddingTop: 10 }}>
                             <div className="flex items-center justify-between">
-                              <span style={{ fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.12em", textTransform: "uppercase", color: "#8C8A84" }}>🤖 ELO Tahmin Olasılıkları</span>
-                              <span style={{ fontSize: "0.48rem", fontWeight: 900, color: "#00C060" }}>CANLI</span>
+                              <span style={{ fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.12em", textTransform: "uppercase", color: "#8C8A84" }}>
+                                {isTr ? "🤖 ELO Tahmin Olasılıkları" : "🤖 ELO Prediction Probabilities"}
+                              </span>
+                              <span style={{ fontSize: "0.48rem", fontWeight: 900, color: "#00C060" }}>
+                                {isTr ? "CANLI" : "LIVE"}
+                              </span>
                             </div>
                             <div style={{ height: 6, background: "#E0DDD0", overflow: "hidden", display: "flex" }}>
                               <div style={{ width: `${homeProb}%`, background: primaryColor, transition: "width 0.6s ease" }} />
@@ -598,9 +641,9 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                               <div style={{ width: `${awayProb}%`, background: "#1A1916" }} />
                             </div>
                             <div className="flex justify-between" style={{ fontSize: "0.52rem", fontWeight: 900, color: "#5C5A54" }}>
-                              <span style={{ color: primaryColor }}>%{homeProb} G</span>
-                              <span>%{drawProb} B</span>
-                              <span>%{awayProb} M</span>
+                              <span style={{ color: primaryColor }}>{isTr ? `%${homeProb} G` : `${homeProb}% W`}</span>
+                              <span>{isTr ? `%${drawProb} B` : `${drawProb}% D`}</span>
+                              <span>{isTr ? `%${awayProb} M` : `${awayProb}% L`}</span>
                             </div>
                           </div>
                         )}
@@ -614,7 +657,9 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                   }) : (
                     <div className="py-16 text-center space-y-2" style={{ border: "1.5px solid #E0DDD0", background: "#F2F0E8" }}>
                       <div style={{ fontSize: "1.5rem" }}>⏳</div>
-                      <p className="swiss-label">Bu takımın planlanmış karşılaşması bulunmamaktadır.</p>
+                      <p className="swiss-label">
+                        {isTr ? "Bu takımın planlanmış karşılaşması bulunmamaktadır." : "This team has no scheduled matches."}
+                      </p>
                     </div>
                   )}
                 </div>
@@ -628,19 +673,21 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                       {/* Group header */}
                       <div className="flex items-center justify-between px-5 py-3" style={{ background: "#1A1916", borderBottom: `2px solid ${primaryColor}` }}>
                         <span style={{ fontSize: "0.6rem", fontWeight: 900, letterSpacing: "0.15em", textTransform: "uppercase", color: primaryColor }}>
-                          {squadInfo.group.replace("Group", "Grup")} Puan Durumu
+                          {isTr ? squadInfo.group.replace("Group", "Grup") : squadInfo.group} {isTr ? "Puan Durumu" : "Standings"}
                         </span>
-                        <span className="swiss-label" style={{ color: "#5C5A54" }}>FIFA Dünya Kupası 2026</span>
+                        <span className="swiss-label" style={{ color: "#5C5A54" }}>
+                          {isTr ? "FIFA Dünya Kupası 2026" : "FIFA World Cup 2026"}
+                        </span>
                       </div>
 
                       <table className="w-full border-collapse">
                         <thead>
                           <tr style={{ background: "#F2F0E8", borderBottom: "1px solid #E0DDD0" }}>
-                            {["#", "Takım", "OM", "G", "B", "M", "A", "P"].map((col, i) => (
+                            {(isTr ? ["#", "Takım", "OM", "G", "B", "M", "A", "P"] : ["#", "Team", "GP", "W", "D", "L", "GD", "PTS"]).map((col, i) => (
                               <th key={i} style={{
                                 padding: "8px 6px",
                                 fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.18em", textTransform: "uppercase",
-                                color: col === "P" ? primaryColor : "#8C8A84",
+                                color: i === 7 ? primaryColor : "#8C8A84",
                                 textAlign: i === 1 ? "left" : "center",
                                 paddingLeft: i === 0 ? 16 : 6,
                                 paddingRight: i === 7 ? 16 : 6,
@@ -706,13 +753,17 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
 
                       <div className="flex items-center gap-2 px-5 py-2" style={{ borderTop: "1px solid #EAE7DA", background: "#F2F0E8" }}>
                         <div style={{ width: 2, height: 10, background: primaryColor, boxShadow: `0 0 4px ${primaryColor}`, flexShrink: 0 }} />
-                        <span className="swiss-label">İlk 2 takım tur atlar</span>
+                        <span className="swiss-label">
+                          {isTr ? "İlk 2 takım tur atlar" : "Top 2 teams advance"}
+                        </span>
                       </div>
                     </div>
                   ) : (
                     <div className="py-16 text-center space-y-2" style={{ border: "1.5px solid #E0DDD0", background: "#F2F0E8" }}>
                       <div style={{ fontSize: "1.5rem" }}>📊</div>
-                      <p className="swiss-label">Bu takımın grup puan tablosu şu an oluşturulamıyor.</p>
+                      <p className="swiss-label">
+                        {isTr ? "Bu takımın grup puan tablosu şu an oluşturulamıyor." : "This team's group standings cannot be loaded at the moment."}
+                      </p>
                     </div>
                   )}
                 </div>
@@ -725,15 +776,30 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                   {/* ELO Rating row */}
                   <div style={{ border: "1.5px solid #1A1916", overflow: "hidden" }}>
                     <div className="flex items-center px-4 py-2" style={{ background: "#1A1916", borderBottom: `2px solid ${primaryColor}` }}>
-                      <span style={{ fontSize: "0.52rem", fontWeight: 900, letterSpacing: "0.15em", textTransform: "uppercase", color: primaryColor }}>ELO Güç Dereceleri</span>
+                      <span style={{ fontSize: "0.52rem", fontWeight: 900, letterSpacing: "0.15em", textTransform: "uppercase", color: primaryColor }}>
+                        {isTr ? "ELO Güç Dereceleri" : "ELO Power Ratings"}
+                      </span>
                     </div>
                     <div className="grid grid-cols-3">
-                      <StatBlock label="Güncel ELO" value={String(eloStats.rating)} sub={`DÜNYA #${eloStats.globalRank} · GRUP #${eloStats.localRank}`} accent={primaryColor} />
-                      <StatBlock label="Zirve ELO" value={String(eloStats.peakRating)} sub={`Zirve Sıra: #${eloStats.peakRank}`} />
+                      <StatBlock
+                        label={isTr ? "Güncel ELO" : "Current ELO"}
+                        value={String(eloStats.rating)}
+                        sub={isTr ? `DÜNYA #${eloStats.globalRank} · GRUP #${eloStats.localRank}` : `GLOBAL #${eloStats.globalRank} · GROUP #${eloStats.localRank}`}
+                        accent={primaryColor}
+                      />
+                      <StatBlock
+                        label={isTr ? "Zirve ELO" : "Peak ELO"}
+                        value={String(eloStats.peakRating)}
+                        sub={isTr ? `Zirve Sıra: #${eloStats.peakRank}` : `Peak Rank: #${eloStats.peakRank}`}
+                      />
                       <div style={{ padding: "14px 12px" }}>
-                        <div style={{ fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.18em", textTransform: "uppercase", color: "#8C8A84", marginBottom: 4 }}>Tarihsel Ortalama</div>
+                        <div style={{ fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.18em", textTransform: "uppercase", color: "#8C8A84", marginBottom: 4 }}>
+                          {isTr ? "Tarihsel Ortalama" : "Historical Average"}
+                        </div>
                         <div style={{ fontSize: "1.1rem", fontWeight: 900, color: "#1A1916", fontVariantNumeric: "tabular-nums" }}>{eloStats.avgRating}</div>
-                        <div style={{ fontSize: "0.5rem", fontWeight: 700, color: "#8C8A84", marginTop: 3 }}>Ort. Sıra: #{eloStats.avgRank}</div>
+                        <div style={{ fontSize: "0.5rem", fontWeight: 700, color: "#8C8A84", marginTop: 3 }}>
+                          {isTr ? `Ort. Sıra: #${eloStats.avgRank}` : `Avg Rank: #${eloStats.avgRank}`}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -741,22 +807,34 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                   {/* W/L/D + Goals */}
                   <div style={{ border: "1.5px solid #1A1916", overflow: "hidden" }}>
                     <div className="flex items-center px-4 py-2" style={{ background: "#1A1916", borderBottom: "2px solid #00FF87" }}>
-                      <span style={{ fontSize: "0.52rem", fontWeight: 900, letterSpacing: "0.15em", textTransform: "uppercase", color: "#00FF87" }}>Tarihsel Maç Performansı</span>
+                      <span style={{ fontSize: "0.52rem", fontWeight: 900, letterSpacing: "0.15em", textTransform: "uppercase", color: "#00FF87" }}>
+                        {isTr ? "Tarihsel Maç Performansı" : "Historical Match Performance"}
+                      </span>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4">
-                      <StatBlock label="Toplam Maç" value={String(eloStats.matchesTotal)} sub={`Ev ${eloStats.matchesHome} · Dep ${eloStats.matchesAway}`} />
-                      <StatBlock label="Galibiyet" value={String(eloStats.wins)} accent="#00C060" />
-                      <StatBlock label="Mağlubiyet" value={String(eloStats.losses)} accent="#E53E3E" />
+                      <StatBlock
+                        label={isTr ? "Toplam Maç" : "Total Matches"}
+                        value={String(eloStats.matchesTotal)}
+                        sub={isTr ? `Ev ${eloStats.matchesHome} · Dep ${eloStats.matchesAway}` : `Home ${eloStats.matchesHome} · Away ${eloStats.matchesAway}`}
+                      />
+                      <StatBlock label={isTr ? "Galibiyet" : "Wins"} value={String(eloStats.wins)} accent="#00C060" />
+                      <StatBlock label={isTr ? "Mağlubiyet" : "Losses"} value={String(eloStats.losses)} accent="#E53E3E" />
                       <div style={{ padding: "14px 12px" }}>
-                        <div style={{ fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.18em", textTransform: "uppercase", color: "#8C8A84", marginBottom: 4 }}>Kazanma Oranı</div>
-                        <div style={{ fontSize: "1.1rem", fontWeight: 900, color: "#1A1916", fontVariantNumeric: "tabular-nums" }}>%{eloStats.winRate}</div>
+                        <div style={{ fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.18em", textTransform: "uppercase", color: "#8C8A84", marginBottom: 4 }}>
+                          {isTr ? "Kazanma Oranı" : "Win Rate"}
+                        </div>
+                        <div style={{ fontSize: "1.1rem", fontWeight: 900, color: "#1A1916", fontVariantNumeric: "tabular-nums" }}>
+                          {isTr ? `%${eloStats.winRate}` : `${eloStats.winRate}%`}
+                        </div>
                       </div>
                     </div>
                     <div className="grid grid-cols-3" style={{ borderTop: "1px solid #EAE7DA" }}>
-                      <StatBlock label="Atılan Gol" value={String(eloStats.goalsFor)} accent="#00C060" />
-                      <StatBlock label="Yenilen Gol" value={String(eloStats.goalsAgainst)} />
+                      <StatBlock label={isTr ? "Atılan Gol" : "Goals For"} value={String(eloStats.goalsFor)} accent="#00C060" />
+                      <StatBlock label={isTr ? "Yenilen Gol" : "Goals Against"} value={String(eloStats.goalsAgainst)} />
                       <div style={{ padding: "14px 12px" }}>
-                        <div style={{ fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.18em", textTransform: "uppercase", color: "#8C8A84", marginBottom: 4 }}>Maç Başı Ort.</div>
+                        <div style={{ fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.18em", textTransform: "uppercase", color: "#8C8A84", marginBottom: 4 }}>
+                          {isTr ? "Maç Başı Ort." : "Avg Per Match"}
+                        </div>
                         <div style={{ fontSize: "1.1rem", fontWeight: 900, color: "#1A1916", fontVariantNumeric: "tabular-nums" }}>{eloStats.goalsForAvg}</div>
                       </div>
                     </div>
@@ -773,8 +851,12 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                     return (
                       <div style={{ border: "1.5px solid #1A1916", overflow: "hidden" }}>
                         <div className="flex items-center justify-between px-4 py-2" style={{ background: "#1A1916", borderBottom: `2px solid ${primaryColor}` }}>
-                          <span style={{ fontSize: "0.52rem", fontWeight: 900, letterSpacing: "0.15em", textTransform: "uppercase", color: primaryColor }}>ELO Güç Dalgalanma Çizgisi</span>
-                          <span style={{ fontSize: "0.48rem", fontWeight: 900, color: "#5C5A54" }}>Kronolojik Sparkline</span>
+                          <span style={{ fontSize: "0.52rem", fontWeight: 900, letterSpacing: "0.15em", textTransform: "uppercase", color: primaryColor }}>
+                            {isTr ? "ELO Güç Dalgalanma Çizgisi" : "ELO Power Fluctuation Sparkline"}
+                          </span>
+                          <span style={{ fontSize: "0.48rem", fontWeight: 900, color: "#5C5A54" }}>
+                            {isTr ? "Kronolojik Sparkline" : "Chronological Sparkline"}
+                          </span>
                         </div>
                         <div style={{ padding: "16px", background: "#F8F7F2" }}>
                           <div style={{ position: "relative", height: 120 }}>
@@ -801,10 +883,10 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                               })}
                             </svg>
                             <div style={{ position: "absolute", top: 4, left: 0, fontSize: "0.48rem", fontWeight: 900, color: "#8C8A84", letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                              En Yüksek: {maxR - 15}
+                              {isTr ? `En Yüksek: ${maxR - 15}` : `Peak: ${maxR - 15}`}
                             </div>
                             <div style={{ position: "absolute", bottom: 4, left: 0, fontSize: "0.48rem", fontWeight: 900, color: "#8C8A84", letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                              En Düşük: {minR + 15}
+                              {isTr ? `En Düşük: ${minR + 15}` : `Lowest: ${minR + 15}`}
                             </div>
                           </div>
                         </div>
@@ -816,13 +898,16 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                   {formHistory.length > 0 && (
                     <div style={{ border: "1.5px solid #1A1916", overflow: "hidden" }}>
                       <div className="flex items-center justify-between px-4 py-2" style={{ background: "#1A1916", borderBottom: "2px solid #FFE600" }}>
-                        <span style={{ fontSize: "0.52rem", fontWeight: 900, letterSpacing: "0.15em", textTransform: "uppercase", color: "#FFE600" }}>Son Form Durumu</span>
+                        <span style={{ fontSize: "0.52rem", fontWeight: 900, letterSpacing: "0.15em", textTransform: "uppercase", color: "#FFE600" }}>
+                          {isTr ? "Son Form Durumu" : "Recent Form Status"}
+                        </span>
                         <div className="flex gap-1.5">
                           {formHistory.map((m, i) => {
                             const bg = m.result === "W" ? "#00C060" : m.result === "L" ? "#E53E3E" : "#8C8A84";
+                            const oppName = isTr ? m.opponentNameTr : m.opponentNameEn;
                             return (
                               <div key={i} style={{ width: 22, height: 22, background: bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.5rem", fontWeight: 900, color: "#F8F7F2", letterSpacing: "0.05em" }}
-                                title={`${m.date} - ${m.opponentNameTr} (${m.teamScore}-${m.opponentScore})`}
+                                title={`${m.date} - ${oppName} (${m.teamScore}-${m.opponentScore})`}
                               >
                                 {m.result}
                               </div>
@@ -848,7 +933,7 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                                 <div style={{ padding: "2px 10px", background: "#1A1916", color: "#00FF87", fontWeight: 900, fontSize: "0.72rem", letterSpacing: "0.1em", fontVariantNumeric: "tabular-nums" }}>
                                   {m.teamScore} — {m.opponentScore}
                                 </div>
-                                <span>{m.opponentNameTr}</span>
+                                <span>{isTr ? m.opponentNameTr : m.opponentNameEn}</span>
                               </div>
                               <span style={{ fontSize: "0.6rem", fontWeight: 900, color: isPlus ? "#00C060" : eloVal < 0 ? "#E53E3E" : "#8C8A84", fontVariantNumeric: "tabular-nums" }}>
                                 {m.eloChange} Elo
@@ -873,17 +958,21 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
                     >
                       <div className="space-y-1">
                         <div style={{ fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.18em", textTransform: "uppercase", color: "#FFE600", background: "#1A1916", display: "inline-block", padding: "2px 8px", marginBottom: 6 }}>
-                          {champ.year} Şampiyonu
+                          {isTr ? `${champ.year} Şampiyonu` : `${champ.year} Champion`}
                         </div>
-                        <div style={{ fontSize: "1rem", fontWeight: 900, color: "#1A1916" }}>{champ.country_tr}</div>
-                        <div style={{ fontSize: "0.6rem", color: "#8C8A84", fontWeight: 500 }}>Teknik Direktör: {champ.manager}</div>
+                        <div style={{ fontSize: "1rem", fontWeight: 900, color: "#1A1916" }}>{isTr ? champ.country_tr : champ.country_en}</div>
+                        <div style={{ fontSize: "0.6rem", color: "#8C8A84", fontWeight: 500 }}>
+                          {isTr ? `Teknik Direktör: ${champ.manager}` : `Manager: ${champ.manager}`}
+                        </div>
                       </div>
                       <div style={{ fontSize: "2.5rem", filter: "drop-shadow(0 0 8px rgba(255,230,0,0.3))" }}>🏆</div>
                     </div>
                   )) : (
                     <div className="py-16 text-center space-y-2" style={{ border: "1.5px solid #E0DDD0", background: "#F2F0E8" }}>
                       <div style={{ fontSize: "1.5rem" }}>🏳️</div>
-                      <p className="swiss-label">Bu takımın geçmiş şampiyonluk kaydı bulunmamaktadır.</p>
+                      <p className="swiss-label">
+                        {isTr ? "Bu takımın geçmiş şampiyonluk kaydı bulunmamaktadır." : "This team has no registered past championship history."}
+                      </p>
                     </div>
                   )}
                 </div>

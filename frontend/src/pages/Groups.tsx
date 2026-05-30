@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import api from "../services/api";
 
 interface TeamEnrichmentData {
@@ -78,16 +79,22 @@ const normalizeName = (name: string) => {
 };
 
 export default function Groups({ onSelectTeam }: GroupsProps) {
+  const { t, i18n } = useTranslation();
+  const isTr = (i18n.language || "en").startsWith("tr");
+
   const [groupedTeams, setGroupedTeams] = useState<GroupedTeams>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [eloData, setEloData] = useState<any[]>([]);
 
   useEffect(() => {
     Promise.all([
       api.get<FifaDataResponse>("/teams"),
       api.get<SquadTeam[]>("/squads"),
+      api.get<any[]>("/elo/ratings"),
     ])
-      .then(([teamsRes, squadsRes]) => {
+      .then(([teamsRes, squadsRes, eloRes]) => {
+        setEloData(eloRes.data || []);
         const teamsList = teamsRes.data.teams;
         const squadsMap: { [k: string]: SquadTeam } = {};
         squadsRes.data.forEach(s => {
@@ -96,7 +103,7 @@ export default function Groups({ onSelectTeam }: GroupsProps) {
 
         const groups: GroupedTeams = {};
         teamsList.forEach(team => {
-          const groupName = team.stage || "Belirsiz";
+          const groupName = team.stage || (isTr ? "Belirsiz" : "TBD");
           if (!groups[groupName]) groups[groupName] = [];
           const sq = squadsMap[normalizeName(team.teamName)];
           groups[groupName].push({
@@ -120,9 +127,19 @@ export default function Groups({ onSelectTeam }: GroupsProps) {
         setGroupedTeams(sortedGroups);
         setError(null);
       })
-      .catch(err => setError(err.message || "Grup verileri yüklenemedi."))
+      .catch(err => setError(err.message || (isTr ? "Grup verileri yüklenemedi." : "Failed to load group standings.")))
       .finally(() => setLoading(false));
-  }, []);
+  }, [isTr]);
+
+  const getTeamName = (englishName: string) => {
+    if (!englishName) return "";
+    const cleanName = normalizeName(englishName);
+    const found = eloData.find(e => normalizeName(e.nameEn) === cleanName);
+    if (found) {
+      return isTr ? found.nameTr : found.nameEn;
+    }
+    return englishName;
+  };
 
   return (
     <div className="space-y-8 animate-fade-up" style={{ color: "#1A1916" }}>
@@ -141,17 +158,18 @@ export default function Groups({ onSelectTeam }: GroupsProps) {
         <div className="relative flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
           <div className="space-y-3">
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="neon-badge neon-badge-cyan">12 GRUP</span>
-              <span className="neon-badge neon-badge-green">48 TAKIM</span>
+              <span className="neon-badge neon-badge-cyan">{isTr ? "12 GRUP" : "12 GROUPS"}</span>
+              <span className="neon-badge neon-badge-green">{isTr ? "48 TAKIM" : "48 TEAMS"}</span>
             </div>
             <h1 style={{ fontSize: "clamp(1.8rem, 5vw, 3.5rem)", fontWeight: 900, letterSpacing: "-0.04em", color: "#F8F7F2", lineHeight: 1.1 }}>
-              GRUPLAR &amp;
+              {isTr ? "GRUPLAR &" : "GROUPS &"}
               <br />
-              <span style={{ color: "#00E5FF", textShadow: "0 0 20px rgba(0,229,255,0.3)" }}>PUAN DURUMU</span>
+              <span style={{ color: "#00E5FF", textShadow: "0 0 20px rgba(0,229,255,0.3)" }}>{isTr ? "PUAN DURUMU" : "STANDINGS"}</span>
             </h1>
             <p style={{ color: "#8C8A84", fontSize: "0.72rem", fontWeight: 500, lineHeight: 1.7, maxWidth: "44ch" }}>
-              48 milli takımın A'dan L'ye 12 gruptaki güncel puan durumları,
-              sıralamalar ve istatistikler.
+              {isTr
+                ? "48 milli takımın A'dan L'ye 12 gruptaki güncel puan durumları, sıralamalar ve istatistikler."
+                : "Standings, positions, and stats for all 48 national teams across the 12 groups (A to L)."}
             </p>
           </div>
 
@@ -163,7 +181,7 @@ export default function Groups({ onSelectTeam }: GroupsProps) {
             onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; }}
             onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
           >
-            ← Tüm Takımları Gör
+            {isTr ? "← Tüm Takımları Gör" : "← See All Teams"}
           </a>
         </div>
       </div>
@@ -173,14 +191,14 @@ export default function Groups({ onSelectTeam }: GroupsProps) {
         <div className="flex flex-col items-center justify-center py-24 space-y-4"
           style={{ border: "1.5px solid #1A1916", background: "#F2F0E8" }}>
           <div style={{ width: 36, height: 36, border: "3px solid #00E5FF", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
-          <p className="swiss-label animate-retro-blink" style={{ color: "#5C5A54" }}>Grup Tabloları Oluşturuluyor...</p>
+          <p className="swiss-label animate-retro-blink" style={{ color: "#5C5A54" }}>{isTr ? "Grup Tabloları Oluşturuluyor..." : "Generating Group Standings..."}</p>
         </div>
       )}
 
       {!loading && error && (
         <div className="p-12 text-center" style={{ border: "1.5px solid #E53E3E", background: "#FFF5F5" }}>
           <div style={{ fontSize: "2.5rem" }}>⚠️</div>
-          <h4 style={{ fontWeight: 900, fontSize: "1rem", color: "#E53E3E", marginTop: 12 }}>Grup Verileri Yüklenemedi</h4>
+          <h4 style={{ fontWeight: 900, fontSize: "1rem", color: "#E53E3E", marginTop: 12 }}>{isTr ? "Grup Verileri Yüklenemedi" : "Failed to Load Standings"}</h4>
           <p style={{ fontSize: "0.7rem", color: "#E53E3E", marginTop: 6 }}>{error}</p>
         </div>
       )}
@@ -222,13 +240,13 @@ export default function Groups({ onSelectTeam }: GroupsProps) {
                     </span>
                     <div>
                       <div style={{ fontSize: "0.7rem", fontWeight: 900, letterSpacing: "0.05em", color: "#F8F7F2" }}>
-                        {groupName.replace("Group", "Grup")}
+                        {isTr ? groupName.replace("Group", "Grup") : groupName}
                       </div>
-                      <div className="swiss-label" style={{ color: "#5C5A54" }}>FIFA Dünya Kupası 2026</div>
+                      <div className="swiss-label" style={{ color: "#5C5A54" }}>{isTr ? "FIFA Dünya Kupası 2026" : "FIFA World Cup 2026"}</div>
                     </div>
                   </div>
                   <span className="neon-badge" style={{ color: accent, borderColor: `${accent}60`, background: `${accent}10`, fontSize: "0.45rem" }}>
-                    {teams.length} TAKIM
+                    {teams.length} {isTr ? "TAKIM" : "TEAMS"}
                   </span>
                 </div>
 
@@ -236,7 +254,7 @@ export default function Groups({ onSelectTeam }: GroupsProps) {
                 <table className="w-full border-collapse">
                   <thead>
                     <tr style={{ background: "#F2F0E8", borderBottom: "1px solid #E0DDD0" }}>
-                      {["#", "Takım", "OM", "G", "B", "M", "AG", "YG", "A", "P"].map((col, i) => (
+                      {(isTr ? ["#", "Takım", "OM", "G", "B", "M", "AG", "YG", "A", "P"] : ["#", "Team", "GP", "W", "D", "L", "GF", "GA", "GD", "PTS"]).map((col, i) => (
                         <th
                           key={i}
                           style={{
@@ -303,16 +321,16 @@ export default function Groups({ onSelectTeam }: GroupsProps) {
                             <div className="flex items-center gap-2">
                               <img
                                 src={flagUrl}
-                                alt={team.teamName}
+                                alt={getTeamName(team.teamName)}
                                 style={{ width: 20, height: 13, objectFit: "cover", border: "1px solid #E0DDD0", flexShrink: 0 }}
                                 onError={e => { (e.target as HTMLImageElement).style.display = "none"; }}
                               />
                               <span style={{ fontSize: "0.7rem", fontWeight: 800, color: "#1A1916", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 120 }}>
-                                {team.teamName}
+                                {getTeamName(team.teamName)}
                               </span>
                               {team.hostTeam && (
                                 <span style={{ fontSize: "0.42rem", fontWeight: 900, letterSpacing: "0.1em", color: "#FFE600", border: "1px solid #FFE60050", padding: "1px 4px", flexShrink: 0 }}>
-                                  EV
+                                  {isTr ? "EV" : "H"}
                                 </span>
                               )}
                             </div>
@@ -355,7 +373,7 @@ export default function Groups({ onSelectTeam }: GroupsProps) {
                   style={{ borderTop: "1px solid #EAE7DA", background: "#F2F0E8" }}
                 >
                   <div style={{ width: 2, height: 10, background: accent, boxShadow: `0 0 4px ${accent}`, flexShrink: 0 }} />
-                  <span className="swiss-label">İlk 2 takım tur atlar</span>
+                  <span className="swiss-label">{isTr ? "İlk 2 takım tur atlar" : "Top 2 teams advance"}</span>
                 </div>
               </div>
             );

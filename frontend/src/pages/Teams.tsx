@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import api from "../services/api";
 
 interface TeamEnrichmentData {
@@ -64,17 +65,23 @@ const CONF_COLORS: Record<string, string> = {
 };
 
 export default function Teams({ onSelectTeam }: TeamsProps) {
+  const { t, i18n } = useTranslation();
+  const isTr = (i18n.language || "en").startsWith("tr");
+
   const [fifaData, setFifaData] = useState<FifaDataResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filterConfederation, setFilterConfederation] = useState<string>("ALL");
+  const [eloData, setEloData] = useState<any[]>([]);
 
   useEffect(() => {
     Promise.all([
       api.get<FifaDataResponse>("/teams"),
       api.get<SquadTeam[]>("/squads"),
+      api.get<any[]>("/elo/ratings"),
     ])
-      .then(([teamsRes, squadsRes]) => {
+      .then(([teamsRes, squadsRes, eloRes]) => {
+        setEloData(eloRes.data || []);
         const teamsList = teamsRes.data.teams;
         const squadsMap: { [k: string]: SquadTeam } = {};
         squadsRes.data.forEach(s => {
@@ -87,9 +94,19 @@ export default function Teams({ onSelectTeam }: TeamsProps) {
         setFifaData({ ...teamsRes.data, teams: enrichedTeams });
         setError(null);
       })
-      .catch(err => setError(err.message || "Milli takımlar verisi yüklenemedi."))
+      .catch(err => setError(err.message || (isTr ? "Milli takımlar verisi yüklenemedi." : "Failed to load national teams data.")))
       .finally(() => setLoading(false));
-  }, []);
+  }, [isTr]);
+
+  const getTeamName = (englishName: string) => {
+    if (!englishName) return "";
+    const cleanName = normalizeName(englishName);
+    const found = eloData.find(e => normalizeName(e.nameEn) === cleanName);
+    if (found) {
+      return isTr ? found.nameTr : found.nameEn;
+    }
+    return englishName;
+  };
 
   const allTeams = fifaData?.teams || [];
   const filteredTeams = useMemo(() => {
@@ -107,7 +124,7 @@ export default function Teams({ onSelectTeam }: TeamsProps) {
       <div className="flex flex-col items-center justify-center py-32 space-y-4 animate-fade-up"
         style={{ border: "1.5px solid #1A1916", background: "#F2F0E8" }}>
         <div style={{ width: 36, height: 36, border: "3px solid #00FF87", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
-        <p className="swiss-label animate-retro-blink" style={{ color: "#5C5A54" }}>Katılımcı Ülkeler Yükleniyor...</p>
+        <p className="swiss-label animate-retro-blink" style={{ color: "#5C5A54" }}>{isTr ? "Katılımcı Ülkeler Yükleniyor..." : "Loading Participating Countries..."}</p>
       </div>
     );
   }
@@ -116,8 +133,8 @@ export default function Teams({ onSelectTeam }: TeamsProps) {
     return (
       <div className="p-12 text-center animate-fade-up" style={{ border: "1.5px solid #E53E3E", background: "#FFF5F5" }}>
         <div style={{ fontSize: "2.5rem" }}>⚠️</div>
-        <h4 style={{ fontWeight: 900, fontSize: "1rem", color: "#E53E3E", marginTop: 12, letterSpacing: "0.02em" }}>Veri Bağlantı Hatası</h4>
-        <p style={{ fontSize: "0.7rem", color: "#E53E3E", marginTop: 6 }}>{error || "Veritabanına ulaşılamadı."}</p>
+        <h4 style={{ fontWeight: 900, fontSize: "1rem", color: "#E53E3E", marginTop: 12, letterSpacing: "0.02em" }}>{isTr ? "Veri Bağlantı Hatası" : "Data Connection Error"}</h4>
+        <p style={{ fontSize: "0.7rem", color: "#E53E3E", marginTop: 6 }}>{error || (isTr ? "Veritabanına ulaşılamadı." : "Failed to reach database.")}</p>
       </div>
     );
   }
@@ -145,7 +162,7 @@ export default function Teams({ onSelectTeam }: TeamsProps) {
           {/* Top row: flag + badges */}
           <div className="flex items-start justify-between relative z-10">
             <img
-              src={flagUrl} alt={team.teamName}
+              src={flagUrl} alt={getTeamName(team.teamName)}
               style={{ width: 36, height: 36, objectFit: "cover", border: "1.5px solid rgba(255,255,255,0.2)" }}
               onError={e => { (e.target as HTMLImageElement).style.display = "none"; }}
             />
@@ -155,7 +172,7 @@ export default function Teams({ onSelectTeam }: TeamsProps) {
                   fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.14em", textTransform: "uppercase",
                   color: cardText, border: `1px solid ${cardText}40`, background: `${cardText}12`, padding: "2px 6px",
                 }}>
-                  {team.squadStats.seed}. TORBA
+                  {team.squadStats.seed}. {isTr ? "TORBA" : "POT"}
                 </span>
               )}
               {team.hostTeam && (
@@ -163,7 +180,7 @@ export default function Teams({ onSelectTeam }: TeamsProps) {
                   fontSize: "0.48rem", fontWeight: 900, letterSpacing: "0.14em", textTransform: "uppercase",
                   color: "#FFE600", border: "1px solid #FFE60060", background: "rgba(255,230,0,0.1)", padding: "2px 6px",
                 }}>
-                  EV SAHİBİ
+                  {isTr ? "EV SAHİBİ" : "HOST COUNTRY"}
                 </span>
               )}
             </div>
@@ -175,7 +192,7 @@ export default function Teams({ onSelectTeam }: TeamsProps) {
               {team.confederationId}
             </div>
             <h3 style={{ fontSize: "1rem", fontWeight: 900, letterSpacing: "-0.01em", color: cardText, lineHeight: 1.2 }}>
-              {team.teamName}
+              {getTeamName(team.teamName)}
               {team.squadStats?.abbr && (
                 <span style={{ fontSize: "0.55rem", fontWeight: 700, opacity: 0.6, marginLeft: 5 }}>({team.squadStats.abbr})</span>
               )}
@@ -189,9 +206,9 @@ export default function Teams({ onSelectTeam }: TeamsProps) {
           style={{ borderTop: "1.5px solid #1A1916", background: "#F8F7F2" }}
         >
           {[
-            { label: "Grup",     value: team.stage },
-            { label: "FIFA Sıra", value: `#${team.worldRanking}` },
-            { label: "Katılım",  value: String(team.appearances) },
+            { label: isTr ? "Grup" : "Group",     value: team.stage },
+            { label: isTr ? "FIFA Sıra" : "FIFA Rank", value: `#${team.worldRanking}` },
+            { label: isTr ? "Katılım" : "Apps",  value: String(team.appearances) },
           ].map((s, i) => (
             <div
               key={i}
@@ -224,17 +241,18 @@ export default function Teams({ onSelectTeam }: TeamsProps) {
         <div className="relative flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
           <div className="space-y-3">
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="neon-badge neon-badge-green">48 TAKIM</span>
-              <span className="neon-badge neon-badge-cyan">7 KONFEDERASYON</span>
+              <span className="neon-badge neon-badge-green">{isTr ? "48 TAKIM" : "48 TEAMS"}</span>
+              <span className="neon-badge neon-badge-cyan">{isTr ? "7 KONFEDERASYON" : "7 CONFEDERATIONS"}</span>
             </div>
             <h1 style={{ fontSize: "clamp(1.8rem, 5vw, 3.5rem)", fontWeight: 900, letterSpacing: "-0.04em", color: "#F8F7F2", lineHeight: 1.1 }}>
-              MİLLİ
+              {isTr ? "MİLLİ" : "NATIONAL"}
               <br />
-              <span style={{ color: "#00FF87", textShadow: "0 0 20px rgba(0,255,135,0.3)" }}>TAKIMLAR</span>
+              <span style={{ color: "#00FF87", textShadow: "0 0 20px rgba(0,255,135,0.3)" }}>{isTr ? "TAKIMLAR" : "TEAMS"}</span>
             </h1>
             <p style={{ color: "#8C8A84", fontSize: "0.72rem", fontWeight: 500, lineHeight: 1.7, maxWidth: "44ch" }}>
-              2026 Dünya Kupası kurasında yer alan 48 milli takımın kurumsal renkler,
-              torba bilgileri ve FIFA sıralamaları.
+              {isTr
+                ? "2026 Dünya Kupası kurasında yer alan 48 milli takımın kurumsal renkler, torba bilgileri ve FIFA sıralamaları."
+                : "Official brand colors, seed pots, and FIFA rankings of all 48 national teams in the 2026 World Cup."}
             </p>
           </div>
 
@@ -261,7 +279,7 @@ export default function Teams({ onSelectTeam }: TeamsProps) {
                     transition: "all 0.15s",
                   }}
                 >
-                  {conf === "ALL" ? "TÜMÜ" : conf}
+                  {conf === "ALL" ? (isTr ? "TÜMÜ" : "ALL") : conf}
                 </button>
               );
             })}
@@ -273,7 +291,7 @@ export default function Teams({ onSelectTeam }: TeamsProps) {
       {hostTeams.length > 0 && (
         <div className="space-y-4">
           <div className="swiss-divider">
-            <span>🏟️ Ev Sahibi Ülkeler — Host Countries</span>
+            <span>🏟️ {isTr ? "Ev Sahibi Ülkeler" : "Host Countries"}</span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {hostTeams.map(renderTeamCard)}
@@ -286,7 +304,7 @@ export default function Teams({ onSelectTeam }: TeamsProps) {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="swiss-divider flex-1">
-              <span>⚽ Katılan Milli Takımlar ({qualifiedTeams.length})</span>
+              <span>⚽ {isTr ? `Katılan Milli Takımlar (${qualifiedTeams.length})` : `Qualified National Teams (${qualifiedTeams.length})`}</span>
             </div>
             <a
               href="#/groups"
@@ -303,7 +321,7 @@ export default function Teams({ onSelectTeam }: TeamsProps) {
                 flexShrink: 0,
               }}
             >
-              Grupları Gör →
+              {isTr ? "Grupları Gör →" : "See Standings →"}
             </a>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
@@ -317,9 +335,9 @@ export default function Teams({ onSelectTeam }: TeamsProps) {
         <div className="py-20 text-center space-y-3" style={{ border: "1.5px solid #E0DDD0", background: "#F2F0E8" }}>
           <div style={{ fontSize: "2rem" }}>🌍</div>
           <p style={{ fontWeight: 900, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "#5C5A54" }}>
-            Seçilen Konfederasyonda Takım Bulunamadı
+            {isTr ? "Seçilen Konfederasyonda Takım Bulunamadı" : "No Teams Found in Selected Confederation"}
           </p>
-          <p style={{ fontSize: "0.65rem", color: "#8C8A84" }}>Lütfen filtreyi değiştirin.</p>
+          <p style={{ fontSize: "0.65rem", color: "#8C8A84" }}>{isTr ? "Lütfen filtreyi değiştirin." : "Please change your filter."}</p>
         </div>
       )}
     </div>

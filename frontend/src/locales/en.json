@@ -1,0 +1,74 @@
+{
+  "menu": {
+    "title": "NAVIGATION OPTIONS",
+    "home": "HOME",
+    "home_desc": "Overall Cup Overview",
+    "groups": "GROUP STANDINGS",
+    "groups_desc": "Standings & Simulation",
+    "matches": "FIXTURES & BRACKET",
+    "matches_desc": "Cascade Simulator Game",
+    "analytics": "ANALYTICS & ODDS",
+    "analytics_desc": "Hidden Potential & Stats",
+    "guide": "GUIDE & HANDBOOK",
+    "guide_desc": "How Engine Works?",
+    "creators": "CREATORS",
+    "creators_desc": "Verified Analyst Predictions",
+    "about": "ABOUT",
+    "elo": "ELO RATING",
+    "contact": "CONTACT",
+    "teams": "NATIONAL TEAMS",
+    "all_teams": "ALL TEAMS",
+    "search_placeholder": "Search team...",
+    "results": "Results ({{count}})",
+    "no_results": "No teams found",
+    "countdown_prefix": "⏱ WORLD CUP KICKOFF IN:",
+    "countdown_started": "⚽ 2026 WORLD CUP STARTED!",
+    "ticker_details": "48 National Teams • 104 Matches • 16 Cities",
+    "ticker_location_title": "🏆 FIFA WORLD CUP 2026 • CANADA • USA • MEXICO",
+    "simulator": "⚡ SIMULATE",
+    "simulator_cockpit": "⚡ SIMULATE (COCKPIT)"
+  },
+  "hud": {
+    "sim_status": "SIM MOTOR STATUS: ON",
+    "total_matches": "TOTAL MATCHES",
+    "simulated": "SIMULATED",
+    "user_overrides": "USER OVERRIDES",
+    "matches_suffix": "MATCHES"
+  },
+  "match": {
+    "tbd_winner": "TBD WINNER",
+    "waiting_match": "WAITING MATCH",
+    "save": "SAVE",
+    "restore_tooltip": "Restore Simulation Value"
+  },
+  "group_table": {
+    "standings_title": "GROUP {{group}} STANDINGS",
+    "live_standing": "LIVE STANDING",
+    "rank": "#",
+    "team": "TEAM",
+    "stats": "P / W / D / L",
+    "gd": "GD",
+    "pts": "PTS",
+    "puan": "PTS",
+    "direct_qualify": "DIRECT QUALIFICATION",
+    "third_placed": "BEST 3RD CANDIDATE"
+  },
+  "footer": {
+    "desc": "Developed as an open-source project to reflect the World Cup 2026 excitement with the most modern technologies.",
+    "platform": "Platform",
+    "teams": "National Teams",
+    "elo": "ELO Analysis",
+    "about": "About Tournament",
+    "contact": "Contact & Support",
+    "professional": "For professional collaborations and contributions:",
+    "support": "☕ Support the Project",
+    "support_desc": "You can contribute for the AI simulation engine and new features.",
+    "donate_btn": "Buy Me a Coffee",
+    "donate_alert": "Tip integration coming soon! 🏆",
+    "copyright": "© {{year}} FollowTheWorldCup.com — All Rights Reserved"
+  },
+  "creator_view": {
+    "locked_desc": "You are reviewing the locked prediction bracket of the verified creator. Score changes are locked.",
+    "clone_btn": "🎮 CLONE THIS BRACKET"
+  }
+}

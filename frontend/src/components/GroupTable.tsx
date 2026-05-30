@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useTournamentStore } from "../services/useTournamentStore";
 
 interface GroupTableProps {
@@ -5,6 +6,7 @@ interface GroupTableProps {
 }
 
 export default function GroupTable({ groupLetter }: GroupTableProps) {
+  const { t, i18n } = useTranslation();
   const { groupStandings } = useTournamentStore();
 
   // Retrieve standings for the specified group letter from the Zustand map
@@ -15,15 +17,17 @@ export default function GroupTable({ groupLetter }: GroupTableProps) {
     return `https://api.fifa.com/api/v3/picture/flags-sq-1/${code.toUpperCase()}`;
   };
 
+  const currentLang = i18n.language || "en";
+
   return (
     <div className="relative bg-zinc-900 border-[3px] border-black p-4 select-none shadow-[6px_6px_0px_#1A1916]">
       {/* Group header section */}
       <div className="flex items-center justify-between border-b-2 border-zinc-800 pb-3 mb-4">
         <h3 className="text-sm font-black tracking-[0.2em] text-white">
-          GRUP {groupLetter.toUpperCase()} STANDINGS
+          {t("group_table.standings_title", { group: groupLetter.toUpperCase() })}
         </h3>
         <span className="font-mono text-[9px] text-[#00E5FF] font-bold tracking-widest uppercase">
-          LIVE STANDING
+          {t("group_table.live_standing")}
         </span>
       </div>
 
@@ -32,13 +36,13 @@ export default function GroupTable({ groupLetter }: GroupTableProps) {
         {/* Table Header Row */}
         <div className="flex items-center justify-between text-[9px] font-mono font-black text-zinc-500 tracking-wider px-2 uppercase pb-1 border-b border-zinc-800">
           <div className="flex-1 flex items-center">
-            <span className="w-6 text-center">#</span>
-            <span>TAKIM</span>
+            <span className="w-6 text-center">{t("group_table.rank")}</span>
+            <span>{t("group_table.team")}</span>
           </div>
           <div className="flex items-center space-x-6 text-right">
-            <span className="w-10">O / G / B / M</span>
-            <span className="w-12">AV</span>
-            <span className="w-10 text-[#00FF87]">PTS</span>
+            <span className="w-10">{t("group_table.stats")}</span>
+            <span className="w-12">{t("group_table.gd")}</span>
+            <span className="w-10 text-[#00FF87]">{t("group_table.pts")}</span>
           </div>
         </div>
 
@@ -46,6 +50,8 @@ export default function GroupTable({ groupLetter }: GroupTableProps) {
         {standings.map((team, idx) => {
           const isQualifiedDirect = idx < 2; // Direct qualification (Top 2)
           const isThirdPlacePotential = idx === 2; // Potential wildcard (3rd)
+
+          const teamName = currentLang.startsWith("tr") ? team.teamNameTr : team.teamNameEn;
 
           return (
             <div
@@ -79,7 +85,7 @@ export default function GroupTable({ groupLetter }: GroupTableProps) {
                 {/* Flag Widget */}
                 <img
                   src={getFlagUrl(team.teamCode)}
-                  alt={team.teamNameTr}
+                  alt={teamName}
                   className="w-7 h-7 object-cover border border-black shadow-[1.5px_1.5px_0px_#000]"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = `https://placehold.co/30x30/222/00FF87?text=${team.teamCode}`;
@@ -92,7 +98,7 @@ export default function GroupTable({ groupLetter }: GroupTableProps) {
                     {team.teamCode.toUpperCase()}
                   </span>
                   <span className="text-[11px] font-bold text-zinc-300 hidden sm:inline-block truncate">
-                    {team.teamNameTr.toUpperCase()}
+                    {teamName.toUpperCase()}
                   </span>
                 </div>
               </div>
@@ -126,7 +132,7 @@ export default function GroupTable({ groupLetter }: GroupTableProps) {
                     {team.points}
                   </span>
                   <span className="text-[7px] text-zinc-500 font-bold uppercase tracking-widest">
-                    PUAN
+                    {t("group_table.puan")}
                   </span>
                 </div>
               </div>
@@ -139,13 +145,14 @@ export default function GroupTable({ groupLetter }: GroupTableProps) {
       <div className="flex items-center space-x-4 mt-4 pt-3 border-t border-zinc-800/80 font-mono text-[8px] tracking-wider text-zinc-500">
         <div className="flex items-center space-x-1">
           <span className="w-2 h-1 bg-[#00FF87]" />
-          <span>DOĞRUDAN ELEMELER</span>
+          <span>{t("group_table.direct_qualify")}</span>
         </div>
         <div className="flex items-center space-x-1">
           <span className="w-2 h-1 bg-[#00E5FF]" />
-          <span>EN İYİ 3.LER ADAYI</span>
+          <span>{t("group_table.third_placed")}</span>
         </div>
       </div>
     </div>
   );
 }
+

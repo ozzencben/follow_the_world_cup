@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, lazy, Suspense } from "react";
+import { useTranslation } from "react-i18next";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import WorldCupBackground from "./components/WorldCupBackground";
@@ -44,6 +45,36 @@ const PageLoading = () => (
     </p>
   </div>
 );
+
+function FloatingLanguageSwitcher() {
+  const { i18n } = useTranslation();
+  return (
+    <div className="fixed bottom-24 right-4 md:bottom-6 md:right-6 z-50 flex items-center bg-[#F8F7F2] dark:bg-zinc-900 border-2 border-black p-1 shadow-[3px_3px_0px_#000] font-mono text-[10px] select-none">
+      <button
+        onClick={() => i18n.changeLanguage("tr")}
+        className={`px-2 py-1 cursor-pointer font-black border transition-all duration-150 uppercase ${
+          i18n.language.startsWith("tr")
+            ? "bg-[#00FF87] text-zinc-950 border-black shadow-[1.5px_1.5px_0px_#1A1916]"
+            : "border-transparent text-zinc-500 hover:text-zinc-700 bg-transparent dark:text-zinc-400 dark:hover:text-zinc-200"
+        }`}
+        style={{ borderRadius: "0px" }}
+      >
+        TR
+      </button>
+      <button
+        onClick={() => i18n.changeLanguage("en")}
+        className={`px-2 py-1 cursor-pointer font-black border transition-all duration-150 uppercase ${
+          i18n.language.startsWith("en")
+            ? "bg-[#00FF87] text-zinc-950 border-black shadow-[1.5px_1.5px_0px_#1A1916]"
+            : "border-transparent text-zinc-500 hover:text-zinc-700 bg-transparent dark:text-zinc-400 dark:hover:text-zinc-200"
+        }`}
+        style={{ borderRadius: "0px" }}
+      >
+        EN
+      </button>
+    </div>
+  );
+}
 
 export default function App() {
   const { initializeStore } = useTournamentStore();
@@ -142,6 +173,7 @@ export default function App() {
             onSelectTeam={handleSelectTeam}
           />
         )}
+        <FloatingLanguageSwitcher />
       </Suspense>
     );
   }
@@ -183,6 +215,7 @@ export default function App() {
           onSelectTeam={handleSelectTeam}
         />
       )}
+      <FloatingLanguageSwitcher />
     </div>
   );
 }
