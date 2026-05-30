@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: follow_the_world_cup_backend
+    ports:
+      - "8005:8000"
+    volumes:
+      # Mount the logs directory on the host for persistency and auditing
+      - ./logs:/app/logs
+    env_file:
+      - .env
+    restart: unless-stopped

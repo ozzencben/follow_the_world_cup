@@ -1,0 +1,986 @@
+{
+    "Fransa": {
+        "team_name": "Fransa",
+        "player_count": 26,
+        "average_age": 27.0,
+        "world_cup_appearances": 17,
+        "squad_value_million_eur": 1480.0,
+        "raw_value_text": "1.48 milyar €"
+    },
+    "İngiltere": {
+        "team_name": "İngiltere",
+        "player_count": 26,
+        "average_age": 27.1,
+        "world_cup_appearances": 17,
+        "squad_value_million_eur": 1310.0,
+        "raw_value_text": "1.31 milyar €"
+    },
+    "İspanya": {
+        "team_name": "İspanya",
+        "player_count": 26,
+        "average_age": 26.7,
+        "world_cup_appearances": 18,
+        "squad_value_million_eur": 1270.0,
+        "raw_value_text": "1.27 milyar €"
+    },
+    "Almanya": {
+        "team_name": "Almanya",
+        "player_count": 26,
+        "average_age": 28.0,
+        "world_cup_appearances": 21,
+        "squad_value_million_eur": 998.0,
+        "raw_value_text": "998.00 mil. €"
+    },
+    "Portekiz": {
+        "team_name": "Portekiz",
+        "player_count": 26,
+        "average_age": 28.0,
+        "world_cup_appearances": 10,
+        "squad_value_million_eur": 957.0,
+        "raw_value_text": "957.00 mil. €"
+    },
+    "Brezilya": {
+        "team_name": "Brezilya",
+        "player_count": 26,
+        "average_age": 29.2,
+        "world_cup_appearances": 23,
+        "squad_value_million_eur": 909.2,
+        "raw_value_text": "909.20 mil. €"
+    },
+    "Hollanda": {
+        "team_name": "Hollanda",
+        "player_count": 26,
+        "average_age": 27.7,
+        "world_cup_appearances": 12,
+        "squad_value_million_eur": 837.2,
+        "raw_value_text": "837.20 mil. €"
+    },
+    "Arjantin": {
+        "team_name": "Arjantin",
+        "player_count": 26,
+        "average_age": 29.0,
+        "world_cup_appearances": 20,
+        "squad_value_million_eur": 816.5,
+        "raw_value_text": "816.50 mil. €"
+    },
+    "Norveç": {
+        "team_name": "Norveç",
+        "player_count": 26,
+        "average_age": 26.8,
+        "world_cup_appearances": 4,
+        "squad_value_million_eur": 601.0,
+        "raw_value_text": "601.00 mil. €"
+    },
+    "Türkiye": {
+        "team_name": "Türkiye",
+        "player_count": 35,
+        "average_age": 27.1,
+        "world_cup_appearances": 3,
+        "squad_value_million_eur": 536.2,
+        "raw_value_text": "536.20 mil. €"
+    },
+    "Belçika": {
+        "team_name": "Belçika",
+        "player_count": 26,
+        "average_age": 27.6,
+        "world_cup_appearances": 15,
+        "squad_value_million_eur": 530.2,
+        "raw_value_text": "530.20 mil. €"
+    },
+    "Fildişi Sahili": {
+        "team_name": "Fildişi Sahili",
+        "player_count": 26,
+        "average_age": 25.8,
+        "world_cup_appearances": 4,
+        "squad_value_million_eur": 525.9,
+        "raw_value_text": "525.90 mil. €"
+    },
+    "Fas": {
+        "team_name": "Fas",
+        "player_count": 26,
+        "average_age": 26.4,
+        "world_cup_appearances": 8,
+        "squad_value_million_eur": 487.2,
+        "raw_value_text": "487.20 mil. €"
+    },
+    "Senegal": {
+        "team_name": "Senegal",
+        "player_count": 28,
+        "average_age": 26.9,
+        "world_cup_appearances": 4,
+        "squad_value_million_eur": 468.0,
+        "raw_value_text": "468.00 mil. €"
+    },
+    "İsveç": {
+        "team_name": "İsveç",
+        "player_count": 26,
+        "average_age": 27.4,
+        "world_cup_appearances": 13,
+        "squad_value_million_eur": 436.38,
+        "raw_value_text": "436.38 mil. €"
+    },
+    "Hırvatistan": {
+        "team_name": "Hırvatistan",
+        "player_count": 26,
+        "average_age": 28.3,
+        "world_cup_appearances": 7,
+        "squad_value_million_eur": 385.7,
+        "raw_value_text": "385.70 mil. €"
+    },
+    "Uruguay": {
+        "team_name": "Uruguay",
+        "player_count": 28,
+        "average_age": 28.5,
+        "world_cup_appearances": 16,
+        "squad_value_million_eur": 371.1,
+        "raw_value_text": "371.10 mil. €"
+    },
+    "Amerika Birleşik Devletleri": {
+        "team_name": "Amerika Birleşik Devletleri",
+        "player_count": 26,
+        "average_age": 26.9,
+        "world_cup_appearances": 12,
+        "squad_value_million_eur": 367.2,
+        "raw_value_text": "367.20 mil. €"
+    },
+    "İsviçre": {
+        "team_name": "İsviçre",
+        "player_count": 26,
+        "average_age": 28.3,
+        "world_cup_appearances": 13,
+        "squad_value_million_eur": 331.1,
+        "raw_value_text": "331.10 mil. €"
+    },
+    "Kolombiya": {
+        "team_name": "Kolombiya",
+        "player_count": 26,
+        "average_age": 30.1,
+        "world_cup_appearances": 7,
+        "squad_value_million_eur": 305.45,
+        "raw_value_text": "305.45 mil. €"
+    },
+    "Japonya": {
+        "team_name": "Japonya",
+        "player_count": 27,
+        "average_age": 28.1,
+        "world_cup_appearances": 8,
+        "squad_value_million_eur": 279.05,
+        "raw_value_text": "279.05 mil. €"
+    },
+    "Avusturya": {
+        "team_name": "Avusturya",
+        "player_count": 26,
+        "average_age": 28.5,
+        "world_cup_appearances": 9,
+        "squad_value_million_eur": 271.7,
+        "raw_value_text": "271.70 mil. €"
+    },
+    "Ekvador": {
+        "team_name": "Ekvador",
+        "player_count": 34,
+        "average_age": 24.2,
+        "world_cup_appearances": 5,
+        "squad_value_million_eur": 257.05,
+        "raw_value_text": "257.05 mil. €"
+    },
+    "Gana": {
+        "team_name": "Gana",
+        "player_count": 28,
+        "average_age": 26.7,
+        "world_cup_appearances": 5,
+        "squad_value_million_eur": 234.75,
+        "raw_value_text": "234.75 mil. €"
+    },
+    "Cezayir": {
+        "team_name": "Cezayir",
+        "player_count": 26,
+        "average_age": 26.0,
+        "world_cup_appearances": 5,
+        "squad_value_million_eur": 226.8,
+        "raw_value_text": "226.80 mil. €"
+    },
+    "Kanada": {
+        "team_name": "Kanada",
+        "player_count": 26,
+        "average_age": 26.9,
+        "world_cup_appearances": 3,
+        "squad_value_million_eur": 204.05,
+        "raw_value_text": "204.05 mil. €"
+    },
+    "Çekya": {
+        "team_name": "Çekya",
+        "player_count": 29,
+        "average_age": 27.5,
+        "world_cup_appearances": 2,
+        "squad_value_million_eur": 196.23,
+        "raw_value_text": "196.23 mil. €"
+    },
+    "İskoçya": {
+        "team_name": "İskoçya",
+        "player_count": 26,
+        "average_age": 29.4,
+        "world_cup_appearances": 9,
+        "squad_value_million_eur": 196.23,
+        "raw_value_text": "196.23 mil. €"
+    },
+    "Bosna-Hersek": {
+        "team_name": "Bosna-Hersek",
+        "player_count": 27,
+        "average_age": 26.6,
+        "world_cup_appearances": 2,
+        "squad_value_million_eur": 149.5,
+        "raw_value_text": "149.50 mil. €"
+    },
+    "Demokratik Kongo Cumhuriyeti": {
+        "team_name": "Demokratik Kongo Cumhuriyeti",
+        "player_count": 26,
+        "average_age": 29.1,
+        "world_cup_appearances": 1,
+        "squad_value_million_eur": 147.05,
+        "raw_value_text": "147.05 mil. €"
+    },
+    "Güney Kore": {
+        "team_name": "Güney Kore",
+        "player_count": 26,
+        "average_age": 28.2,
+        "world_cup_appearances": 12,
+        "squad_value_million_eur": 142.3,
+        "raw_value_text": "142.30 mil. €"
+    },
+    "Paraguay": {
+        "team_name": "Paraguay",
+        "player_count": 25,
+        "average_age": 28.9,
+        "world_cup_appearances": 10,
+        "squad_value_million_eur": 138.8,
+        "raw_value_text": "138.80 mil. €"
+    },
+    "Mısır": {
+        "team_name": "Mısır",
+        "player_count": 26,
+        "average_age": 29.0,
+        "world_cup_appearances": 4,
+        "squad_value_million_eur": 135.18,
+        "raw_value_text": "135.18 mil. €"
+    },
+    "Meksika": {
+        "team_name": "Meksika",
+        "player_count": 15,
+        "average_age": 26.4,
+        "world_cup_appearances": 18,
+        "squad_value_million_eur": 121.6,
+        "raw_value_text": "121.60 mil. €"
+    },
+    "Özbekistan": {
+        "team_name": "Özbekistan",
+        "player_count": 40,
+        "average_age": 27.1,
+        "world_cup_appearances": 1,
+        "squad_value_million_eur": 78.73,
+        "raw_value_text": "78.73 mil. €"
+    },
+    "Avustralya": {
+        "team_name": "Avustralya",
+        "player_count": 27,
+        "average_age": 27.0,
+        "world_cup_appearances": 7,
+        "squad_value_million_eur": 69.8,
+        "raw_value_text": "69.80 mil. €"
+    },
+    "Tunus": {
+        "team_name": "Tunus",
+        "player_count": 26,
+        "average_age": 26.6,
+        "world_cup_appearances": 7,
+        "squad_value_million_eur": 69.25,
+        "raw_value_text": "69.25 mil. €"
+    },
+    "Yeşil Burun Adaları": {
+        "team_name": "Yeşil Burun Adaları",
+        "player_count": 26,
+        "average_age": 29.7,
+        "world_cup_appearances": 1,
+        "squad_value_million_eur": 56.18,
+        "raw_value_text": "56.18 mil. €"
+    },
+    "Haiti": {
+        "team_name": "Haiti",
+        "player_count": 26,
+        "average_age": 27.6,
+        "world_cup_appearances": 2,
+        "squad_value_million_eur": 55.88,
+        "raw_value_text": "55.88 mil. €"
+    },
+    "Güney Afrika": {
+        "team_name": "Güney Afrika",
+        "player_count": 26,
+        "average_age": 26.8,
+        "world_cup_appearances": 4,
+        "squad_value_million_eur": 45.8,
+        "raw_value_text": "45.80 mil. €"
+    },
+    "İran": {
+        "team_name": "İran",
+        "player_count": 30,
+        "average_age": 29.2,
+        "world_cup_appearances": 7,
+        "squad_value_million_eur": 35.5,
+        "raw_value_text": "35.50 mil. €"
+    },
+    "Yeni Zelanda": {
+        "team_name": "Yeni Zelanda",
+        "player_count": 26,
+        "average_age": 28.1,
+        "world_cup_appearances": 3,
+        "squad_value_million_eur": 35.35,
+        "raw_value_text": "35.35 mil. €"
+    },
+    "Panama": {
+        "team_name": "Panama",
+        "player_count": 26,
+        "average_age": 30.4,
+        "world_cup_appearances": 2,
+        "squad_value_million_eur": 34.93,
+        "raw_value_text": "34.93 mil. €"
+    },
+    "Suudi Arabistan": {
+        "team_name": "Suudi Arabistan",
+        "player_count": 24,
+        "average_age": 27.4,
+        "world_cup_appearances": 7,
+        "squad_value_million_eur": 31.25,
+        "raw_value_text": "31.25 mil. €"
+    },
+    "Curaçao": {
+        "team_name": "Curaçao",
+        "player_count": 26,
+        "average_age": 28.0,
+        "world_cup_appearances": 1,
+        "squad_value_million_eur": 26.03,
+        "raw_value_text": "26.03 mil. €"
+    },
+    "Irak": {
+        "team_name": "Irak",
+        "player_count": 33,
+        "average_age": 26.5,
+        "world_cup_appearances": 2,
+        "squad_value_million_eur": 23.9,
+        "raw_value_text": "23.90 mil. €"
+    },
+    "Katar": {
+        "team_name": "Katar",
+        "player_count": 28,
+        "average_age": 29.0,
+        "world_cup_appearances": 2,
+        "squad_value_million_eur": 20.48,
+        "raw_value_text": "20.48 mil. €"
+    },
+    "Ürdün": {
+        "team_name": "Ürdün",
+        "player_count": 30,
+        "average_age": 27.8,
+        "world_cup_appearances": 1,
+        "squad_value_million_eur": 18.35,
+        "raw_value_text": "18.35 mil. €"
+    },
+    "Danimarka": {
+        "team_name": "Danimarka",
+        "player_count": 23,
+        "average_age": 26.3,
+        "world_cup_appearances": 6,
+        "squad_value_million_eur": 412.5,
+        "raw_value_text": "412.50 mil. €"
+    },
+    "İtalya": {
+        "team_name": "İtalya",
+        "player_count": 24,
+        "average_age": 21.0,
+        "world_cup_appearances": 18,
+        "squad_value_million_eur": 339.4,
+        "raw_value_text": "339.40 mil. €"
+    },
+    "Sırbistan": {
+        "team_name": "Sırbistan",
+        "player_count": 28,
+        "average_age": 26.8,
+        "world_cup_appearances": 3,
+        "squad_value_million_eur": 297.3,
+        "raw_value_text": "297.30 mil. €"
+    },
+    "Yunanistan": {
+        "team_name": "Yunanistan",
+        "player_count": 26,
+        "average_age": 26.4,
+        "world_cup_appearances": 3,
+        "squad_value_million_eur": 261.7,
+        "raw_value_text": "261.70 mil. €"
+    },
+    "Ukrayna": {
+        "team_name": "Ukrayna",
+        "player_count": 26,
+        "average_age": 26.6,
+        "world_cup_appearances": 1,
+        "squad_value_million_eur": 258.7,
+        "raw_value_text": "258.70 mil. €"
+    },
+    "Rusya": {
+        "team_name": "Rusya",
+        "player_count": 33,
+        "average_age": 26.4,
+        "world_cup_appearances": 4,
+        "squad_value_million_eur": 242.2,
+        "raw_value_text": "242.20 mil. €"
+    },
+    "Polonya": {
+        "team_name": "Polonya",
+        "player_count": 26,
+        "average_age": 26.3,
+        "world_cup_appearances": 9,
+        "squad_value_million_eur": 231.3,
+        "raw_value_text": "231.30 mil. €"
+    },
+    "Galler": {
+        "team_name": "Galler",
+        "player_count": 26,
+        "average_age": 27.4,
+        "world_cup_appearances": 2,
+        "squad_value_million_eur": 215.05,
+        "raw_value_text": "215.05 mil. €"
+    },
+    "Macaristan": {
+        "team_name": "Macaristan",
+        "player_count": 29,
+        "average_age": 25.6,
+        "world_cup_appearances": 9,
+        "squad_value_million_eur": 214.0,
+        "raw_value_text": "214.00 mil. €"
+    },
+    "Kamerun": {
+        "team_name": "Kamerun",
+        "player_count": 24,
+        "average_age": 23.7,
+        "world_cup_appearances": 8,
+        "squad_value_million_eur": 200.5,
+        "raw_value_text": "200.50 mil. €"
+    },
+    "Gürcistan": {
+        "team_name": "Gürcistan",
+        "player_count": 25,
+        "average_age": 26.7,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 198.25,
+        "raw_value_text": "198.25 mil. €"
+    },
+    "Kosova": {
+        "team_name": "Kosova",
+        "player_count": 29,
+        "average_age": 27.4,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 155.28,
+        "raw_value_text": "155.28 mil. €"
+    },
+    "İrlanda": {
+        "team_name": "İrlanda",
+        "player_count": 24,
+        "average_age": 25.3,
+        "world_cup_appearances": 3,
+        "squad_value_million_eur": 143.88,
+        "raw_value_text": "143.88 mil. €"
+    },
+    "Slovakya": {
+        "team_name": "Slovakya",
+        "player_count": 28,
+        "average_age": 27.3,
+        "world_cup_appearances": 1,
+        "squad_value_million_eur": 114.85,
+        "raw_value_text": "114.85 mil. €"
+    },
+    "Burkina Faso": {
+        "team_name": "Burkina Faso",
+        "player_count": 25,
+        "average_age": 25.0,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 104.3,
+        "raw_value_text": "104.30 mil. €"
+    },
+    "Mali": {
+        "team_name": "Mali",
+        "player_count": 26,
+        "average_age": 25.6,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 103.35,
+        "raw_value_text": "103.35 mil. €"
+    },
+    "Slovenya": {
+        "team_name": "Slovenya",
+        "player_count": 26,
+        "average_age": 26.7,
+        "world_cup_appearances": 2,
+        "squad_value_million_eur": 100.55,
+        "raw_value_text": "100.55 mil. €"
+    },
+    "Romanya": {
+        "team_name": "Romanya",
+        "player_count": 26,
+        "average_age": 27.9,
+        "world_cup_appearances": 7,
+        "squad_value_million_eur": 99.6,
+        "raw_value_text": "99.60 mil. €"
+    },
+    "Arnavutluk": {
+        "team_name": "Arnavutluk",
+        "player_count": 27,
+        "average_age": 27.4,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 96.35,
+        "raw_value_text": "96.35 mil. €"
+    },
+    "İsrail": {
+        "team_name": "İsrail",
+        "player_count": 25,
+        "average_age": 26.3,
+        "world_cup_appearances": 1,
+        "squad_value_million_eur": 87.7,
+        "raw_value_text": "87.70 mil. €"
+    },
+    "Kuzey İrlanda": {
+        "team_name": "Kuzey İrlanda",
+        "player_count": 23,
+        "average_age": 23.7,
+        "world_cup_appearances": 3,
+        "squad_value_million_eur": 79.9,
+        "raw_value_text": "79.90 mil. €"
+    },
+    "İzlanda": {
+        "team_name": "İzlanda",
+        "player_count": 24,
+        "average_age": 27.7,
+        "world_cup_appearances": 1,
+        "squad_value_million_eur": 78.15,
+        "raw_value_text": "78.15 mil. €"
+    },
+    "Venezuela": {
+        "team_name": "Venezuela",
+        "player_count": 27,
+        "average_age": 25.6,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 76.9,
+        "raw_value_text": "76.90 mil. €"
+    },
+    "Gambiya": {
+        "team_name": "Gambiya",
+        "player_count": 23,
+        "average_age": 25.1,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 74.43,
+        "raw_value_text": "74.43 mil. €"
+    },
+    "Şili": {
+        "team_name": "Şili",
+        "player_count": 27,
+        "average_age": 25.6,
+        "world_cup_appearances": 9,
+        "squad_value_million_eur": 69.9,
+        "raw_value_text": "69.90 mil. €"
+    },
+    "Gine": {
+        "team_name": "Gine",
+        "player_count": 26,
+        "average_age": 25.2,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 66.0,
+        "raw_value_text": "66.00 mil. €"
+    },
+    "Karadağ": {
+        "team_name": "Karadağ",
+        "player_count": 28,
+        "average_age": 28.2,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 65.63,
+        "raw_value_text": "65.63 mil. €"
+    },
+    "Nijerya": {
+        "team_name": "Nijerya",
+        "player_count": 20,
+        "average_age": 24.3,
+        "world_cup_appearances": 6,
+        "squad_value_million_eur": 62.95,
+        "raw_value_text": "62.95 mil. €"
+    },
+    "Angola": {
+        "team_name": "Angola",
+        "player_count": 27,
+        "average_age": 29.4,
+        "world_cup_appearances": 1,
+        "squad_value_million_eur": 51.7,
+        "raw_value_text": "51.70 mil. €"
+    },
+    "Finlandiya": {
+        "team_name": "Finlandiya",
+        "player_count": 27,
+        "average_age": 25.9,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 46.35,
+        "raw_value_text": "46.35 mil. €"
+    },
+    "Gine-Bissau": {
+        "team_name": "Gine-Bissau",
+        "player_count": 24,
+        "average_age": 26.5,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 41.45,
+        "raw_value_text": "41.45 mil. €"
+    },
+    "Ermenistan": {
+        "team_name": "Ermenistan",
+        "player_count": 27,
+        "average_age": 26.0,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 40.85,
+        "raw_value_text": "40.85 mil. €"
+    },
+    "Surinam": {
+        "team_name": "Surinam",
+        "player_count": 26,
+        "average_age": 29.1,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 39.23,
+        "raw_value_text": "39.23 mil. €"
+    },
+    "Endonezya": {
+        "team_name": "Endonezya",
+        "player_count": 23,
+        "average_age": 26.5,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 34.95,
+        "raw_value_text": "34.95 mil. €"
+    },
+    "Gabon": {
+        "team_name": "Gabon",
+        "player_count": 35,
+        "average_age": 27.6,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 33.8,
+        "raw_value_text": "33.80 mil. €"
+    },
+    "Kuzey Makedonya": {
+        "team_name": "Kuzey Makedonya",
+        "player_count": 25,
+        "average_age": 27.8,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 32.2,
+        "raw_value_text": "32.20 mil. €"
+    },
+    "Bulgaristan": {
+        "team_name": "Bulgaristan",
+        "player_count": 26,
+        "average_age": 25.5,
+        "world_cup_appearances": 7,
+        "squad_value_million_eur": 31.3,
+        "raw_value_text": "31.30 mil. €"
+    },
+    "Togo": {
+        "team_name": "Togo",
+        "player_count": 25,
+        "average_age": 25.6,
+        "world_cup_appearances": 1,
+        "squad_value_million_eur": 29.78,
+        "raw_value_text": "29.78 mil. €"
+    },
+    "Kosta Rika": {
+        "team_name": "Kosta Rika",
+        "player_count": 25,
+        "average_age": 24.4,
+        "world_cup_appearances": 6,
+        "squad_value_million_eur": 29.68,
+        "raw_value_text": "29.68 mil. €"
+    },
+    "Birleşik Arap Emirlikleri": {
+        "team_name": "Birleşik Arap Emirlikleri",
+        "player_count": 24,
+        "average_age": 26.7,
+        "world_cup_appearances": 1,
+        "squad_value_million_eur": 29.05,
+        "raw_value_text": "29.05 mil. €"
+    },
+    "Peru": {
+        "team_name": "Peru",
+        "player_count": 25,
+        "average_age": 27.7,
+        "world_cup_appearances": 5,
+        "squad_value_million_eur": 28.75,
+        "raw_value_text": "28.75 mil. €"
+    },
+    "Moritanya": {
+        "team_name": "Moritanya",
+        "player_count": 28,
+        "average_age": 26.4,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 26.35,
+        "raw_value_text": "26.35 mil. €"
+    },
+    "Zimbabve": {
+        "team_name": "Zimbabve",
+        "player_count": 21,
+        "average_age": 26.0,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 22.08,
+        "raw_value_text": "22.08 mil. €"
+    },
+    "Bolivya": {
+        "team_name": "Bolivya",
+        "player_count": 28,
+        "average_age": 25.0,
+        "world_cup_appearances": 3,
+        "squad_value_million_eur": 19.38,
+        "raw_value_text": "19.38 mil. €"
+    },
+    "Kıbrıs": {
+        "team_name": "Kıbrıs",
+        "player_count": 27,
+        "average_age": 26.7,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 18.63,
+        "raw_value_text": "18.63 mil. €"
+    },
+    "Benin": {
+        "team_name": "Benin",
+        "player_count": 25,
+        "average_age": 26.2,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 18.4,
+        "raw_value_text": "18.40 mil. €"
+    },
+    "Kazakistan": {
+        "team_name": "Kazakistan",
+        "player_count": 26,
+        "average_age": 26.4,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 17.35,
+        "raw_value_text": "17.35 mil. €"
+    },
+    "Lüksemburg": {
+        "team_name": "Lüksemburg",
+        "player_count": 28,
+        "average_age": 25.7,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 17.28,
+        "raw_value_text": "17.28 mil. €"
+    },
+    "Honduras": {
+        "team_name": "Honduras",
+        "player_count": 26,
+        "average_age": 25.3,
+        "world_cup_appearances": 3,
+        "squad_value_million_eur": 17.28,
+        "raw_value_text": "17.28 mil. €"
+    },
+    "Azerbaycan": {
+        "team_name": "Azerbaycan",
+        "player_count": 27,
+        "average_age": 27.6,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 16.28,
+        "raw_value_text": "16.28 mil. €"
+    },
+    "Belarus": {
+        "team_name": "Belarus",
+        "player_count": 25,
+        "average_age": 26.5,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 15.68,
+        "raw_value_text": "15.68 mil. €"
+    },
+    "Litvanya": {
+        "team_name": "Litvanya",
+        "player_count": 24,
+        "average_age": 26.0,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 15.45,
+        "raw_value_text": "15.45 mil. €"
+    },
+    "Malta": {
+        "team_name": "Malta",
+        "player_count": 27,
+        "average_age": 27.7,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 14.75,
+        "raw_value_text": "14.75 mil. €"
+    },
+    "Liberya": {
+        "team_name": "Liberya",
+        "player_count": 25,
+        "average_age": 24.7,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 14.15,
+        "raw_value_text": "14.15 mil. €"
+    },
+    "Zambiya": {
+        "team_name": "Zambiya",
+        "player_count": 23,
+        "average_age": 26.3,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 14.13,
+        "raw_value_text": "14.13 mil. €"
+    },
+    "Guadeloupe": {
+        "team_name": "Guadeloupe",
+        "player_count": 25,
+        "average_age": 29.5,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 13.75,
+        "raw_value_text": "13.75 mil. €"
+    },
+    "Sierra Leone": {
+        "team_name": "Sierra Leone",
+        "player_count": 24,
+        "average_age": 24.3,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 13.33,
+        "raw_value_text": "13.33 mil. €"
+    },
+    "Dominik Cumhuriyeti": {
+        "team_name": "Dominik Cumhuriyeti",
+        "player_count": 25,
+        "average_age": 25.5,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 12.93,
+        "raw_value_text": "12.93 mil. €"
+    },
+    "Çin": {
+        "team_name": "Çin",
+        "player_count": 26,
+        "average_age": 28.0,
+        "world_cup_appearances": 1,
+        "squad_value_million_eur": 12.9,
+        "raw_value_text": "12.90 mil. €"
+    },
+    "Estonya": {
+        "team_name": "Estonya",
+        "player_count": 25,
+        "average_age": 25.3,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 12.35,
+        "raw_value_text": "12.35 mil. €"
+    },
+    "Burundi": {
+        "team_name": "Burundi",
+        "player_count": 29,
+        "average_age": 26.5,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 11.7,
+        "raw_value_text": "11.70 mil. €"
+    },
+    "Nijer": {
+        "team_name": "Nijer",
+        "player_count": 25,
+        "average_age": 26.4,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 11.6,
+        "raw_value_text": "11.60 mil. €"
+    },
+    "Moldova": {
+        "team_name": "Moldova",
+        "player_count": 26,
+        "average_age": 25.9,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 10.53,
+        "raw_value_text": "10.53 mil. €"
+    },
+    "Filistin": {
+        "team_name": "Filistin",
+        "player_count": 30,
+        "average_age": 26.7,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 10.28,
+        "raw_value_text": "10.28 mil. €"
+    },
+    "Jamaika": {
+        "team_name": "Jamaika",
+        "player_count": 24,
+        "average_age": 23.1,
+        "world_cup_appearances": 1,
+        "squad_value_million_eur": 9.43,
+        "raw_value_text": "9.43 mil. €"
+    },
+    "Tanzanya": {
+        "team_name": "Tanzanya",
+        "player_count": 25,
+        "average_age": 26.3,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 9.03,
+        "raw_value_text": "9.03 mil. €"
+    },
+    "Libya": {
+        "team_name": "Libya",
+        "player_count": 19,
+        "average_age": 26.6,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 8.93,
+        "raw_value_text": "8.93 mil. €"
+    },
+    "Uganda": {
+        "team_name": "Uganda",
+        "player_count": 29,
+        "average_age": 28.0,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 8.88,
+        "raw_value_text": "8.88 mil. €"
+    },
+    "Çad": {
+        "team_name": "Çad",
+        "player_count": 24,
+        "average_age": 24.3,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 8.58,
+        "raw_value_text": "8.58 mil. €"
+    },
+    "Letonya": {
+        "team_name": "Letonya",
+        "player_count": 25,
+        "average_age": 27.0,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 8.28,
+        "raw_value_text": "8.28 mil. €"
+    },
+    "Umman": {
+        "team_name": "Umman",
+        "player_count": 29,
+        "average_age": 28.8,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 8.18,
+        "raw_value_text": "8.18 mil. €"
+    },
+    "Tacikistan": {
+        "team_name": "Tacikistan",
+        "player_count": 24,
+        "average_age": 26.3,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 7.9,
+        "raw_value_text": "7.90 mil. €"
+    },
+    "Orta Afrika Cumhuriyeti": {
+        "team_name": "Orta Afrika Cumhuriyeti",
+        "player_count": 29,
+        "average_age": 25.9,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 7.68,
+        "raw_value_text": "7.68 mil. €"
+    },
+    "Guatemala": {
+        "team_name": "Guatemala",
+        "player_count": 23,
+        "average_age": 25.7,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 7.45,
+        "raw_value_text": "7.45 mil. €"
+    },
+    "Bangladeş": {
+        "team_name": "Bangladeş",
+        "player_count": 23,
+        "average_age": 26.3,
+        "world_cup_appearances": 0,
+        "squad_value_million_eur": 7.25,
+        "raw_value_text": "7.25 mil. €"
+    }
+}

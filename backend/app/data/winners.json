@@ -1,0 +1,137 @@
+{
+    "winners": [
+        {
+            "year": 2022,
+            "country_tr": "Arjantin",
+            "country_en": "Argentina",
+            "manager": "Lionel Scaloni"
+        },
+        {
+            "year": 2018,
+            "country_tr": "Fransa",
+            "country_en": "France",
+            "manager": "Didier Deschamps"
+        },
+        {
+            "year": 2014,
+            "country_tr": "Almanya",
+            "country_en": "Germany",
+            "manager": "Joachim Löw"
+        },
+        {
+            "year": 2010,
+            "country_tr": "İspanya",
+            "country_en": "Spain",
+            "manager": "Vicente del Bosque"
+        },
+        {
+            "year": 2006,
+            "country_tr": "İtalya",
+            "country_en": "Italy",
+            "manager": "Marcello Lippi"
+        },
+        {
+            "year": 2002,
+            "country_tr": "Brezilya",
+            "country_en": "Brazil",
+            "manager": "Luiz Felipe Scolari"
+        },
+        {
+            "year": 1998,
+            "country_tr": "Fransa",
+            "country_en": "France",
+            "manager": "Aimé Jacquet"
+        },
+        {
+            "year": 1994,
+            "country_tr": "Brezilya",
+            "country_en": "Brazil",
+            "manager": "Carlos Alberto Parreira"
+        },
+        {
+            "year": 1990,
+            "country_tr": "Almanya",
+            "country_en": "Germany",
+            "manager": "Franz Beckenbauer"
+        },
+        {
+            "year": 1986,
+            "country_tr": "Arjantin",
+            "country_en": "Argentina",
+            "manager": "Carlos Bilardo"
+        },
+        {
+            "year": 1982,
+            "country_tr": "İtalya",
+            "country_en": "Italy",
+            "manager": "Enzo Bearzot"
+        },
+        {
+            "year": 1978,
+            "country_tr": "Arjantin",
+            "country_en": "Argentina",
+            "manager": "César Menotti"
+        },
+        {
+            "year": 1974,
+            "country_tr": "Almanya",
+            "country_en": "Germany",
+            "manager": "Helmut Schön"
+        },
+        {
+            "year": 1970,
+            "country_tr": "Brezilya",
+            "country_en": "Brazil",
+            "manager": "Mario Zagallo"
+        },
+        {
+            "year": 1966,
+            "country_tr": "İngiltere",
+            "country_en": "England",
+            "manager": "Sir Alf Ramsey"
+        },
+        {
+            "year": 1962,
+            "country_tr": "Brezilya",
+            "country_en": "Brazil",
+            "manager": "Aymoré Moreira"
+        },
+        {
+            "year": 1958,
+            "country_tr": "Brezilya",
+            "country_en": "Brazil",
+            "manager": "Vicente Feola"
+        },
+        {
+            "year": 1954,
+            "country_tr": "Almanya",
+            "country_en": "Germany",
+            "manager": "Sepp Herberger"
+        },
+        {
+            "year": 1950,
+            "country_tr": "Uruguay",
+            "country_en": "Uruguay",
+            "manager": "Juan López"
+        },
+        {
+            "year": 1938,
+            "country_tr": "İtalya",
+            "country_en": "Italy",
+            "manager": "Vittorio Pozzo"
+        },
+        {
+            "year": 1934,
+            "country_tr": "İtalya",
+            "country_en": "Italy",
+            "manager": "Vittorio Pozzo"
+        },
+        {
+            "year": 1930,
+            "country_tr": "Uruguay",
+            "country_en": "Uruguay",
+            "manager": "Alberto Suppici"
+        }
+    ],
+    "total_tournaments": 22
+}
