@@ -59,6 +59,7 @@ export default function Simulator({ onRouteChange }: { onRouteChange?: (route: s
     isPublishing,
     publishError,
     publishCreatorBracket,
+    viewingCreatorName,
   } = useTournamentStore();
 
   const handleShare = () => {
@@ -139,8 +140,31 @@ export default function Simulator({ onRouteChange }: { onRouteChange?: (route: s
           </div>
         )}
 
-        {/* ══ SUCCESSFUL PUBLISH BANNER ══ */}
-        {isReadOnly && !window.location.href.includes("bracket=") && (
+        {/* ══ CREATOR PREDICTION VIEWER BANNER ══ */}
+        {isReadOnly && viewingCreatorName && (
+          <div className="bg-black border-[3px] border-[#00E5FF] p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-[4px_4px_0_#00E5FF] animate-fade-up">
+            <div className="flex items-center space-x-3.5">
+              <span className="text-2xl">🎙️</span>
+              <div>
+                <h3 className="text-sm font-mono font-black text-[#00E5FF] uppercase tracking-wider">
+                  {viewingCreatorName}
+                </h3>
+                <p className="text-[10px] text-zinc-400 font-medium">
+                  Onaylı yorumcunun kilitli tahmin ağacını inceliyorsunuz. Skor değişiklikleri kilitlenmiştir.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={cloneBracket}
+              className="swiss-btn-primary bg-[#00E5FF] hover:bg-[#00B4D8] text-zinc-950 border-black shadow-[3px_3px_0px_#FFF] uppercase text-[10px] tracking-widest font-black shrink-0 px-4 py-2 cursor-pointer"
+            >
+              🎮 BU TAHMİNİ KLONLA
+            </button>
+          </div>
+        )}
+
+        {/* ══ SUCCESSFUL PUBLISH BANNER (own bracket just published) ══ */}
+        {isReadOnly && !viewingCreatorName && !window.location.href.includes("bracket=") && (
           <div className="bg-black border-[3px] border-[#00FF87] p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-[4px_4px_0_#00FF87] animate-fade-up">
             <div className="flex items-center space-x-3.5">
               <span className="text-2xl animate-bounce">🏆</span>
@@ -239,15 +263,6 @@ export default function Simulator({ onRouteChange }: { onRouteChange?: (route: s
                     <span>{copied ? "KOPYALANDI!" : "TAHMİNİ PAYLAŞ"}</span>
                   </button>
                 </>
-              )}
-
-              {isReadOnly && (
-                <button
-                  onClick={cloneBracket}
-                  className="swiss-btn-primary bg-[#00FF87] hover:bg-[#00D06E] text-zinc-950 border-black shadow-[3px_3px_0px_#FFF] uppercase text-[10px] tracking-widest font-black"
-                >
-                  🎮 BU TAHMİNİ KLONLA
-                </button>
               )}
             </div>
           </div>
