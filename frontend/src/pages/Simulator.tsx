@@ -2,11 +2,15 @@ import { useState } from "react";
 import MainLayout from "../components/MainLayout";
 import GroupTable from "../components/GroupTable";
 import MatchCard from "../components/MatchCard";
+import CreatorsSubView from "./CreatorsSubView";
 import { useTournamentStore } from "../services/useTournamentStore";
 import { calculateCSR } from "../services/TournamentEngine";
 
-type SubTabType = "groups" | "matches" | "analytics" | "guide";
+type SubTabType = "groups" | "matches" | "analytics" | "guide" | "creators";
 type StageType = "GROUP" | "R32" | "R16" | "QF" | "SF" | "F";
+
+// Sub-tabs that live INSIDE the Simulator page
+const SIMULATOR_SUB_TABS: SubTabType[] = ["groups", "matches", "analytics", "guide", "creators"];
 
 const STAGE_LABELS: Record<StageType, string> = {
   GROUP: "GRUP AŞAMASI",
@@ -26,8 +30,13 @@ const STAGE_COLORS: Record<StageType, string> = {
   F: "#A78BFA",
 };
 
-export default function Simulator() {
-  const [subTab, setSubTab] = useState<SubTabType>("groups");
+export default function Simulator({ onRouteChange }: { onRouteChange?: (route: string) => void }) {
+  const [subTab, setSubTab] = useState<SubTabType>(() => {
+    // Support direct navigation to #/creators
+    const hash = window.location.hash.replace("#/", "").split("?")[0];
+    if ((SIMULATOR_SUB_TABS as string[]).includes(hash)) return hash as SubTabType;
+    return "groups";
+  });
   const [activeStage, setActiveStage] = useState<StageType>("GROUP");
   const [copied, setCopied] = useState(false);
   const [token, setToken] = useState<string | null>(() => {
@@ -61,11 +70,16 @@ export default function Simulator() {
   };
 
   const handleSubTabChange = (id: string) => {
-    if (id === "groups" || id === "matches" || id === "analytics" || id === "guide") {
+    if (SIMULATOR_SUB_TABS.includes(id as SubTabType)) {
+      // Internal simulator tab switch
       setSubTab(id as SubTabType);
     } else {
-      // Redirect back to normal light-themed site routes
-      window.location.hash = `#/${id}`;
+      // External site route — delegate to App.tsx router
+      if (onRouteChange) {
+        onRouteChange(id);
+      } else {
+        window.location.hash = `#/${id}`;
+      }
     }
   };
 
@@ -332,6 +346,11 @@ export default function Simulator() {
             {subTab === "guide" && (
               /* HOW IT WORKS / DOCUMENTATION VIEW */
               <SimulationGuidePanel />
+            )}
+
+            {subTab === "creators" && (
+              /* VERIFIED CREATORS SHOWCASE */
+              <CreatorsSubView onViewCreator={() => setSubTab("groups")} />
             )}
           </div>
         )}

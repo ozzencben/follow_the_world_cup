@@ -42,6 +42,27 @@ DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 TOKENS_FILE = os.path.join(DATA_DIR, "tokens.json")
 CREATORS_FILE = os.path.join(DATA_DIR, "creators.json")
 
+@app.get("/api/creators")
+async def get_creators():
+    """
+    Public endpoint — returns the list of verified creators.
+    Only exposes id, name, bracketString. Token data is NEVER returned.
+    """
+    if not os.path.exists(CREATORS_FILE):
+        return []
+    with open(CREATORS_FILE, "r", encoding="utf-8") as f:
+        creators_data = json.load(f)
+    # Strip to public fields only
+    return [
+        {
+            "id": c.get("id"),
+            "name": c.get("name"),
+            "bracketString": c.get("bracketString"),
+        }
+        for c in creators_data
+    ]
+
+
 @app.post("/api/creators/publish")
 async def publish_creator_bracket(payload: PublishRequest):
     try:

@@ -7,6 +7,13 @@ import type {
   GroupStanding,
 } from "./TournamentEngine";
 
+// ── CREATOR TYPE ────────────────────────────────────────────────
+export interface Creator {
+  id: string;
+  name: string;
+  bracketString: string | null;
+}
+
 interface TournamentState {
   teams: SimulatorTeam[];
   matches: MatchState[];
@@ -18,6 +25,8 @@ interface TournamentState {
   isReadOnly: boolean;
   isPublishing: boolean;
   publishError: string | null;
+  creatorsList: Creator[];
+  viewingCreatorName: string | null;
 
   initializeStore: () => Promise<void>;
   overrideMatchScore: (matchId: string, homeScore: number, awayScore: number) => void;
@@ -28,6 +37,8 @@ interface TournamentState {
   loadBracketFromUrl: (queryString?: string) => Promise<void>;
   cloneBracket: () => void;
   publishCreatorBracket: (token: string) => Promise<void>;
+  fetchCreators: () => Promise<void>;
+  viewCreatorPrediction: (bracketString: string, creatorName: string) => Promise<void>;
 }
 
 // ── NAME NORMALIZATION HELPER ────────────────────────────────────
@@ -78,6 +89,8 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
   isReadOnly: false,
   isPublishing: false,
   publishError: null,
+  creatorsList: [],
+  viewingCreatorName: null,
 
   initializeStore: async () => {
     set({ loading: true, error: null });
@@ -479,5 +492,71 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
     } finally {
       set({ isPublishing: false });
     }
+  },
+
+  fetchCreators: async () => {
+    try {
+      const response = await fetch("/api/creators");
+      if (!response.ok) throw new Error(`Yorumcular yüklenemedi (${response.status})`);
+      const data: Creator[] = await response.json();
+      set({ creatorsList: data });
+    } catch (err: any) {
+      console.error("[fetchCreators]", err.message);
+    }
+  },
+
+  viewCreatorPrediction: async (bracketString: string, creatorName: string) => {
+    // Ensure simulation engine is loaded before applying the bracket
+    if (get().teams.length === 0) {
+      await get().initializeStore();
+    }
+
+    const { teams, matches, seed } = get();
+    if (teams.length === 0 || matches.length === 0) return;
+
+    const overridesMap = new Map<string, { home: number; away: number }>();
+    bracketString.split("|").forEach((item) => {
+      const parts = item.split("_");
+      if (parts.length === 2) {
+        const matchId = parts[0];
+        const scores = parts[1].split("-");
+        if (scores.length === 2) {
+          const home = parseInt(scores[0], 10);
+          const away = parseInt(scores[1], 10);
+          if (!isNaN(home) && !isNaN(away)) {
+            overridesMap.set(matchId, { home, away });
+          }
+        }
+      }
+    });
+
+    const updatedMatches = matches.map((m) => {
+      const override = overridesMap.get(m.id);
+      if (override) {
+        return {
+          ...m,
+          isOverridden: true,
+          userHomeScore: override.home,
+          userAwayScore: override.away,
+          winnerCode: override.home > override.away ? m.homeTeamCode : m.awayTeamCode,
+        };
+      }
+      return m;
+    });
+
+    const engine = new TournamentEngine(teams);
+    const cascadedMatches = engine.runFullCascade(updatedMatches, seed);
+    const standings = engine.calculateGroupStandings(
+      cascadedMatches.filter((m) => m.stage === "GROUP")
+    );
+    const bestThirds = engine.getBestThirdPlacedTeams(standings);
+
+    set({
+      matches: cascadedMatches,
+      groupStandings: standings,
+      bestThirds,
+      isReadOnly: true,
+      viewingCreatorName: creatorName,
+    });
   },
 }));
