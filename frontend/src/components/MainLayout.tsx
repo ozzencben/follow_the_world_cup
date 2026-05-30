@@ -65,6 +65,17 @@ export default function MainLayout({ children, currentRoute, onRouteChange }: Ma
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2z" />
         </svg>
       )
+    },
+    {
+      id: "analytics",
+      label: "ANALİZ & ORANLAR",
+      description: "Gizli Potansiyel & İstatistikler",
+      icon: (active: boolean) => (
+        <svg className={`w-5 h-5 ${active ? "text-[#00FF87]" : "text-zinc-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M11 3.055A9.003 9.003 0 1020.95 12H11V3.055z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+        </svg>
+      )
     }
   ];
 

@@ -20,6 +20,10 @@ export interface SimulatorTeam {
   confederationId: string;
   group: string; // "a" to "l"
   abbr: string;
+  goalsForAvg?: number;
+  goalsAgainstAvg?: number;
+  avgRating?: number;
+  matchesTotal?: number;
 }
 
 export interface MatchState {
@@ -61,7 +65,10 @@ function log10(val: number): number {
  * 1. COMPOSITE STRENGTH RATING (CSR) CALCULATION
  * Evaluates a team based on Elo, squad value (logarithmic), DNA, momentum, and host advantages.
  */
-export function calculateCSR(team: SimulatorTeam): number {
+export function calculateCSR(
+  team: SimulatorTeam,
+  stage: "GROUP" | "R32" | "R16" | "QF" | "SF" | "F" = "GROUP"
+): number {
   // A. Base Elo (55%)
   const rElo = team.rating;
 
@@ -69,7 +76,13 @@ export function calculateCSR(team: SimulatorTeam): number {
   const rSquad = 100 * log10(team.squadValue + 1);
 
   // C. Tournament DNA (10%)
-  const rDNA = Math.min(150, 5 * team.appearances + 25 * team.championships);
+  let dnaMultiplier = 1.0;
+  if (stage === "R32" || stage === "R16") {
+    dnaMultiplier = 1.5;
+  } else if (stage === "QF" || stage === "SF" || stage === "F") {
+    dnaMultiplier = 2.0;
+  }
+  const rDNA = Math.min(150, 5 * team.appearances + 25 * team.championships) * dnaMultiplier;
 
   // D. Momentum (5%)
   const parsedChange = parseInt(team.oneYearRatingChange.replace("−", "-").replace("+", ""), 10);
@@ -78,12 +91,20 @@ export function calculateCSR(team: SimulatorTeam): number {
   // E. Host Advantage (10%)
   const rHost = team.hostTeam ? 100 : 0;
 
-  return 0.55 * rElo + 0.20 * rSquad + 0.10 * rDNA + 0.05 * rMomentum + 0.10 * rHost;
+  let csr = 0.55 * rElo + 0.20 * rSquad + 0.10 * rDNA + 0.05 * rMomentum + 0.10 * rHost;
+
+  // Ev Sahibi Balonunu Söndürme (Host Cap):
+  // Ev sahibi bonusu alan ancak elite ELO'su olmayan takımlar 1950 CSR ile limitlenir.
+  if (team.hostTeam && team.rating < 1950) {
+    csr = Math.min(1950, csr);
+  }
+
+  return csr;
 }
 
 /**
  * 2. TRUNCATED POISSON RANDOM VARIABLE GENERATION
- * Employs Knuth's algorithm to generate realistic soccer goal counts bounded to [0, 6].
+ * Employs Knuth's algorithm to generate realistic soccer goal counts bounded to [0, 8].
  */
 export function poissonRandom(lambda: number, randomFn?: () => number): number {
   const rand = randomFn || Math.random;
@@ -95,42 +116,118 @@ export function poissonRandom(lambda: number, randomFn?: () => number): number {
     p *= rand();
   } while (p > L && k < 15); // Bounded loop for safety
   const val = k - 1;
-  return Math.min(6, val); // Truncated to avoid unrealistic results
+  return Math.min(8, val); // Bounded to 8 to allow historic routs (e.g. 7-1, 8-0)
 }
 
 /**
  * 3. POISSON GOAL PREDICTOR MODEL
- * Simulates a single match outcome based on team CSR ratings.
+ * Simulates a single match outcome based on team CSR ratings, aura, underdog momentum, and golden generation.
  */
 export function simulateMatch(
   teamA: SimulatorTeam,
   teamB: SimulatorTeam,
-  isKnockout: boolean,
+  stage: "GROUP" | "R32" | "R16" | "QF" | "SF" | "F",
   randomFn?: () => number
 ): { homeScore: number; awayScore: number; winnerCode: string } {
   const rand = randomFn || Math.random;
-  const csrA = calculateCSR(teamA);
-  const csrB = calculateCSR(teamB);
+  let csrA = calculateCSR(teamA, stage);
+  let csrB = calculateCSR(teamB, stage);
 
-  // Historical fallbacks for goals expectation (averages)
-  const baseGoalsFor = 1.45;
-  const baseGoalsAgainst = 1.15;
+  const parseChange = (changeStr: string) => {
+    const cleaned = changeStr.replace("−", "-").replace("+", "").trim();
+    const val = parseInt(cleaned, 10);
+    return isNaN(val) ? 0 : val;
+  };
+
+  // Deviren Bonusu (Underdog Motivation)
+  if (csrA - csrB > 250) {
+    if (parseChange(teamB.oneYearRatingChange) > 0) {
+      csrB += 50;
+    }
+  } else if (csrB - csrA > 250) {
+    if (parseChange(teamA.oneYearRatingChange) > 0) {
+      csrA += 50;
+    }
+  }
+
+  // Get dynamic goal average values or fallback
+  let goalsForA = teamA.goalsForAvg ?? 1.45;
+  let goalsAgainstA = teamA.goalsAgainstAvg ?? 1.15;
+  let goalsForB = teamB.goalsForAvg ?? 1.45;
+  let goalsAgainstB = teamB.goalsAgainstAvg ?? 1.15;
+
+  // Şişirilmiş İstatistik Filtresi (Fake Stats Normalization):
+  // İki takım arasındaki CSR farkı 300 puandan BÜYÜKSE, zayıf olan takımın goalsForAvg değeri MAKSİMUM 1.1'e sabitlenir.
+  if (csrA - csrB > 300) {
+    goalsForB = Math.min(goalsForB, 1.1);
+  } else if (csrB - csrA > 300) {
+    goalsForA = Math.min(goalsForA, 1.1);
+  }
 
   const diffCSR = csrA - csrB;
-  let lambdaA = baseGoalsFor * baseGoalsAgainst * (1 + diffCSR / 1000);
-  let lambdaB = baseGoalsFor * baseGoalsAgainst * (1 + diffCSR / -1000);
+  let lambdaA = goalsForA * goalsAgainstB * (1 + diffCSR / 1000);
+  let lambdaB = goalsForB * goalsAgainstA * (1 + diffCSR / -1000);
 
-  // Bound lambdas to realistic ranges [0.25, 4.25]
+  // Devlerin Aurası (Juggernaut Modifier)
+  if (teamA.rating > 2000) {
+    lambdaB *= 0.85;
+  }
+  if (teamB.rating > 2000) {
+    lambdaA *= 0.85;
+  }
+
+  // Altın Jenerasyon Bonusu (Golden Generation / Wonderkids)
+  if (teamA.averageAge < 27 && teamA.squadValue > 300) {
+    lambdaA *= 1.10;
+  }
+  if (teamB.averageAge < 27 && teamB.squadValue > 300) {
+    lambdaB *= 1.10;
+  }
+
+  // Efsanelerin Zırhı (Elite Plot Armor - Knockout Penalty)
+  if (stage !== "GROUP") {
+    if (teamA.rating >= 2000 && csrA - csrB > 200) {
+      lambdaB *= 0.80;
+    }
+    if (teamB.rating >= 2000 && csrB - csrA > 200) {
+      lambdaA *= 0.80;
+    }
+  }
+
+  // Sahne Korkusu (Stage Fright Penalty):
+  // Zayıf takımın baz ELO < 1650 ise VE rakibinin baz ELO > 1950 ise; zayıf takımın Lambda'sı %50 oranında düşürülür.
+  if (teamA.rating < 1650 && teamB.rating > 1950) {
+    lambdaA *= 0.5;
+  }
+  if (teamB.rating < 1650 && teamA.rating > 1950) {
+    lambdaB *= 0.5;
+  }
+
+  // Büyük Maç Baskısı (Variance Dampening)
+  if (stage === "QF" || stage === "SF" || stage === "F") {
+    lambdaA *= 0.75;
+    lambdaB *= 0.75;
+  }
+
+  // Bound lambdas to realistic ranges [0.25, 4.25] after all modifications
   lambdaA = Math.max(0.25, Math.min(4.25, lambdaA));
   lambdaB = Math.max(0.25, Math.min(4.25, lambdaB));
 
   let homeScore = poissonRandom(lambdaA, rand);
   let awayScore = poissonRandom(lambdaB, rand);
 
+  // Kesin Gol Sınırı (Ultimate Score Cap):
+  // İki takım arasındaki CSR farkı 350 puandan BÜYÜKSE, zayıf takımın üretebileceği maksimum gol sayısı zorla 1'e sabitlenir.
+  if (csrA - csrB > 350) {
+    awayScore = Math.min(1, awayScore);
+  } else if (csrB - csrA > 350) {
+    homeScore = Math.min(1, homeScore);
+  }
+
   // Handle Knockout Stage Tie-Breakers (no draws)
-  if (isKnockout && homeScore === awayScore) {
+  if (stage !== "GROUP" && homeScore === awayScore) {
     // 50% CSR weight + 50% luck simulation for extra-time/penalties
-    const pA = 1 / (1 + Math.pow(10, -diffCSR / 400));
+    const pA = 1 / (1 + Math.pow(10, -(csrA - csrB) / 400));
     if (rand() < pA) {
       homeScore += 1; // Simulated extra time goal or penalty win
     } else {
@@ -283,7 +380,7 @@ export class TournamentEngine {
           const tA = this.getTeam(m.homeTeamCode);
           const tB = this.getTeam(m.awayTeamCode);
           if (tA && tB) {
-            const res = simulateMatch(tA, tB, false, seededRandom);
+            const res = simulateMatch(tA, tB, "GROUP", seededRandom);
             m.simulatedHomeScore = res.homeScore;
             m.simulatedAwayScore = res.awayScore;
             m.winnerCode = res.winnerCode;
@@ -380,7 +477,7 @@ export class TournamentEngine {
         const tA = this.getTeam(updatedMatch.homeTeamCode);
         const tB = this.getTeam(updatedMatch.awayTeamCode);
         if (tA && tB) {
-          const res = simulateMatch(tA, tB, true, seededRandom);
+          const res = simulateMatch(tA, tB, "R32", seededRandom);
           updatedMatch.simulatedHomeScore = res.homeScore;
           updatedMatch.simulatedAwayScore = res.awayScore;
           updatedMatch.winnerCode = res.winnerCode;
@@ -452,7 +549,7 @@ export class TournamentEngine {
           const tA = this.getTeam(updatedMatch.homeTeamCode);
           const tB = this.getTeam(updatedMatch.awayTeamCode);
           if (tA && tB) {
-            const res = simulateMatch(tA, tB, true, seededRandom);
+            const res = simulateMatch(tA, tB, stage, seededRandom);
             updatedMatch.simulatedHomeScore = res.homeScore;
             updatedMatch.simulatedAwayScore = res.awayScore;
             updatedMatch.winnerCode = res.winnerCode;

@@ -120,6 +120,10 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
           confederationId: elo.confederation,
           group: matchingSquad?.group || "a",
           abbr: matchingSquad?.abbr || elo.code,
+          goalsForAvg: elo.goalsForAvg,
+          goalsAgainstAvg: elo.goalsAgainstAvg,
+          avgRating: elo.avgRating,
+          matchesTotal: elo.matchesTotal,
         };
       });
 
