@@ -677,7 +677,7 @@ export default function Home({ onSelectTeam }: HomeProps) {
                 { weight: "%20", label: isTr ? "KADRO DEĞERİ" : "SQUAD VALUE", sub: isTr ? "Piyasa Değeri" : "Transfermarkt" },
                 { weight: "%10", label: isTr ? "TURNUVA DNA" : "DNA FORCE", sub: isTr ? "Katılım / Kupa" : "History" },
                 { weight: "%5", label: isTr ? "MOMENTUM" : "MOMENTUM", sub: isTr ? "1 Yıllık Trend" : "1Yr Trend" },
-                { weight: "%10", label: isTr ? "EV SAHİBİ" : "HOST AURA", sub: isTr ? "Seyirci Gücü" : "Crowd Boost" },
+                { weight: "+%15", label: isTr ? "EV SAHİBİ" : "HOST BOOST", sub: isTr ? "Gol Olasılığı" : "Expected Goals" },
               ].map((w, idx) => (
                 <div key={idx} className="text-center space-y-1">
                   <div className="swiss-number text-zinc-900 leading-none" style={{ fontSize: "1.6rem" }}>{w.weight}</div>
@@ -689,8 +689,8 @@ export default function Home({ onSelectTeam }: HomeProps) {
 
             <div className="text-[9px] text-zinc-500 font-bold bg-[#F2F0E8] p-3 border-l-2 border-[#00FF87] leading-relaxed">
               💡 {isTr 
-                ? "Ev Sahibi Balonunu Söndürme: Elite ELO seviyesine sahip olmayan ev sahibi ülkeler, CSR hesaplamasında maksimum 1950 limitine tabi tutulur." 
-                : "Host Cap: Host countries that do not possess elite base ELO scores are automatically capped at 1950 CSR to prevent synthetic inflation."}
+                ? "Ev Sahibi Ayrıştırması: Seyirci motivasyonu temel CSR puanını yapay olarak şişirmemesi için teknik formülden çıkarılmış, doğrudan gol beklentisine (Lambda +%15) yansıtılmıştır." 
+                : "Host Decoupling: To prevent crowd motivation from artificially inflating the core CSR, it is decoupled from the strength rating and applied directly to expected goals (Lambda +15%)."}
             </div>
           </div>
 
@@ -734,15 +734,13 @@ export default function Home({ onSelectTeam }: HomeProps) {
       </div>
 
       {/* ═══════════════════════════════════════════════════════
-          BRACKET SHARING AND CREATORS SHOWCASE
+          BRACKET SHARING (FULL WIDTH)
       ══════════════════════════════════════════════════════════ */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-        
-        {/* Dynamic link sharing */}
-        <div
-          className="p-6 md:p-8 flex flex-col justify-between space-y-6"
-          style={{ border: "1.5px solid #1A1916", background: "#F8F7F2", boxShadow: "4px 4px 0px #FF2D78" }}
-        >
+      <div
+        className="p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6"
+        style={{ border: "1.5px solid #1A1916", background: "#F8F7F2", boxShadow: "5px 5px 0px #FF2D78" }}
+      >
+        <div className="flex-1 space-y-4">
           <div>
             <span className="neon-badge font-mono uppercase text-[8px] tracking-widest" style={{ color: "#FF2D78", borderColor: "#FF2D7840", background: "#FF2D7810" }}>
               03 • ZERO-DATABASE SHARING
@@ -752,75 +750,27 @@ export default function Home({ onSelectTeam }: HomeProps) {
             </h3>
             <p className="text-[10px] text-zinc-500 font-semibold leading-relaxed mt-2">
               {isTr
-                ? "Braketinizi paylaşmak için hiçbir veritabanı veya üyelik gereksizdir! Tahminlerinizi tek tıkla şifrelenmiş URL parametrelerine kodlayın, kopyalayın ve tüm dünyaya yayınlayın."
+                ? "Braketinizi paylaşmak için hiçbir veritabanı veya üyelik gerekmez! Tahminlerinizi tek tıkla şifrelenmiş URL parametrelerine kodlayın, kopyalayın ve tüm dünyayla paylaşın."
                 : "No databases or profiles required to broadcast your bracket! Instantly serialize all match overrides into a compressed URL parameter string, copy, and share globally."}
             </p>
           </div>
 
-          <div className="text-[9px] font-mono text-zinc-400 bg-zinc-950 p-4 border border-zinc-800 leading-normal flex items-center justify-between">
+          <div className="text-[9px] font-mono text-zinc-400 bg-zinc-950 p-4 border border-zinc-800 leading-normal flex items-center justify-between max-w-xl">
             <span className="truncate select-all mr-2">?bracket=G-A-1_2-1|R32-1_3-2|QF-1_1-0...</span>
             <span className="text-[#FF2D78] font-bold shrink-0">[ENCRYPTED]</span>
           </div>
-
-          <div>
-            <a
-              href="#/simulator"
-              onClick={e => { e.preventDefault(); window.location.hash = "#/simulator"; }}
-              className="swiss-btn-primary w-full justify-center"
-              style={{ background: "transparent", color: "#FF2D78", borderColor: "#FF2D78", boxShadow: "3px 3px 0 rgba(255,45,120,0.25)" }}
-            >
-              🎮 {isTr ? "KENDİ TAHMİNİNİ OLUŞTUR" : "GENERATE YOUR PREDICTION BRACKET"}
-            </a>
-          </div>
         </div>
 
-        {/* Commentator Showcase & Dynamic Link Clones */}
-        <div
-          className="p-6 md:p-8 flex flex-col justify-between space-y-6"
-          style={{ border: "1.5px solid #1A1916", background: "#F8F7F2", boxShadow: "4px 4px 0px #A78BFA" }}
-        >
-          <div>
-            <span className="neon-badge font-mono uppercase text-[8px] tracking-widest" style={{ color: "#A78BFA", borderColor: "#A78BFA40", background: "#A78BFA10" }}>
-              04 • ONE-SHOT LOCK & ANALYSTS
-            </span>
-            <h3 className="font-black text-sm tracking-wide uppercase mt-3">
-              {isTr ? "Onaylı Yorumcu Kilitli Tahminleri" : "One-Shot Locked Creator Predictions"}
-            </h3>
-            <p className="text-[10px] text-zinc-500 font-semibold leading-relaxed mt-2">
-              {isTr
-                ? "Sertifikalı analistler ve spor yazarları, One-Shot kilitli şifreleriyle tahminlerini Railway veri tabanında dondururlar. Onların tahminlerini kopyalayabilir, AI ile karşılaştırabilir ve üstünlüklerini test edebilirsiniz."
-                : "Certified commentators freeze their tournament predictions using secure, one-shot lock tokens. You can examine, clone their exact tree, and pitch them against the Monte Carlo Poisson engine."}
-            </p>
-          </div>
-
-          {/* Quick list of creators showcase */}
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { name: "Özgenç Dönmezer", role: isTr ? "Sistem Mimarı" : "Lead Architect", active: true },
-              { name: isTr ? "Yapay Zeka Motoru" : "AI simulation Engine", role: isTr ? "Poisson Predictor" : "Poisson Predictor", active: true },
-            ].map((c, idx) => (
-              <div key={idx} className="bg-[#F2F0E8] p-3 border border-zinc-200 flex flex-col justify-between">
-                <div>
-                  <div className="text-[9px] font-extrabold text-zinc-900 leading-tight">{c.name.toUpperCase()}</div>
-                  <div className="text-[7.5px] font-bold text-zinc-500 uppercase tracking-widest mt-1">{c.role}</div>
-                </div>
-                <span className="text-[7.5px] text-[#A78BFA] font-bold tracking-widest uppercase mt-2">● {isTr ? "KİLİTLİ" : "LOCKED"}</span>
-              </div>
-            ))}
-          </div>
-
-          <div>
-            <a
-              href="#/simulator"
-              onClick={e => { e.preventDefault(); window.location.hash = "#/simulator?creators=true"; }}
-              className="swiss-btn-primary w-full justify-center"
-              style={{ background: "transparent", color: "#A78BFA", borderColor: "#A78BFA", boxShadow: "3px 3px 0 rgba(167,139,250,0.25)" }}
-            >
-              📣 {isTr ? "TÜM YORUMCULARI İNCELE" : "EXPLORE ALL CREATORS"}
-            </a>
-          </div>
+        <div className="shrink-0 w-full md:w-auto">
+          <a
+            href="#/simulator"
+            onClick={e => { e.preventDefault(); window.location.hash = "#/simulator"; }}
+            className="swiss-btn-primary w-full md:w-64 justify-center"
+            style={{ background: "transparent", color: "#FF2D78", borderColor: "#FF2D78", boxShadow: "3px 3px 0 rgba(255,45,120,0.25)" }}
+          >
+            🎮 {isTr ? "KENDİ TAHMİNİNİ OLUŞTUR" : "GENERATE YOUR PREDICTION BRACKET"}
+          </a>
         </div>
-
       </div>
 
       {/* ═══════════════════════════════════════════════════════
