@@ -38,6 +38,7 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 class PublishRequest(BaseModel):
     token: str
     bracketString: str
+    comment: str = None
 
 # Define paths to json databases
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
@@ -142,6 +143,9 @@ async def publish_creator_bracket(payload: PublishRequest):
         for creator in creators_data:
             if creator.get("id") == creator_id:
                 creator["bracketString"] = payload.bracketString
+                if payload.comment:
+                    creator["commentTr"] = payload.comment
+                    creator["commentEn"] = payload.comment
                 creator_found = True
                 break
                 

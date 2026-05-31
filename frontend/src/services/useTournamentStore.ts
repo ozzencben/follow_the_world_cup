@@ -40,7 +40,7 @@ interface TournamentState {
   generateShareableLink: () => string;
   loadBracketFromUrl: (queryString?: string) => Promise<void>;
   cloneBracket: () => void;
-  publishCreatorBracket: (token: string) => Promise<void>;
+  publishCreatorBracket: (token: string, comment?: string) => Promise<void>;
   fetchCreators: () => Promise<void>;
   viewCreatorPrediction: (bracketString: string, creatorName: string) => Promise<void>;
 }
@@ -451,7 +451,7 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
     window.history.replaceState({}, "", url.toString());
   },
 
-  publishCreatorBracket: async (token: string) => {
+  publishCreatorBracket: async (token: string, comment?: string) => {
     set({ isPublishing: true, publishError: null });
     try {
       const { matches } = get();
@@ -465,7 +465,7 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ token, bracketString: serialized }),
+        body: JSON.stringify({ token, bracketString: serialized, comment }),
       });
 
       if (!response.ok) {

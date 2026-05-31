@@ -52,6 +52,7 @@ export default function Simulator({ onRouteChange }: { onRouteChange?: (route: s
   });
   const [activeStage, setActiveStage] = useState<StageType>("GROUP");
   const [copied, setCopied] = useState(false);
+  const [comment, setComment] = useState("");
   const token = (() => {
     const href = window.location.href;
     const match = href.match(/[?&]token=([^&#]*)/);
@@ -131,10 +132,30 @@ export default function Simulator({ onRouteChange }: { onRouteChange?: (route: s
               </div>
             )}
 
-            <div className="flex items-center gap-3">
+            {/* Verbal Commentary Input Field */}
+            <div className="flex flex-col space-y-2 max-w-[80ch] w-full">
+              <label className="text-[9px] font-mono font-bold text-[#FFE600] uppercase tracking-wider">
+                🎙️ {isTr ? "Sözlü Yorumunuz & Öngörünüz (Anasayfada Canlı Gösterilecektir)" : "Your Commentary & Predictions (Will display live on Homepage)"}
+              </label>
+              <textarea
+                value={comment}
+                onChange={e => setComment(e.target.value)}
+                maxLength={200}
+                placeholder={isTr ? "Örn: Brezilya kadro kalitesiyle kupayı kaldırır. Türkiye çeyrek finale kadar sürpriz yapabilir..." : "e.g., Brazil wins due to squad value. Turkey could pull off surprises up to QF..."}
+                rows={3}
+                className="w-full bg-zinc-950 border-2 border-zinc-800 text-zinc-100 text-xs font-mono p-3 focus:border-[#FFE600] focus:outline-none placeholder-zinc-700 transition-colors"
+                style={{ borderRadius: "0px" }}
+              />
+              <div className="flex items-center justify-between text-[8px] font-mono text-zinc-500 font-bold">
+                <span>{isTr ? "* Maksimum 200 karakter." : "* Max 200 characters."}</span>
+                <span className={comment.length >= 180 ? "text-[#FF2D78]" : "text-zinc-500"}>{comment.length} / 200</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 pt-2">
               <button
                 onClick={async () => {
-                  await publishCreatorBracket(token);
+                  await publishCreatorBracket(token, comment);
                 }}
                 disabled={isPublishing}
                 className={`swiss-btn-primary bg-[#FF2D78] hover:bg-[#D8105B] text-white border-black shadow-[3px_3px_0px_#FFE600] uppercase text-[10px] tracking-widest font-black flex items-center gap-2 px-5 py-3 cursor-pointer ${
