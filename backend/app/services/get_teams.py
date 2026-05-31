@@ -4,10 +4,11 @@ import httpx
 from loguru import logger
 import anyio
 
+from app.core.config import settings
+
 # Kayıt / Önbellekleme dizini ve dosya yolları
 DATA_DIR = Path("app/data")
 TEAMS_FILE = DATA_DIR / "fifa_data.json"
-FIFA_API_URL = "https://cxm-api.fifa.com/fifaplusweb/api/sections/teamsModule/4v5Yng3VdGD9c1cpnOIff1?locale=en&limit=200"
 
 _cached_teams = None
 _teams_mtime = 0.0
@@ -63,7 +64,7 @@ async def fetch_world_cup_participants() -> dict:
     try:
         logger.info("Yerel veri bulunamadı. Resmi FIFA API'si üzerinden veriler çekiliyor...")
         async with httpx.AsyncClient(timeout=15.0) as client:
-            response = await client.get(FIFA_API_URL, headers=headers)
+            response = await client.get(settings.FIFA_TEAMS_API_URL, headers=headers)
 
             if response.status_code == 200:
                 data = response.json()

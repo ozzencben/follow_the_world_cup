@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-const DONATE_URL = "https://kreosus.com/httpsgithubcomozzencben";
+const DONATE_URL = import.meta.env.VITE_KREOSUS_URL || "https://kreosus.com/httpsgithubcomozzencben";
 
 export default function Footer() {
     const { t } = useTranslation();

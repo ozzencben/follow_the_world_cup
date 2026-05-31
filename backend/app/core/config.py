@@ -1,5 +1,5 @@
 from typing import Any, List, Union
-from pydantic import field_validator
+from pydantic import field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -18,9 +18,9 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "INFO"
 
     # CORS Configurations
-    # Annotated as Any to prevent Pydantic-Settings from forcing JSON array parsing
-    # parsed dynamically into list[str] in field_validator
     BACKEND_CORS_ORIGINS: Any = []
+    BACKEND_CORS_ORIGIN_REGEX: str | None = None
+    ALLOWED_ORIGINS: Any = None
 
     @field_validator("BACKEND_CORS_ORIGINS", mode="before")
     @classmethod
@@ -37,10 +37,41 @@ class Settings(BaseSettings):
             return [str(item) for item in v]
         return []
 
-    # External APIs (FollowTheWorldCup integrations)
+    @model_validator(mode="after")
+    def merge_allowed_origins(self) -> "Settings":
+        if self.ALLOWED_ORIGINS:
+            v = self.ALLOWED_ORIGINS
+            parsed_origins = []
+            if isinstance(v, str):
+                if v.startswith("[") and v.endswith("]"):
+                    import json
+                    try:
+                        parsed_origins = json.loads(v)
+                    except Exception:
+                        pass
+                else:
+                    parsed_origins = [i.strip() for i in v.split(",") if i.strip()]
+            elif isinstance(v, list):
+                parsed_origins = [str(item) for item in v]
+                
+            for origin in parsed_origins:
+                if origin not in self.BACKEND_CORS_ORIGINS:
+                    self.BACKEND_CORS_ORIGINS.append(origin)
+        return self
+
+    # External Integrations & Redirections
+    KREOSUS_URL: str = "https://kreosus.com/httpsgithubcomozzencben"
+
+    # External FIFA API endpoints
+    FIFA_TEAMS_API_URL: str = "https://cxm-api.fifa.com/fifaplusweb/api/sections/teamsModule/4v5Yng3VdGD9c1cpnOIff1?locale=en&limit=200"
+    FIFA_SQUADS_API_URL: str = "https://play.fifa.com/json/bracket_predictor/squads.json"
+    FIFA_ROUNDS_API_URL: str = "https://play.fifa.com/json/bracket_predictor/rounds.json"
+
+    # Secret Keys (FollowTheWorldCup integrations)
     FOOTBALL_API_KEY: str | None = None
     GEMINI_API_KEY: str | None = None
 
 
 # Instantiate settings globally
 settings = Settings()
+

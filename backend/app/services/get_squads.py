@@ -4,10 +4,11 @@ import httpx
 from loguru import logger
 import anyio
 
+from app.core.config import settings
+
 # Kayıt / Önbellekleme dizini ve dosya yolları
 DATA_DIR = Path("app/data")
 SQUADS_FILE = DATA_DIR / "squads.json"
-FIFA_SQUADS_URL = "https://play.fifa.com/json/bracket_predictor/squads.json"
 
 _cached_squads = None
 _squads_mtime = 0.0
@@ -63,7 +64,7 @@ async def fetch_world_cup_squads() -> list:
     try:
         logger.info("Yerel puan durumu verisi bulunamadı. Resmi FIFA API'si üzerinden squads verileri çekiliyor...")
         async with httpx.AsyncClient(timeout=15.0) as client:
-            response = await client.get(FIFA_SQUADS_URL, headers=headers)
+            response = await client.get(settings.FIFA_SQUADS_API_URL, headers=headers)
 
             if response.status_code == 200:
                 data = response.json()

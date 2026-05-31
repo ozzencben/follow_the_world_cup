@@ -17,11 +17,12 @@ app = FastAPI(
     debug=(settings.ENVIRONMENT == "development"),
 )
 
-# Apply dynamic CORS configurations
-if settings.BACKEND_CORS_ORIGINS:
+# Apply dynamic CORS configurations with regex match support (such as Vercel preview environments)
+if settings.BACKEND_CORS_ORIGINS or settings.BACKEND_CORS_ORIGIN_REGEX:
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=settings.BACKEND_CORS_ORIGINS,
+        allow_origins=settings.BACKEND_CORS_ORIGINS or [],
+        allow_origin_regex=settings.BACKEND_CORS_ORIGIN_REGEX,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],

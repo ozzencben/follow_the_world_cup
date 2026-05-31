@@ -8137,3 +8137,83 @@
 2026-05-31 07:46:06.484 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
 2026-05-31 07:46:06.485 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
 2026-05-31 07:46:06.486 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-05-31 07:46:09.385 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:44 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-31 07:46:09.384 | INFO     | app.services.get_teams:fetch_world_cup_participants:44 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-31 07:46:09.416 | INFO     | app.services.get_squads:fetch_world_cup_squads:44 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-31 07:46:09.428 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33416 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-31 07:46:09.448 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33416 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-31 07:46:09.453 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33436 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-31 07:46:09.469 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33402 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-31 07:46:09.484 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33416 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-31 07:46:09.484 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33430 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-31 07:46:09.502 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33430 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-31 07:46:09.510 | INFO     | app.services.get_elo:_get_elo_ratings_sync:219 - ELO Ratings yüklendi: 48 takım
+2026-05-31 07:46:09.524 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33420 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-31 07:46:09.542 | INFO     | app.services.get_teams:fetch_world_cup_participants:44 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-31 07:46:09.554 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33430 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-31 07:46:09.561 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33436 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-31 07:46:09.580 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33430 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-31 07:46:09.599 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33436 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-31 07:46:12.617 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33436 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-31 07:46:12.634 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33430 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-31 07:46:14.112 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33436 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-31 07:46:14.133 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33430 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-31 07:46:14.156 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33420 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-31 07:46:14.199 | INFO     | app.services.get_elo:_get_elo_ratings_sync:219 - ELO Ratings yüklendi: 48 takım
+2026-05-31 07:46:14.210 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33436 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-31 07:46:14.316 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33470 - "GET /api/v1/teams/flags/flags-sq-1/ARG HTTP/1.1" 200
+2026-05-31 07:46:14.321 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33466 - "GET /api/v1/teams/flags/flags-sq-1/FRA HTTP/1.1" 200
+2026-05-31 07:46:14.332 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33454 - "GET /api/v1/teams/flags/flags-sq-1/ESP HTTP/1.1" 200
+2026-05-31 07:46:14.332 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33476 - "GET /api/v1/teams/flags/flags-sq-1/ENG HTTP/1.1" 200
+2026-05-31 07:46:14.335 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33486 - "GET /api/v1/teams/flags/flags-sq-1/BRA HTTP/1.1" 200
+2026-05-31 07:46:14.343 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33500 - "GET /api/v1/teams/flags/flags-sq-1/POR HTTP/1.1" 200
+2026-05-31 07:46:14.359 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33470 - "GET /api/v1/teams/flags/flags-sq-1/COL HTTP/1.1" 200
+2026-05-31 07:46:14.361 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33466 - "GET /api/v1/teams/flags/flags-sq-1/NED HTTP/1.1" 200
+2026-05-31 07:46:14.377 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33476 - "GET /api/v1/teams/flags/flags-sq-1/ECU HTTP/1.1" 200
+2026-05-31 07:46:14.379 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33454 - "GET /api/v1/teams/flags/flags-sq-1/CRO HTTP/1.1" 200
+2026-05-31 07:46:14.382 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33486 - "GET /api/v1/teams/flags/flags-sq-1/GER HTTP/1.1" 200
+2026-05-31 07:46:14.384 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33500 - "GET /api/v1/teams/flags/flags-sq-1/NOR HTTP/1.1" 200
+2026-05-31 07:46:14.400 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33470 - "GET /api/v1/teams/flags/flags-sq-1/JPN HTTP/1.1" 200
+2026-05-31 07:46:14.410 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33476 - "GET /api/v1/teams/flags/flags-sq-1/TUR HTTP/1.1" 200
+2026-05-31 07:46:14.413 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33466 - "GET /api/v1/teams/flags/flags-sq-1/URU HTTP/1.1" 200
+2026-05-31 07:46:14.415 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33454 - "GET /api/v1/teams/flags/flags-sq-1/SUI HTTP/1.1" 200
+2026-05-31 07:46:14.425 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33500 - "GET /api/v1/teams/flags/flags-sq-1/SEN HTTP/1.1" 200
+2026-05-31 07:46:14.431 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33486 - "GET /api/v1/teams/flags/flags-sq-1/BEL HTTP/1.1" 200
+2026-05-31 07:46:14.442 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33470 - "GET /api/v1/teams/flags/flags-sq-1/MEX HTTP/1.1" 200
+2026-05-31 07:46:14.455 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33466 - "GET /api/v1/teams/flags/flags-sq-1/MAR HTTP/1.1" 200
+2026-05-31 07:46:14.457 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33454 - "GET /api/v1/teams/flags/flags-sq-1/AUT HTTP/1.1" 200
+2026-05-31 07:46:14.461 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33500 - "GET /api/v1/teams/flags/flags-sq-1/CAN HTTP/1.1" 200
+2026-05-31 07:46:14.463 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33476 - "GET /api/v1/teams/flags/flags-sq-1/PAR HTTP/1.1" 200
+2026-05-31 07:46:14.468 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33470 - "GET /api/v1/teams/flags/flags-sq-1/AUS HTTP/1.1" 200
+2026-05-31 07:46:14.476 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33486 - "GET /api/v1/teams/flags/flags-sq-1/SCO HTTP/1.1" 200
+2026-05-31 07:46:14.489 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33466 - "GET /api/v1/teams/flags/flags-sq-1/IRN HTTP/1.1" 200
+2026-05-31 07:46:14.496 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33470 - "GET /api/v1/teams/flags/flags-sq-1/ALG HTTP/1.1" 200
+2026-05-31 07:46:14.498 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33454 - "GET /api/v1/teams/flags/flags-sq-1/KOR HTTP/1.1" 200
+2026-05-31 07:46:14.507 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33500 - "GET /api/v1/teams/flags/flags-sq-1/PAN HTTP/1.1" 200
+2026-05-31 07:46:14.523 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33466 - "GET /api/v1/teams/flags/flags-sq-1/USA HTTP/1.1" 200
+2026-05-31 07:46:14.526 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33486 - "GET /api/v1/teams/flags/flags-sq-1/CZE HTTP/1.1" 200
+2026-05-31 07:46:14.528 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33476 - "GET /api/v1/teams/flags/flags-sq-1/UZB HTTP/1.1" 200
+2026-05-31 07:46:14.536 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33470 - "GET /api/v1/teams/flags/flags-sq-1/SWE HTTP/1.1" 200
+2026-05-31 07:46:14.550 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33454 - "GET /api/v1/teams/flags/flags-sq-1/EGY HTTP/1.1" 200
+2026-05-31 07:46:14.559 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33500 - "GET /api/v1/teams/flags/flags-sq-1/JOR HTTP/1.1" 200
+2026-05-31 07:46:14.562 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33470 - "GET /api/v1/teams/flags/flags-sq-1/COD HTTP/1.1" 200
+2026-05-31 07:46:14.563 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33466 - "GET /api/v1/teams/flags/flags-sq-1/CIV HTTP/1.1" 200
+2026-05-31 07:46:14.574 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33476 - "GET /api/v1/teams/flags/flags-sq-1/TUN HTTP/1.1" 200
+2026-05-31 07:46:14.581 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33486 - "GET /api/v1/teams/flags/flags-sq-1/IRQ HTTP/1.1" 200
+2026-05-31 07:46:14.591 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33500 - "GET /api/v1/teams/flags/flags-sq-1/BIH HTTP/1.1" 200
+2026-05-31 07:46:14.592 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33466 - "GET /api/v1/teams/flags/flags-sq-1/KSA HTTP/1.1" 200
+2026-05-31 07:46:14.600 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33470 - "GET /api/v1/teams/flags/flags-sq-1/CPV HTTP/1.1" 200
+2026-05-31 07:46:14.601 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33454 - "GET /api/v1/teams/flags/flags-sq-1/NZL HTTP/1.1" 200
+2026-05-31 07:46:14.620 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33470 - "GET /api/v1/teams/flags/flags-sq-1/GHA HTTP/1.1" 200
+2026-05-31 07:46:14.615 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33486 - "GET /api/v1/teams/flags/flags-sq-1/RSA HTTP/1.1" 200
+2026-05-31 07:46:14.618 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33476 - "GET /api/v1/teams/flags/flags-sq-1/HAI HTTP/1.1" 200
+2026-05-31 07:46:14.628 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33466 - "GET /api/v1/teams/flags/flags-sq-1/CUW HTTP/1.1" 200
+2026-05-31 07:46:14.636 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33500 - "GET /api/v1/teams/flags/flags-sq-1/QAT HTTP/1.1" 200
+2026-05-31 07:52:54.809 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:43836 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-31 07:52:54.828 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:43836 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-31 07:59:27.483 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:49736 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-31 07:59:27.490 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:49752 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-31 07:59:27.509 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:49768 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-31 07:59:27.515 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:49754 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-31 07:59:27.529 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:49736 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-31 07:59:27.543 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:49768 - "GET /api/v1/elo/ratings HTTP/1.1" 200

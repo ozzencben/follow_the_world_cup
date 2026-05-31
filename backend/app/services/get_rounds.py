@@ -4,10 +4,11 @@ import httpx
 from loguru import logger
 import anyio
 
+from app.core.config import settings
+
 # Kayıt / Önbellekleme dizini ve dosya yolları
 DATA_DIR = Path("app/data")
 ROUNDS_FILE = DATA_DIR / "rounds.json"
-FIFA_ROUNDS_URL = "https://play.fifa.com/json/bracket_predictor/rounds.json"
 
 _cached_rounds = None
 _rounds_mtime = 0.0
@@ -63,7 +64,7 @@ async def fetch_world_cup_rounds() -> list:
     try:
         logger.info("Yerel fikstür verisi bulunamadı. Resmi FIFA API'si üzerinden fikstürler çekiliyor...")
         async with httpx.AsyncClient(timeout=15.0) as client:
-            response = await client.get(FIFA_ROUNDS_URL, headers=headers)
+            response = await client.get(settings.FIFA_ROUNDS_API_URL, headers=headers)
 
             if response.status_code == 200:
                 data = response.json()
