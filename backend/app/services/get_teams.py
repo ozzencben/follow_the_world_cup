@@ -2,30 +2,51 @@ import json
 from pathlib import Path
 import httpx
 from loguru import logger
+import anyio
 
 # Kayıt / Önbellekleme dizini ve dosya yolları
 DATA_DIR = Path("app/data")
 TEAMS_FILE = DATA_DIR / "fifa_data.json"
 FIFA_API_URL = "https://cxm-api.fifa.com/fifaplusweb/api/sections/teamsModule/4v5Yng3VdGD9c1cpnOIff1?locale=en&limit=200"
 
+_cached_teams = None
+_teams_mtime = 0.0
+
+
+def _load_teams_sync() -> dict:
+    with open(TEAMS_FILE, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _save_teams_sync(data: dict) -> None:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    with open(TEAMS_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+
 
 async def fetch_world_cup_participants() -> dict:
     """
     FIFA verilerini önbellek öncelikli (caching-first) olarak yükler.
-    1. Yerel 'fifa_data.json' dosyası VARSA: Doğrudan yerel dosyayı okur (0 ms gecikme, API çağrısı yapılmaz).
+    1. Yerel 'fifa_data.json' dosyası VARSA: Bellekten veya arka planda asenkron diskten okur.
     2. Dosya YOKSA: Resmi FIFA API'sine istek atar, gelen verileri yerel dosyaya kaydeder ve döner.
     """
+    global _cached_teams, _teams_mtime
+
     # ==============================================================
-    # 1. YEREL DOSYA KONTROLÜ (Dosya varsa doğrudan oku)
+    # 1. YEREL DOSYA KONTROLÜ & RAM CACHE (Dosya varsa bellekten veya diskten oku)
     # ==============================================================
     if TEAMS_FILE.exists():
-        logger.info(
-            f"FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): {TEAMS_FILE}"
-        )
         try:
-            with open(TEAMS_FILE, "r", encoding="utf-8") as f:
-                cached_data = json.load(f)
-                return cached_data
+            mtime = TEAMS_FILE.stat().st_mtime
+            if _cached_teams is not None and mtime == _teams_mtime:
+                return _cached_teams
+
+            logger.info(
+                f"FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): {TEAMS_FILE}"
+            )
+            _cached_teams = await anyio.to_thread.run_sync(_load_teams_sync)
+            _teams_mtime = mtime
+            return _cached_teams
         except Exception as cache_err:
             logger.error(
                 f"Yerel önbellek dosyası okunurken hata oluştu, API çağrısına yönlendiriliyor: {cache_err}"
@@ -47,10 +68,11 @@ async def fetch_world_cup_participants() -> dict:
             if response.status_code == 200:
                 data = response.json()
                 
-                # Verileri diske yaz (Böylece bir sonraki isteklerde API çağrısı yapılmaz)
-                DATA_DIR.mkdir(parents=True, exist_ok=True)
-                with open(TEAMS_FILE, "w", encoding="utf-8") as f:
-                    json.dump(data, f, ensure_ascii=False, indent=4)
+                # Verileri asenkron arka planda diske yaz
+                await anyio.to_thread.run_sync(_save_teams_sync, data)
+                
+                _cached_teams = data
+                _teams_mtime = TEAMS_FILE.stat().st_mtime if TEAMS_FILE.exists() else 0.0
                 
                 logger.info(
                     f"FIFA API verileri ilk kez çekildi ve yerel dosyaya başarıyla kaydedildi: {TEAMS_FILE}"

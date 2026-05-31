@@ -1,6 +1,7 @@
 from pathlib import Path
 import httpx
 import copy
+import anyio
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import FileResponse, RedirectResponse
 from app.services.get_teams import fetch_world_cup_participants
@@ -56,10 +57,13 @@ async def get_flag_proxy(format: str, size: str, code: str):
     Takım bayraklarını önbellekleyen proxy endpoint.
     FIFA API sunucularından resmi bayrak görsellerini çeker, yerel diske
     önbellekler ve kesintisiz 0ms gecikmeyle sunar.
+    Önbellekleme işlemleri event-loop'u kilitlememesi için iş parçacığı havuzunda çalıştırılır.
     """
     try:
-        # Create cache directory if not exists
-        FLAGS_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        # Create cache directory if not exists inside worker thread
+        def _create_dir():
+            FLAGS_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        await anyio.to_thread.run_sync(_create_dir)
         
         # Normalize inputs to prevent directory traversal
         safe_code = "".join(c for c in code if c.isalnum() or c in "-_")
@@ -69,7 +73,8 @@ async def get_flag_proxy(format: str, size: str, code: str):
         cache_file = FLAGS_CACHE_DIR / f"{safe_code}_{safe_format}_{safe_size}.png"
         
         # 1. Return from cache if exists
-        if cache_file.exists():
+        exists = await anyio.to_thread.run_sync(cache_file.exists)
+        if exists:
             return FileResponse(cache_file, media_type="image/png")
             
         # 2. Fetch from FIFA API if not cached
@@ -85,9 +90,11 @@ async def get_flag_proxy(format: str, size: str, code: str):
             response = await client.get(fifa_url, headers=headers)
             
             if response.status_code == 200:
-                # Save to cache
-                with open(cache_file, "wb") as f:
-                    f.write(response.content)
+                # Save to cache asynchronously
+                def _save_to_cache(content):
+                    with open(cache_file, "wb") as f:
+                        f.write(content)
+                await anyio.to_thread.run_sync(_save_to_cache, response.content)
                 return FileResponse(cache_file, media_type="image/png")
             else:
                 logger.warning(f"FIFA Flag API returned status {response.status_code} for {code}. Redirecting to original.")

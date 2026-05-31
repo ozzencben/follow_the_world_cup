@@ -2,6 +2,7 @@ import json
 import unicodedata
 from pathlib import Path
 from loguru import logger
+import anyio
 
 # Kayıt dizini ve dosya yolları
 DATA_DIR = Path("app/data")
@@ -123,22 +124,12 @@ def load_transfermarkt_stats() -> dict:
         return {}
 
 
-async def get_elo_ratings() -> list:
-    """
-    2026_World_Cup.tsv dosyasını parse eder, Transfermarkt kadro verileriyle
-    birleştirir, GOLDEN_COUNTRY_MAP üzerinden eşleştirir ve tam liste döner.
+_cached_ratings = None
+_ratings_mtime = 0.0
+_cached_tm_mtime = 0.0
 
-    TSV Sütun Düzeni (0-indexed):
-    0:localRank  1:globalRank  2:code  3:rating
-    4:peakRank  5:peakRating  6:avgRank  7:avgRating
-    8:lowRank  9:lowRating
-    10:?  11:?  12:?  13:?   (ara sütunlar)
-    14:1yRankChange  15:1yRatingChange
-    16-21: (diğer değişim kolonları)
-    22:matchesTotal  23:matchesHome  24:matchesAway  25:matchesNeutral
-    26:wins  27:losses  28:draws
-    29:goalsFor  30:goalsAgainst
-    """
+
+def _get_elo_ratings_sync() -> list:
     if not ELO_RATINGS_FILE.exists():
         logger.error(f"Elo ratings dosyası bulunamadı: {ELO_RATINGS_FILE}")
         return []
@@ -233,18 +224,30 @@ async def get_elo_ratings() -> list:
         return []
 
 
-async def get_team_form(team_code: str) -> dict:
+async def get_elo_ratings() -> list:
     """
-    2026_World_Cup_latest.tsv dosyasını okur ve son maçların form detaylarını çıkarır.
-    Ayrıca 2026_World_Cup_graph.tsv ve latest.tsv verilerini birleştirerek
-    eksenel olarak kesintisiz tarihsel ELO gelişim grafiğini (Trajectory) hesaplar.
+    2026_World_Cup.tsv dosyasını parse eder, Transfermarkt kadro verileriyle
+    birleştirir, GOLDEN_COUNTRY_MAP üzerinden eşleştirir ve tam liste döner.
+    Önbellekleme mantığıyla bellekten hızlı yanıt verir ve event-loop'u bloke etmez.
+    """
+    global _cached_ratings, _ratings_mtime, _cached_tm_mtime
+    
+    r_exists = ELO_RATINGS_FILE.exists()
+    tm_exists = TRANSFERMARKT_FILE.exists()
+    
+    r_mtime = ELO_RATINGS_FILE.stat().st_mtime if r_exists else 0.0
+    tm_mtime = TRANSFERMARKT_FILE.stat().st_mtime if tm_exists else 0.0
+    
+    if _cached_ratings is not None and r_mtime == _ratings_mtime and tm_mtime == _cached_tm_mtime:
+        return _cached_ratings
+        
+    _cached_ratings = await anyio.to_thread.run_sync(_get_elo_ratings_sync)
+    _ratings_mtime = r_mtime
+    _cached_tm_mtime = tm_mtime
+    return _cached_ratings
 
-    latest.tsv Sütun Düzeni (0-indexed):
-    0:year  1:month  2:day  3:team1  4:team2
-    5:score1  6:score2  7:matchType  8:neutral?
-    9:eloChange(team1)  10:elo1After  11:elo2After  12:rankChange1  13:rankChange2
-    14:rank1After  15:rank2After
-    """
+
+def _get_team_form_sync(team_code: str) -> dict:
     team_code = team_code.upper()
     form_list = []
 
@@ -425,17 +428,15 @@ async def get_team_form(team_code: str) -> dict:
     }
 
 
-async def get_elo_fixtures() -> list:
+async def get_team_form(team_code: str) -> dict:
     """
-    2026_World_Cup_fixtures.tsv dosyasını okur,
-    Dünya Kupası (WC) maçlarını filtreler ve ELO olasılıklarıyla birlikte döner.
+    2026_World_Cup_latest.tsv dosyasını okur ve son maçların form detaylarını çıkarır.
+    Önbellekleme mantığıyla event-loop'u bloke etmeden arka planda çalıştırır.
+    """
+    return await anyio.to_thread.run_sync(_get_team_form_sync, team_code)
 
-    fixtures.tsv Sütun Düzeni (0-indexed):
-    0:year  1:month  2:day  3:team1  4:team2
-    5:matchType  6:location
-    7-10: (ek bilgiler)
-    11:t1WinProb  12-14: (diğer)  15:t2WinProb
-    """
+
+def _get_elo_fixtures_sync() -> list:
     if not ELO_FIXTURES_FILE.exists():
         logger.error(f"Elo fixtures dosyası bulunamadı: {ELO_FIXTURES_FILE}")
         return []
@@ -485,3 +486,25 @@ async def get_elo_fixtures() -> list:
     except Exception as e:
         logger.error(f"Elo fikstür okuma hatası: {e}")
         return []
+
+
+_cached_fixtures = None
+_fixtures_mtime = 0.0
+
+
+async def get_elo_fixtures() -> list:
+    """
+    2026_World_Cup_fixtures.tsv dosyasını okur,
+    Dünya Kupası (WC) maçlarını filtreler ve ELO olasılıklarıyla birlikte döner.
+    Önbellekleme mantığıyla bellekten hızlı yanıt verir ve event-loop'u bloke etmez.
+    """
+    global _cached_fixtures, _fixtures_mtime
+    exists = ELO_FIXTURES_FILE.exists()
+    mtime = ELO_FIXTURES_FILE.stat().st_mtime if exists else 0.0
+
+    if _cached_fixtures is not None and mtime == _fixtures_mtime:
+        return _cached_fixtures
+
+    _cached_fixtures = await anyio.to_thread.run_sync(_get_elo_fixtures_sync)
+    _fixtures_mtime = mtime
+    return _cached_fixtures

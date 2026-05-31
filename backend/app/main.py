@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import json
 import os
+import anyio
 from app.api.exceptions import register_exception_handlers
 from app.api.v1.api import api_router
 from app.core.config import settings
@@ -42,16 +43,52 @@ DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 TOKENS_FILE = os.path.join(DATA_DIR, "tokens.json")
 CREATORS_FILE = os.path.join(DATA_DIR, "creators.json")
 
+_cached_creators = None
+_creators_mtime = 0.0
+
+
+def _load_creators_sync() -> list:
+    with open(CREATORS_FILE, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _load_tokens_sync() -> dict:
+    with open(TOKENS_FILE, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _save_creators_and_tokens_sync(tokens_data: dict, creators_data: list) -> None:
+    with open(TOKENS_FILE, "w", encoding="utf-8") as f:
+        json.dump(tokens_data, f, indent=2, ensure_ascii=False)
+    with open(CREATORS_FILE, "w", encoding="utf-8") as f:
+        json.dump(creators_data, f, indent=2, ensure_ascii=False)
+
+
 @app.get("/api/creators")
 async def get_creators():
     """
     Public endpoint — returns the list of verified creators.
     Only exposes id, name, bracketString. Token data is NEVER returned.
+    Önbellekleme mantığıyla bellekten hızlı yanıt verir ve event-loop'u bloke etmez.
     """
-    if not os.path.exists(CREATORS_FILE):
-        return []
-    with open(CREATORS_FILE, "r", encoding="utf-8") as f:
-        creators_data = json.load(f)
+    global _cached_creators, _creators_mtime
+    
+    exists = os.path.exists(CREATORS_FILE)
+    mtime = os.path.getmtime(CREATORS_FILE) if exists else 0.0
+    
+    if _cached_creators is not None and mtime == _creators_mtime:
+        creators_data = _cached_creators
+    else:
+        if not exists:
+            return []
+        try:
+            creators_data = await anyio.to_thread.run_sync(_load_creators_sync)
+            _cached_creators = creators_data
+            _creators_mtime = mtime
+        except Exception as e:
+            logger.error(f"Creators verisi yüklenirken hata oluştu: {e}")
+            return []
+        
     # Strip to public fields only
     return [
         {
@@ -65,6 +102,7 @@ async def get_creators():
 
 @app.post("/api/creators/publish")
 async def publish_creator_bracket(payload: PublishRequest):
+    global _cached_creators, _creators_mtime
     try:
         # Load tokens
         if not os.path.exists(TOKENS_FILE):
@@ -73,8 +111,7 @@ async def publish_creator_bracket(payload: PublishRequest):
                 detail="Tokens database is missing."
             )
         
-        with open(TOKENS_FILE, "r", encoding="utf-8") as f:
-            tokens_data = json.load(f)
+        tokens_data = await anyio.to_thread.run_sync(_load_tokens_sync)
             
         # Adım 1: Gelen token'ı tokens.json içinde ara. Eğer yoksa veya used: true ise 403 Forbidden döndür.
         token_info = tokens_data.get(payload.token)
@@ -93,8 +130,7 @@ async def publish_creator_bracket(payload: PublishRequest):
                 detail="Creators database is missing."
             )
             
-        with open(CREATORS_FILE, "r", encoding="utf-8") as f:
-            creators_data = json.load(f)
+        creators_data = await anyio.to_thread.run_sync(_load_creators_sync)
             
         # Adım 2: Token geçerliyse, o token'a ait creator_id'yi al, creators.json dosyasında o yorumcuyu bul ve bracketString değerini güncelle.
         creator_found = False
@@ -114,11 +150,11 @@ async def publish_creator_bracket(payload: PublishRequest):
         token_info["used"] = True
         
         # Adım 4: Dosyaları diske geri kaydet (JSON dump)
-        with open(TOKENS_FILE, "w", encoding="utf-8") as f:
-            json.dump(tokens_data, f, indent=2, ensure_ascii=False)
-            
-        with open(CREATORS_FILE, "w", encoding="utf-8") as f:
-            json.dump(creators_data, f, indent=2, ensure_ascii=False)
+        await anyio.to_thread.run_sync(_save_creators_and_tokens_sync, tokens_data, creators_data)
+        
+        # Force cache reload on next GET
+        _cached_creators = creators_data
+        _creators_mtime = os.path.getmtime(CREATORS_FILE) if os.path.exists(CREATORS_FILE) else 0.0
             
         return {
             "status": "success",

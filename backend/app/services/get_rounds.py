@@ -2,30 +2,51 @@ import json
 from pathlib import Path
 import httpx
 from loguru import logger
+import anyio
 
 # Kayıt / Önbellekleme dizini ve dosya yolları
 DATA_DIR = Path("app/data")
 ROUNDS_FILE = DATA_DIR / "rounds.json"
 FIFA_ROUNDS_URL = "https://play.fifa.com/json/bracket_predictor/rounds.json"
 
+_cached_rounds = None
+_rounds_mtime = 0.0
+
+
+def _load_rounds_sync() -> list:
+    with open(ROUNDS_FILE, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _save_rounds_sync(data: list) -> None:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    with open(ROUNDS_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+
 
 async def fetch_world_cup_rounds() -> list:
     """
     FIFA fikstür ve tur verilerini önbellek öncelikli (caching-first) olarak yükler.
-    1. Yerel 'rounds.json' dosyası VARSA: Doğrudan yerel dosyayı okur (0 ms gecikme, API çağrısı yapılmaz).
+    1. Yerel 'rounds.json' dosyası VARSA: Bellekten veya arka planda asenkron diskten okur.
     2. Dosya YOKSA: Resmi FIFA API'sine istek atar, gelen verileri yerel dosyaya kaydeder ve döner.
     """
+    global _cached_rounds, _rounds_mtime
+
     # ==============================================================
-    # 1. YEREL DOSYA KONTROLÜ (Dosya varsa doğrudan oku)
+    # 1. YEREL DOSYA KONTROLÜ & RAM CACHE (Dosya varsa bellekten veya diskten oku)
     # ==============================================================
     if ROUNDS_FILE.exists():
-        logger.info(
-            f"FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): {ROUNDS_FILE}"
-        )
         try:
-            with open(ROUNDS_FILE, "r", encoding="utf-8") as f:
-                cached_data = json.load(f)
-                return cached_data
+            mtime = ROUNDS_FILE.stat().st_mtime
+            if _cached_rounds is not None and mtime == _rounds_mtime:
+                return _cached_rounds
+
+            logger.info(
+                f"FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): {ROUNDS_FILE}"
+            )
+            _cached_rounds = await anyio.to_thread.run_sync(_load_rounds_sync)
+            _rounds_mtime = mtime
+            return _cached_rounds
         except Exception as cache_err:
             logger.error(
                 f"Yerel önbellek fikstür dosyası okunurken hata oluştu, API çağrısına yönlendiriliyor: {cache_err}"
@@ -47,10 +68,11 @@ async def fetch_world_cup_rounds() -> list:
             if response.status_code == 200:
                 data = response.json()
                 
-                # Verileri diske yaz (Böylece bir sonraki isteklerde API çağrısı yapılmaz)
-                DATA_DIR.mkdir(parents=True, exist_ok=True)
-                with open(ROUNDS_FILE, "w", encoding="utf-8") as f:
-                    json.dump(data, f, ensure_ascii=False, indent=4)
+                # Verileri asenkron arka planda diske yaz
+                await anyio.to_thread.run_sync(_save_rounds_sync, data)
+                
+                _cached_rounds = data
+                _rounds_mtime = ROUNDS_FILE.stat().st_mtime if ROUNDS_FILE.exists() else 0.0
                 
                 logger.info(
                     f"FIFA fikstür API verileri ilk kez çekildi ve yerel dosyaya başarıyla kaydedildi: {ROUNDS_FILE}"
