@@ -13,11 +13,12 @@ ENV UV_COMPILE_BYTECODE=1
 # Prevent uv from sending usage statistics
 ENV UV_NO_CACHE=1
 
-# Copy dependency manifests
-COPY pyproject.toml .
+# Copy dependency manifests and lock file
+COPY pyproject.toml uv.lock ./
 
-# Create virtualenv and compile dependencies
-RUN uv venv /opt/venv && \
+# Create virtualenv and compile dependencies using cache mount
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv venv /opt/venv && \
     . /opt/venv/bin/activate && \
     uv pip install .
 
@@ -40,14 +41,8 @@ ENV PYTHONUNBUFFERED=1
 COPY app/ app/
 COPY main.py .
 COPY .env.example .env.example
-# In production, we pass env variables instead of physical .env files,
-# but we bundle the .env file as a fallback for local running ease
-COPY .env .env
-
 # Create empty folder for file logging persistence
 RUN mkdir -p logs
 
-EXPOSE 8000
-
-# Run FastAPI app with standardized Production server settings
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
+# Run FastAPI app with dynamic port binding fallback
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 2"]
