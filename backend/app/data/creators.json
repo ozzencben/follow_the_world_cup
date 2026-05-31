@@ -1,29 +1,30 @@
 [
-  {
-    "id": "ugur-k",
-    "name": "Uğur K.",
-    "bracketString": "F-1_1-5",
-    "roleTr": "Spor Yorumcusu / Analist",
-    "roleEn": "Sports Commentator / Analyst",
-    "commentTr": "Arjantin'in ELO gücü favori olduğunu gösteriyor ama Poisson simülasyonundaki sürpriz çarpanı Brezilya'yı öne çıkarabilir. Eleme turlarında plot-armor devreye girecektir.",
-    "commentEn": "Argentina's ELO strength shows they are favorites, but the upset multiplier in the Poisson simulation could give Brazil the edge. Plot-armor will trigger during knockouts."
-  },
-  {
-    "id": "developer",
-    "name": "Developer.",
-    "bracketString": "G-C-11_3-2|G-E-19_1-2|G-G-28_5-3|G-H-32_4-0|G-I-38_4-2|G-D-63_1-3|G-K-72_2-0|G-E-17_3-0|G-E-21_3-1|G-G-29_1-2|G-H-31_3-0|G-K-46_4-2|G-B-58_3-1|G-D-62_3-2|G-C-10_2-3|G-H-33_0-3|G-D-61_3-2|R32-11_1-2|F-1_3-0",
-    "roleTr": "Sistem Mimarı / Geliştirici",
-    "roleEn": "Lead Architect / Developer",
-    "commentTr": "Poisson Knuth ve Monte Carlo modellerini birleştirerek en kararlı turnuva ağacını kurguladık. AI vs İnsan tahminlerinde kimin üstün geleceğini göreceğiz!",
-    "commentEn": "We built the most stable tournament tree by combining Poisson Knuth and Monte Carlo models. Let's see who wins in the battle of AI vs Human brackets!"
-  },
-  {
-    "id": "ai",
-    "name": "AI",
-    "bracketString": "",
-    "roleTr": "Yapay Zeka Tahmin Motoru",
-    "roleEn": "AI Tournament Predictor",
-    "commentTr": "Türkiye kazanır",
-    "commentEn": "Türkiye kazanır"
-  }
+    {
+        "id": "ugur-k",
+        "name": "Uğur K.",
+        "bracketString": "F-1_1-5",
+        "roleTr": "Spor Yorumcusu / Analist",
+        "roleEn": "Sports Commentator / Analyst",
+        "commentTr": "Arjantin'in ELO gücü favori olduğunu gösteriyor ama Poisson simülasyonundaki sürpriz çarpanı Brezilya'yı öne çıkarabilir. Eleme turlarında plot-armor devreye girecektir.",
+        "commentEn": "Argentina's ELO strength shows they are favorites, but the upset multiplier in the Poisson simulation could give Brazil the edge. Plot-armor will trigger during knockouts."
+    },
+    {
+        "id": "developer",
+        "name": "Developer.",
+        "bracketString": "G-C-11_3-2|G-E-19_1-2|G-G-28_5-3|G-H-32_4-0|G-I-38_4-2|G-D-63_1-3|G-K-72_2-0|G-E-17_3-0|G-E-21_3-1|G-G-29_1-2|G-H-31_3-0|G-K-46_4-2|G-B-58_3-1|G-D-62_3-2|G-C-10_2-3|G-H-33_0-3|G-D-61_3-2|R32-11_1-2|F-1_3-0",
+        "roleTr": "Sistem Mimarı / Geliştirici",
+        "roleEn": "Lead Architect / Developer",
+        "commentTr": "Poisson Knuth ve Monte Carlo modellerini birleştirerek en kararlı turnuva ağacını kurguladık. AI vs İnsan tahminlerinde kimin üstün geleceğini göreceğiz!",
+        "commentEn": "We built the most stable tournament tree by combining Poisson Knuth and Monte Carlo models. Let's see who wins in the battle of AI vs Human brackets!"
+    },
+    {
+        "id": "kerem-yoldas",
+        "name": "Kerem Yoldaş",
+        "bracketString": "F-1_4-2",
+        "roleTr": "",
+        "roleEn": "",
+        "commentTr": "bu benım tahmınım",
+        "commentEn": "bu benım tahmınım",
+        "seed": 2026
+    }
 ]
