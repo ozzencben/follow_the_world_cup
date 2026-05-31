@@ -7,6 +7,21 @@ import type {
   GroupStanding,
 } from "./TournamentEngine";
 
+// Helper to resolve root /api path dynamically from VITE_API_URL (which has /api/v1 suffix)
+const getApiBase = (): string => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl) {
+    if (envUrl.endsWith("/api/v1")) {
+      return envUrl.slice(0, -3); // .../api/v1 -> .../api
+    }
+    if (envUrl.endsWith("/api/v1/")) {
+      return envUrl.slice(0, -4); // .../api/v1/ -> .../api
+    }
+    return envUrl;
+  }
+  return "/api";
+};
+
 // ── CREATOR TYPE ────────────────────────────────────────────────
 export interface Creator {
   id: string;
@@ -468,7 +483,7 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
         .map((m) => `${m.id}_${m.userHomeScore}-${m.userAwayScore}`)
         .join("|");
 
-      const response = await fetch("/api/creators/publish", {
+      const response = await fetch(`${getApiBase()}/creators/publish`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -508,7 +523,7 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
 
   fetchCreators: async () => {
     try {
-      const response = await fetch("/api/creators");
+      const response = await fetch(`${getApiBase()}/creators`);
       if (!response.ok) throw new Error(`Yorumcular yüklenemedi (${response.status})`);
       const data: Creator[] = await response.json();
       set({ creatorsList: data });
