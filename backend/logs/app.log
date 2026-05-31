@@ -36,3 +36,31 @@
 2026-05-31 12:53:55.285 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:50472 - "GET /api/v1/teams HTTP/1.1" 200
 2026-05-31 12:53:55.352 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:50494 - "GET /api/creators HTTP/1.1" 200
 2026-05-31 12:53:55.369 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:50472 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-31 16:43:46.351 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:33290 - "GET /api/creators HTTP/1.1" 200
+2026-05-31 17:25:22.828 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-05-31 17:25:22.830 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-05-31 17:25:22.830 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-05-31 17:25:22.830 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-05-31 17:25:23.074 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-05-31 17:25:23.075 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-05-31 17:25:23.075 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-05-31 17:25:23.076 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-05-31 17:25:24.975 | INFO     | app.services.get_squads:fetch_world_cup_squads:45 - FIFA takımları puan durumu verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/squads.json
+2026-05-31 17:25:24.986 | INFO     | app.services.get_teams:fetch_world_cup_participants:45 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-31 17:25:25.083 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:47186 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-31 17:25:25.080 | INFO     | app.services.get_rounds:fetch_world_cup_rounds:45 - FIFA fikstür verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/rounds.json
+2026-05-31 17:25:25.085 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:47202 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-31 17:25:25.105 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:47202 - "GET /api/v1/squads HTTP/1.1" 200
+2026-05-31 17:25:25.122 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:47218 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-31 17:25:25.154 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:47202 - "GET /api/v1/rounds HTTP/1.1" 200
+2026-05-31 17:25:25.234 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:47230 - "GET /api/creators HTTP/1.1" 200
+2026-05-31 17:25:25.247 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:47230 - "GET /api/creators HTTP/1.1" 200
+2026-05-31 17:25:25.264 | INFO     | app.services.get_teams:fetch_world_cup_participants:45 - FIFA verileri yerel önbellek dosyasından okunuyor (API isteği yapılmadı): app/data/fifa_data.json
+2026-05-31 17:25:25.266 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:47204 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-31 17:25:25.270 | INFO     | app.services.get_elo:_get_elo_ratings_sync:312 - ELO Ratings yüklendi: 48 takım
+2026-05-31 17:25:25.287 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:47222 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-31 17:25:25.295 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:47204 - "GET /api/v1/winners HTTP/1.1" 200
+2026-05-31 17:25:25.313 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:47218 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-31 17:25:25.328 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:47230 - "GET /api/v1/elo/ratings HTTP/1.1" 200
+2026-05-31 17:25:25.345 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:47204 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-31 17:25:25.365 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:47230 - "GET /api/v1/teams HTTP/1.1" 200

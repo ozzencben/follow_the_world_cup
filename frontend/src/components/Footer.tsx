@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-const DONATE_URL = import.meta.env.VITE_KREOSUS_URL || "https://kreosus.com/httpsgithubcomozzencben";
+const DONATE_URL = import.meta.env.VITE_KREOSUS_URL || "https://kreosus.com/httpsfollowtheworldcupcom";
 
 export default function Footer() {
     const { t } = useTranslation();
@@ -161,23 +161,23 @@ export default function Footer() {
                             <p style={{ fontSize: "0.6rem", color: "#5C5A54", lineHeight: 1.6, marginBottom: 10, fontWeight: 500 }}>
                                 {t("footer.support_desc")}
                             </p>
-                             <a
-                                 href={DONATE_URL}
-                                 target="_blank"
-                                 rel="noopener noreferrer"
-                                 className="swiss-btn-primary w-full justify-center"
-                                 style={{
-                                     background: "transparent",
-                                     color: "#FFE600",
-                                     borderColor: "#FFE600",
-                                     boxShadow: "3px 3px 0 rgba(255,230,0,0.25)",
-                                     textDecoration: "none",
-                                     display: "flex",
-                                     alignItems: "center",
-                                 }}
-                             >
-                                 {t("footer.donate_btn")}
-                             </a>
+                            <a
+                                href={DONATE_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="swiss-btn-primary w-full justify-center"
+                                style={{
+                                    background: "transparent",
+                                    color: "#FFE600",
+                                    borderColor: "#FFE600",
+                                    boxShadow: "3px 3px 0 rgba(255,230,0,0.25)",
+                                    textDecoration: "none",
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}
+                            >
+                                {t("footer.donate_btn")}
+                            </a>
                         </div>
                     </div>
                 </div>
