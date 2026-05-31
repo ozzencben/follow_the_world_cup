@@ -129,6 +129,48 @@ _ratings_mtime = 0.0
 _cached_tm_mtime = 0.0
 
 
+def normalize_name(name: str) -> str:
+    if not name:
+        return ""
+    # Standardize unicode characters (remove accents)
+    normalized = unicodedata.normalize("NFKD", name.lower())
+    # Remove accents, non-alphanumeric, and whitespace
+    cleaned = "".join([c for c in normalized if c.isalnum()])
+    return cleaned.replace("and", "")
+
+
+def calculate_team_category(
+    rating: int,
+    avg_rating: int,
+    matches_total: int,
+    appearances: int,
+    championships: int,
+    squad_value: float
+) -> str:
+    """
+    Takımların güç ve profil kategorilerini hiyerarşik öncelik mantığıyla belirler.
+    """
+    # ÖNCELİK 1 (Tarihi Efsane): Toplam Maç >= 800 VE (Şampiyonluk > 0 VEYA Katılım >= 15)
+    if matches_total >= 800 and (championships > 0 or appearances >= 15):
+        return "Historic Legend"
+
+    # ÖNCELİK 2 (Gizli Potansiyel): Güncel ELO < 1900 VE Kadro Değeri > 300M VE Şampiyonluk == 0
+    elif rating < 1900 and squad_value > 300.0 and championships == 0:
+        return "Dark Horse"
+
+    # ÖNCELİK 3 (Yükselen Yıldız): (Güncel ELO - Tarihsel ELO >= 100) VE (Tarihsel ELO < 1850)
+    elif (rating - avg_rating >= 100) and (avg_rating < 1850):
+        return "Rising Star"
+
+    # ÖNCELİK 4 (Gerileyen Dev): (Tarihsel ELO - Güncel ELO >= 20) VE Kadro Değeri < 250M
+    elif (avg_rating - rating >= 20) and squad_value < 250.0:
+        return "Falling Giant"
+
+    # ÖNCELİK 5 (Mütevazı Güç)
+    else:
+        return "Modest Strength"
+
+
 def _get_elo_ratings_sync() -> list:
     if not ELO_RATINGS_FILE.exists():
         logger.error(f"Elo ratings dosyası bulunamadı: {ELO_RATINGS_FILE}")
@@ -136,6 +178,32 @@ def _get_elo_ratings_sync() -> list:
 
     ratings_list = []
     tm_stats = load_transfermarkt_stats()
+
+    # Load winners to get championships count
+    winners_file = Path("app/data/winners.json")
+    championships_map = {}
+    if winners_file.exists():
+        try:
+            with open(winners_file, "r", encoding="utf-8") as f:
+                winners_data = json.load(f)
+                for w in winners_data.get("winners", []):
+                    name = normalize_name(w.get("country_en", ""))
+                    championships_map[name] = championships_map.get(name, 0) + 1
+        except Exception as e:
+            logger.error(f"Winners read error: {e}")
+
+    # Load fifa_data to get appearances
+    fifa_file = Path("app/data/fifa_data.json")
+    appearances_map = {}
+    if fifa_file.exists():
+        try:
+            with open(fifa_file, "r", encoding="utf-8") as f:
+                fifa_data = json.load(f)
+                for t in fifa_data.get("teams", []):
+                    name = normalize_name(t.get("teamName", ""))
+                    appearances_map[name] = t.get("appearances", 1)
+        except Exception as e:
+            logger.error(f"Fifa data read error: {e}")
 
     try:
         with open(ELO_RATINGS_FILE, "r", encoding="utf-8") as f:
@@ -179,6 +247,21 @@ def _get_elo_ratings_sync() -> list:
                 goals_for_avg     = round(goals_for / total_matches, 2)    if total_matches > 0 else 0.0
                 goals_against_avg = round(goals_against / total_matches, 2) if total_matches > 0 else 0.0
 
+                name_norm = normalize_name(mapping["en"])
+                appearances = appearances_map.get(name_norm, 1)
+                championships = championships_map.get(name_norm, 0)
+                rating_val = clean_value(parts[3])
+                avg_rating_val = clean_value(parts[7]) or rating_val
+
+                category = calculate_team_category(
+                    rating=rating_val,
+                    avg_rating=avg_rating_val,
+                    matches_total=total_matches,
+                    appearances=appearances,
+                    championships=championships,
+                    squad_value=squad_value
+                )
+
                 team_data = {
                     "localRank":            clean_value(parts[0]),
                     "globalRank":           clean_value(parts[1]),
@@ -186,11 +269,11 @@ def _get_elo_ratings_sync() -> list:
                     "nameEn":               mapping["en"],
                     "nameTr":               mapping["tr"],
                     "confederation":        mapping["conf"],
-                    "rating":               clean_value(parts[3]),
+                    "rating":               rating_val,
                     "peakRank":             clean_value(parts[4]),
                     "peakRating":           clean_value(parts[5]),
                     "avgRank":              clean_value(parts[6]),
-                    "avgRating":            clean_value(parts[7]),
+                    "avgRating":            avg_rating_val,
                     "lowRank":              clean_value(parts[8]),
                     "lowRating":            clean_value(parts[9]),
                     # 1 yıllık değişim — frontend'de ▲/▼ ile gösterilir
@@ -212,6 +295,9 @@ def _get_elo_ratings_sync() -> list:
                     "squadValue":           squad_value,
                     "averageAge":           average_age,
                     "playerCount":          player_count,
+                    "appearances":          appearances,
+                    "championships":        championships,
+                    "category":             category,
                 }
                 ratings_list.append(team_data)
 

@@ -467,31 +467,40 @@ function TeamAnalyticsPanel({ teams }: TeamAnalyticsPanelProps) {
     let explanation = "";
     let color = "#A78BFA"; // purple/violet default
 
+    // PRIORITY 1: Historic Legend
     if (matchesTotal >= 800 && (championships > 0 || appearances >= 15)) {
       categoryKey = "LEGEND";
       color = "#A78BFA"; // violet
       explanation = isTr
         ? `${championships > 0 ? championships + ' Şampiyonluk ve ' : ''}${appearances} katılımı ile turnuva DNA'sı en yüksek elit devlerden biridir.`
         : `One of the elite giants with the highest tournament DNA, holding ${appearances} appearances${championships > 0 ? ' and ' + championships + ' titles' : ''}.`;
-    } else if (rating < 1900 && squadValue > 300 && championships === 0) {
+    } 
+    // PRIORITY 2: Dark Horse / Potential
+    else if (rating < 1900 && squadValue > 300 && championships === 0) {
       categoryKey = "POTENTIAL";
       color = "#00E5FF"; // siber mavi
       explanation = isTr
         ? `${squadValue}M € kadro değeri ve ${averageAge} yaş ortalamasıyla gizli bir devdir. Kupayı devirme potansiyeli çok yüksektir.`
         : `A sleeping giant with a squad value of €${squadValue}M and average age of ${averageAge}. High potential to win the cup.`;
-    } else if (rating - avgRating >= 100) {
+    } 
+    // PRIORITY 3: Rising Star
+    else if ((rating - avgRating >= 100) && (avgRating < 1850)) {
       categoryKey = "STAR";
       color = "#00FF87"; // neon yeşil
       explanation = isTr
         ? `Tarihsel ELO ortalaması ${avgRating} iken, güncel ELO puanı ${rating} seviyesine fırlamıştır (+${rating - avgRating} ELO artışı).`
         : `Current ELO rating has surged to ${rating} from a historical ELO average of ${avgRating} (+${rating - avgRating} ELO growth).`;
-    } else if (rating - avgRating < -20 && squadValue < 250) {
+    } 
+    // PRIORITY 4: Falling Giant
+    else if ((avgRating - rating >= 20) && squadValue < 250) {
       categoryKey = "FALLING";
       color = "#FF2D78"; // siber pembe
       explanation = isTr
         ? `Geçmiş gücünün gerisinde kalmış, form grafiği ve kadro değeri (${squadValue}M €) eriyen tehlike sınırındaki takım.`
         : `Fallen behind its past strength, a team in the danger zone with declining form and squad value (€${squadValue}M).`;
-    } else {
+    } 
+    // PRIORITY 5: Modest Strength
+    else {
       categoryKey = "MODEST";
       color = "#FFE600"; // siber sarı
       explanation = isTr
@@ -748,50 +757,85 @@ function TeamAnalyticsPanel({ teams }: TeamAnalyticsPanelProps) {
               <span className="text-[#A78BFA] font-black uppercase">
                 🏆 {isTr ? "Tarihi Efsane (Historic Legend):" : "Historic Legend:"}
               </span>
-              <p className="mt-0.5 text-zinc-400">
+              <p className="mt-1 text-zinc-400">
+                <strong>{isTr ? "Nasıl Belirlenir?:" : "How It's Determined?:"}</strong>{" "}
                 {isTr
-                  ? "Tarihinde en az 800 resmi maç yapmış, kupa şampiyonluğu veya en az 15 kez turnuva tecrübesine sahip elit devleri temsil eder. (Örn: Brezilya, Arjantin, Almanya)."
-                  : "Elite giants holding at least 800 historical matches alongside a championship title or at least 15 tournament appearances. (e.g., Brazil, Argentina, Germany)."}
+                  ? "Takımın tarihsel maç sayısı 800+ olmalı VE en az 1 şampiyonluğu ya da 15+ turnuva katılımı bulunmalıdır. (Not: Bu statü mutlak hiyerarşiye sahiptir, form durumundan bağımsız olarak diğer tüm kategorileri ezer)."
+                  : "Historically played matches must be 800+ AND have at least 1 championship title or 15+ tournament appearances. (Note: This status possesses absolute hierarchy, overriding all other categories regardless of form trends)."}
+              </p>
+              <p className="mt-1 text-zinc-400">
+                <strong>{isTr ? "Neyi Belirliyor?:" : "What It Determines?:"}</strong>{" "}
+                {isTr
+                  ? "Turnuva DNA'sı ve tecrübesi en üst seviyede olan elit devlerdir (Örn: Arjantin, Brezilya, İspanya, Almanya). Simülatörümüzde eleme turlarında zayıf takımlara karşı uygulanan \"Efsanelerin Zırhı\" çarpanını doğrudan bu DNA tetikler."
+                  : "Elite giants with supreme tournament pedigree and experience (e.g., Argentina, Brazil, Spain, Germany). In our simulator, this DNA directly triggers the 'Elite Plot Armor' multiplier applied during knockouts against underdogs."}
               </p>
             </li>
             <li>
               <span className="text-[#00E5FF] font-black uppercase">
-                💎 {isTr ? "Gizli Potansiyel (Dark Horse):" : "Dark Horse / Potential:"}
+                💎 {isTr ? "Gizli Potansiyel (Dark Horse / Potential):" : "Dark Horse / Potential:"}
               </span>
-              <p className="mt-0.5 text-zinc-400">
+              <p className="mt-1 text-zinc-400">
+                <strong>{isTr ? "Nasıl Belirlenir?:" : "How It's Determined?:"}</strong>{" "}
                 {isTr
-                  ? "ELO sıralaması 1900'ün altında olmasına karşın, kadro piyasa değeri 300 Milyon Euro'yu aşan ve turnuva tecrübesi görece daha düşük olan gizli güçler. (Örn: Türkiye)."
-                  : "Teams with a base ELO below 1900 but possessing high-quality rosters exceeding €300M in market value. (e.g., Turkey)."}
+                  ? "Güncel ELO gücü 1900'ün altında, Kadro Değeri 300 Milyon Euro'dan yüksek olmalı ve hiç şampiyonluğu bulunmamalıdır."
+                  : "Current ELO must be below 1900, Squad Value over €300M, and have zero championship titles."}
+              </p>
+              <p className="mt-1 text-zinc-400">
+                <strong>{isTr ? "Neyi Belirliyor?:" : "What It Determines?:"}</strong>{" "}
+                {isTr
+                  ? "İstatistikleri henüz zirvede olmasa da, kadro kalitesi ve finansal gücü elit seviyede olan, patlamaya hazır takımları temsil eder. Yaş ortalamaları genelde gençtir ve devleri devirme potansiyelleri çok yüksektir."
+                  : "Roster quality and financial power are at elite levels even if stats are not yet at the absolute peak, representing highly explosive squads. Roster ages are usually young with a very high potential to upset elite giants."}
               </p>
             </li>
             <li>
               <span className="text-[#00FF87] font-black uppercase">
                 ⚡ {isTr ? "Yükselen Yıldız (Rising Star):" : "Rising Star:"}
               </span>
-              <p className="mt-0.5 text-zinc-400">
+              <p className="mt-1 text-zinc-400">
+                <strong>{isTr ? "Nasıl Belirlenir?:" : "How It's Determined?:"}</strong>{" "}
                 {isTr
-                  ? "Son dönemde olağanüstü form yakalayarak güncel ELO puanını tarihsel ortalamasına kıyasla en az 100 puan artırmış formda takımlar."
-                  : "High-flying squads that have successfully elevated their active ELO by at least 100 points compared to their historical average."}
+                  ? "Güncel ELO gücü, tarihsel ELO ortalamasının en az 100 puan üzerinde olmalıdır. Ancak takımın tarihsel ELO ortalaması 1850'nin altında olmalıdır. (Köklü devler bu kategoriye giremez)."
+                  : "Current ELO rating must be at least 100 points higher than historical ELO average. However, the historical ELO average must be below 1850. (Established football giants cannot enter this category)."}
+              </p>
+              <p className="mt-1 text-zinc-400">
+                <strong>{isTr ? "Neyi Belirliyor?:" : "What It Determines?:"}</strong>{" "}
+                {isTr
+                  ? "Orta veya alt klasmandan gelip son yıllarda form grafiğinde muazzam bir patlama yaşayan takımları belirler. Form ve moral avantajları, simülatörde gol beklentisi (Lambda) hesaplarına ciddi bir momentum olarak yansır."
+                  : "Identifies squads from lower or mid tiers who have registered massive form explosions in recent years. Form and morale advantages reflect as high momentum inside simulator goal expectation (Lambda) calculations."}
               </p>
             </li>
             <li>
               <span className="text-[#FF2D78] font-black uppercase">
                 🚨 {isTr ? "Gerileyen Dev (Falling Giant):" : "Falling Giant:"}
               </span>
-              <p className="mt-0.5 text-zinc-400">
+              <p className="mt-1 text-zinc-400">
+                <strong>{isTr ? "Nasıl Belirlenir?:" : "How It's Determined?:"}</strong>{" "}
                 {isTr
-                  ? "Eski parlak başarılarının gerisinde kalmış, güncel ELO puanı tarihi ortalamasından 20 puandan daha fazla düşmüş ve kadro değeri 250M €'nun altına inmiş takımlar."
-                  : "Historically strong sides facing a performance slump, with active ELO dropping 20+ points below their average and squad values under €250M."}
+                  ? "Güncel ELO gücü, tarihsel ortalamasının en az 20 puan altında olmalı VE Kadro Değeri 250 Milyon Euro'nun altında kalmalıdır."
+                  : "Current ELO must be at least 20 points lower than the historical average, AND the squad market value must be under €250M."}
+              </p>
+              <p className="mt-1 text-zinc-400">
+                <strong>{isTr ? "Neyi Belirliyor?:" : "What It Determines?:"}</strong>{" "}
+                {isTr
+                  ? "Geçmişte büyük başarıları olan ancak güncel form grafiği eriyen, kadro kalitesi zayıflayan takımları temsil eder. Bu takımların eleme turlarında oyundan düşme olasılıkları matematiksel olarak artırılır."
+                  : "Represents established teams with high historical pedigree facing a performance slump and melting squad values. Their capacity to compete during knockout extra times is mathematically suppressed."}
               </p>
             </li>
             <li>
               <span className="text-[#FFE600] font-black uppercase">
                 🟡 {isTr ? "Mütevazı Güç (Modest Strength):" : "Modest Strength:"}
               </span>
-              <p className="mt-0.5 text-zinc-400">
+              <p className="mt-1 text-zinc-400">
+                <strong>{isTr ? "Nasıl Belirlenir?:" : "How It's Determined?:"}</strong>{" "}
                 {isTr
-                  ? "Yukarıdaki 4 özel kritere dahil olmayan, ancak dengeli güçleri ve taktiksel yapılarıyla her an turnuvada büyük sürprizler yapabilecek takımlar."
-                  : "Highly competitive sides not classified in the 4 categories, holding precise ELO strengths capable of initiating tournament upsets."}
+                  ? "Yukarıdaki 4 elit/özel kritere uymayan diğer tüm takımlar otomatik olarak bu kategoriye dahil edilir."
+                  : "All other squads not matching any of the 4 elite/custom conditions are automatically grouped here."}
+              </p>
+              <p className="mt-1 text-zinc-400">
+                <strong>{isTr ? "Neyi Belirliyor?:" : "What It Determines?:"}</strong>{" "}
+                {isTr
+                  ? "Turnuvanın rekabet dengesini elinde tutan, her an sürpriz yapabilecek tehlikeli ve dirençli takımları temsil eder. Tamamen kendi taktiksel ELO güçleriyle sahada mücadele ederler."
+                  : "Represents dangerous, highly resilient sides holding the competitive balance of the tournament, capable of surprises at any time. They fight purely using tactical ELO strengths."}
               </p>
             </li>
           </ul>
