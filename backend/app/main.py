@@ -39,6 +39,7 @@ class PublishRequest(BaseModel):
     token: str
     bracketString: str
     comment: str = None
+    seed: int = 2026
 
 # Define paths to json databases
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
@@ -97,6 +98,7 @@ async def get_creators():
             "id": c.get("id"),
             "name": c.get("name"),
             "bracketString": c.get("bracketString"),
+            "seed": c.get("seed"),
             "roleTr": c.get("roleTr"),
             "roleEn": c.get("roleEn"),
             "commentTr": c.get("commentTr"),
@@ -138,11 +140,12 @@ async def publish_creator_bracket(payload: PublishRequest):
             
         creators_data = await anyio.to_thread.run_sync(_load_creators_sync)
             
-        # Adım 2: Token geçerliyse, o token'a ait creator_id'yi al, creators.json dosyasında o yorumcuyu bul ve bracketString değerini güncelle.
+        # Adım 2: Token geçerliyse, o token'a ait creator_id'yi al, creators.json dosyasında o yorumcuyu bul ve bracketString ve seed değerini güncelle.
         creator_found = False
         for creator in creators_data:
             if creator.get("id") == creator_id:
                 creator["bracketString"] = payload.bracketString
+                creator["seed"] = payload.seed
                 if payload.comment:
                     creator["commentTr"] = payload.comment
                     creator["commentEn"] = payload.comment

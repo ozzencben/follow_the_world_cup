@@ -20,10 +20,10 @@
   {
     "id": "ai",
     "name": "AI",
-    "bracketString": null,
+    "bracketString": "",
     "roleTr": "Yapay Zeka Tahmin Motoru",
     "roleEn": "AI Tournament Predictor",
-    "commentTr": "Wonderkids bonusu turnuvada genç kadrolu Türkiye ve İngiltere gibi takımlara büyük avantaj sağlıyor. Simülasyonda sürprizler ve efsanelerin zırhı kıran anlar kapıda!",
-    "commentEn": "The Wonderkids bonus gives a massive advantage to young squads like Turkey and England. Surprises and plot-armor breaking moments are imminent!"
+    "commentTr": "Türkiye kazanır",
+    "commentEn": "Türkiye kazanır"
   }
 ]

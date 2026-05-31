@@ -8293,3 +8293,22 @@
 2026-05-31 09:05:32.263 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:32828 - "GET /api/v1/teams HTTP/1.1" 200
 2026-05-31 09:05:32.326 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:32840 - "GET /api/creators HTTP/1.1" 200
 2026-05-31 09:05:32.330 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:32828 - "GET /api/v1/teams HTTP/1.1" 200
+2026-05-31 09:08:25.160 | INFO     | uvicorn.protocols.http.httptools_impl:send:484 - 172.19.0.1:53406 - "GET /api/creators HTTP/1.1" 200
+2026-05-31 09:10:45.922 | INFO     | uvicorn.server:shutdown:272 - Shutting down
+2026-05-31 09:10:45.922 | INFO     | uvicorn.server:shutdown:272 - Shutting down
+2026-05-31 09:10:46.029 | INFO     | uvicorn.lifespan.on:shutdown:67 - Waiting for application shutdown.
+2026-05-31 09:10:46.036 | INFO     | app.core.lifespan:lifespan:22 - Shutting down FollowTheWorldCup.com Backend Application...
+2026-05-31 09:10:46.036 | INFO     | app.core.lifespan:lifespan:23 - Closing all external active connections & sessions...
+2026-05-31 09:10:46.030 | INFO     | uvicorn.lifespan.on:shutdown:67 - Waiting for application shutdown.
+2026-05-31 09:10:46.042 | INFO     | app.core.lifespan:lifespan:22 - Shutting down FollowTheWorldCup.com Backend Application...
+2026-05-31 09:10:46.037 | INFO     | app.core.lifespan:lifespan:24 - FastAPI lifespan shutdown hook completed.
+2026-05-31 09:10:46.039 | INFO     | uvicorn.lifespan.on:shutdown:76 - Application shutdown complete.
+2026-05-31 09:10:46.043 | INFO     | app.core.lifespan:lifespan:23 - Closing all external active connections & sessions...
+2026-05-31 09:11:09.811 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-05-31 09:11:09.812 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-05-31 09:11:09.812 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-05-31 09:11:09.813 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-05-31 09:11:10.010 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-05-31 09:11:10.011 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-05-31 09:11:10.011 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-05-31 09:11:10.012 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.

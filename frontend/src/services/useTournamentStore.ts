@@ -12,6 +12,7 @@ export interface Creator {
   id: string;
   name: string;
   bracketString: string | null;
+  seed?: number;
   roleTr?: string;
   roleEn?: string;
   commentTr?: string;
@@ -515,25 +516,32 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
       await get().initializeStore();
     }
 
-    const { teams, matches, seed } = get();
+    const { teams, matches, creatorsList } = get();
     if (teams.length === 0 || matches.length === 0) return;
 
+    // Dynamically look up the creator's saved seed (falls back to 2026 if not set)
+    const matchedCreator = creatorsList.find((c) => c.name === creatorName);
+    const creatorSeed = matchedCreator?.seed || 2026;
+
     const overridesMap = new Map<string, { home: number; away: number }>();
-    bracketString.split("|").forEach((item) => {
-      const parts = item.split("_");
-      if (parts.length === 2) {
-        const matchId = parts[0];
-        const scores = parts[1].split("-");
-        if (scores.length === 2) {
-          const home = parseInt(scores[0], 10);
-          const away = parseInt(scores[1], 10);
-          if (!isNaN(home) && !isNaN(away)) {
-            overridesMap.set(matchId, { home, away });
+    if (bracketString && bracketString.trim() !== "") {
+      bracketString.split("|").forEach((item) => {
+        const parts = item.split("_");
+        if (parts.length === 2) {
+          const matchId = parts[0];
+          const scores = parts[1].split("-");
+          if (scores.length === 2) {
+            const home = parseInt(scores[0], 10);
+            const away = parseInt(scores[1], 10);
+            if (!isNaN(home) && !isNaN(away)) {
+              overridesMap.set(matchId, { home, away });
+            }
           }
         }
-      }
-    });
+      });
+    }
 
+    // Reset non-overridden matches to prevent leak of user's active overrides
     const updatedMatches = matches.map((m) => {
       const override = overridesMap.get(m.id);
       if (override) {
@@ -545,17 +553,26 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
           winnerCode: override.home > override.away ? m.homeTeamCode : m.awayTeamCode,
         };
       }
-      return m;
+      return {
+        ...m,
+        isOverridden: false,
+        userHomeScore: null,
+        userAwayScore: null,
+        simulatedHomeScore: null,
+        simulatedAwayScore: null,
+        winnerCode: null,
+      };
     });
 
     const engine = new TournamentEngine(teams);
-    const cascadedMatches = engine.runFullCascade(updatedMatches, seed);
+    const cascadedMatches = engine.runFullCascade(updatedMatches, creatorSeed);
     const standings = engine.calculateGroupStandings(
       cascadedMatches.filter((m) => m.stage === "GROUP")
     );
     const bestThirds = engine.getBestThirdPlacedTeams(standings);
 
     set({
+      seed: creatorSeed,
       matches: cascadedMatches,
       groupStandings: standings,
       bestThirds,
