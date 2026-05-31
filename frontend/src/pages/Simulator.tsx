@@ -720,6 +720,88 @@ function TeamAnalyticsPanel({ teams }: TeamAnalyticsPanelProps) {
           </p>
         </div>
       )}
+
+      {/* ══ DYNAMIC ALGORITHM DOCUMENTATION BOARD (TR & EN side-by-side) ══ */}
+      <div 
+        className="bg-zinc-900 border-[3px] border-black p-6 md:p-8 space-y-6 shadow-[5px_5px_0_rgba(167,139,250,0.2)] mt-8"
+      >
+        <div className="border-b border-zinc-800 pb-4">
+          <span className="neon-badge font-mono tracking-widest text-[9px] uppercase" style={{ color: "#A78BFA", borderColor: "#A78BFA40", background: "#A78BFA10" }}>
+            ● ALGORITHM SPECIFICATIONS & METRICS DOCUMENTATION
+          </span>
+          <h2 className="text-white font-black text-sm tracking-wide uppercase mt-2">
+            {isTr 
+              ? "Güç ve Profil Kategorileri Nasıl Belirlenir?" 
+              : "How are Strength & Profile Categories Computed?"}
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 text-xs font-mono leading-relaxed">
+          {/* Turkish Columns */}
+          <div className="space-y-4 text-zinc-400">
+            <h3 className="text-[#00FF87] font-extrabold text-[10px] tracking-widest uppercase border-b border-zinc-800 pb-1 text-left">
+              🇹🇷 TÜRKÇE HESAPLAMA METODOLOJİSİ
+            </h3>
+            <p className="text-[10px] text-zinc-500 font-medium">
+              Sistemimizdeki profiller ve etiketler, takımların anlık başarılarından bağımsız olarak turnuva genetiğini, kadro piyasa değerlerini ve tarihsel form grafiklerini harmanlayan hibrit bir modelle hesaplanır:
+            </p>
+            <ul className="space-y-3 text-[10px] list-none p-0 m-0">
+              <li>
+                <span className="text-[#A78BFA] font-black uppercase">🏆 Tarihi Efsane (Historic Legend):</span>
+                <p className="mt-0.5 text-zinc-400">Tarihinde en az 800 resmi maç yapmış, kupa şampiyonluğu veya en az 15 kez turnuva tecrübesine sahip elit devleri temsil eder. (Örn: Brezilya, Arjantin, Almanya).</p>
+              </li>
+              <li>
+                <span className="text-[#00E5FF] font-black uppercase">💎 Gizli Potansiyel (Dark Horse):</span>
+                <p className="mt-0.5 text-zinc-400">ELO sıralaması 1900'ün altında olmasına karşın, kadro piyasa değeri 300 Milyon Euro'yu aşan ve turnuva tecrübesi görece daha düşük olan gizli güçler. (Örn: Türkiye).</p>
+              </li>
+              <li>
+                <span className="text-[#00FF87] font-black uppercase">⚡ Yükselen Yıldız (Rising Star):</span>
+                <p className="mt-0.5 text-zinc-400">Son dönemde olağanüstü form yakalayarak güncel ELO puanını tarihsel ortalamasına kıyasla en az 100 puan artırmış formda takımlar.</p>
+              </li>
+              <li>
+                <span className="text-[#FF2D78] font-black uppercase">🚨 Gerileyen Dev (Falling Giant):</span>
+                <p className="mt-0.5 text-zinc-400">Eski parlak başarılarının gerisinde kalmış, güncel ELO puanı tarihi ortalamasından 20 puandan daha fazla düşmüş ve kadro değeri 250M €'nun altına inmiş takımlar.</p>
+              </li>
+              <li>
+                <span className="text-[#FFE600] font-black uppercase">🟡 Mütevazı Güç (Modest Strength):</span>
+                <p className="mt-0.5 text-zinc-400">Yukarıdaki 4 özel kritere dahil olmayan, ancak dengeli güçleri ve taktiksel yapılarıyla her an turnuvada büyük sürprizler yapabilecek takımlar.</p>
+              </li>
+            </ul>
+          </div>
+
+          {/* English Columns */}
+          <div className="space-y-4 text-zinc-400 border-t border-zinc-800 pt-6 lg:border-t-0 lg:pt-0 lg:border-l lg:border-zinc-800/80 lg:pl-8">
+            <h3 className="text-[#00E5FF] font-extrabold text-[10px] tracking-widest uppercase border-b border-zinc-800 pb-1 text-left">
+              🇬🇧 ENGLISH ESTIMATION METHODOLOGY
+            </h3>
+            <p className="text-[10px] text-zinc-500 font-medium">
+              Profiles and tags are generated dynamically based on an analytical hybrid model that merges tournament pedigree, financial value, and historical ELO trends:
+            </p>
+            <ul className="space-y-3 text-[10px] list-none p-0 m-0">
+              <li>
+                <span className="text-[#A78BFA] font-black uppercase">🏆 Historic Legend:</span>
+                <p className="mt-0.5 text-zinc-400">Elite giants holding at least 800 historical matches alongside a championship title or at least 15 tournament appearances. (e.g., Brazil, Argentina, Germany).</p>
+              </li>
+              <li>
+                <span className="text-[#00E5FF] font-black uppercase">💎 Dark Horse / Potential:</span>
+                <p className="mt-0.5 text-zinc-400">Teams with a base ELO below 1900 but possessing high-quality rosters exceeding €300M in market value. (e.g., Turkey).</p>
+              </li>
+              <li>
+                <span className="text-[#00FF87] font-black uppercase">⚡ Rising Star:</span>
+                <p className="mt-0.5 text-zinc-400">High-flying squads that have successfully elevated their active ELO by at least 100 points compared to their historical average.</p>
+              </li>
+              <li>
+                <span className="text-[#FF2D78] font-black uppercase">🚨 Falling Giant:</span>
+                <p className="mt-0.5 text-zinc-400">Historically strong sides facing a performance slump, with active ELO dropping 20+ points below their average and squad values under €250M.</p>
+              </li>
+              <li>
+                <span className="text-[#FFE600] font-black uppercase">🟡 Modest Strength:</span>
+                <p className="mt-0.5 text-zinc-400">Highly competitive sides not classified in the 4 categories, holding precise ELO strengths capable of initiating tournament upsets.</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
