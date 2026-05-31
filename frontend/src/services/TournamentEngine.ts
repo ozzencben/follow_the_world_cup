@@ -16,6 +16,7 @@ export interface SimulatorTeam {
   oneYearRatingChange: string;
   appearances: number;
   championships: number;
+  championshipDnaScore?: number;
   hostTeam: boolean;
   confederationId: string;
   group: string; // "a" to "l"
@@ -82,22 +83,14 @@ export function calculateCSR(
   } else if (stage === "QF" || stage === "SF" || stage === "F") {
     dnaMultiplier = 2.0;
   }
-  const rDNA = Math.min(150, 5 * team.appearances + 25 * team.championships) * dnaMultiplier;
+  const rDNA = Math.min(150, 5 * team.appearances + (team.championshipDnaScore ?? (25 * team.championships))) * dnaMultiplier;
 
   // D. Momentum (5%)
   const parsedChange = parseInt(team.oneYearRatingChange.replace("−", "-").replace("+", ""), 10);
   const rMomentum = isNaN(parsedChange) ? 0 : parsedChange;
 
-  // E. Host Advantage (10%)
-  const rHost = team.hostTeam ? 100 : 0;
-
-  let csr = 0.55 * rElo + 0.20 * rSquad + 0.10 * rDNA + 0.05 * rMomentum + 0.10 * rHost;
-
-  // Ev Sahibi Balonunu Söndürme (Host Cap):
-  // Ev sahibi bonusu alan ancak elite ELO'su olmayan takımlar 1950 CSR ile limitlenir.
-  if (team.hostTeam && team.rating < 1950) {
-    csr = Math.min(1950, csr);
-  }
+  // Ev sahibi takımlara verilen doğrudan +100 ELO bonusu (rHost) ve Ev Sahibi Sınırı (Host Cap) Ev Sahibi Paradoksu gereği kaldırılmıştır.
+  let csr = 0.55 * rElo + 0.20 * rSquad + 0.10 * rDNA + 0.05 * rMomentum;
 
   return csr;
 }
@@ -207,6 +200,22 @@ export function simulateMatch(
   if (stage === "QF" || stage === "SF" || stage === "F") {
     lambdaA *= 0.75;
     lambdaB *= 0.75;
+  }
+
+  // Ev Sahibi Paradoksu: Seyirci Coşkusu & Oynama Motivasyonu (+%15 Gol Olasılık Çarpanı)
+  if (teamA.hostTeam) {
+    lambdaA *= 1.15;
+  }
+  if (teamB.hostTeam) {
+    lambdaB *= 1.15;
+  }
+
+  // Türkiye Paradoksu: Modern Dominasyon Zemin Filtresi (Gruptan ELO Artışıyla Gelen Takımların Zayıf Takımları Dağıtması)
+  if (csrA - csrB > 400) {
+    lambdaA = Math.max(lambdaA, 2.0);
+  }
+  if (csrB - csrA > 400) {
+    lambdaB = Math.max(lambdaB, 2.0);
   }
 
   // Bound lambdas to realistic ranges [0.25, 4.25] after all modifications

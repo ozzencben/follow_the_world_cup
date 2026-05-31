@@ -113,25 +113,31 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
       const eloList = eloRes.data || [];
       const winnersList = winnersRes.data.winners || [];
 
-      // Calculate champion counts
+      // Calculate champion counts and year-decayed championship DNA score
       const winnerCounts: { [name: string]: number } = {};
+      const winnerDnaScores: { [name: string]: number } = {};
       winnersList.forEach((w) => {
         const name = w.country_en.toLowerCase();
         winnerCounts[name] = (winnerCounts[name] || 0) + 1;
+        
+        const score = w.year >= 1990 ? 25 : 5;
+        winnerDnaScores[name] = (winnerDnaScores[name] || 0) + score;
       });
 
       // 1. Build SimulatorTeam list by merging ELO, Transfermarkt, and FIFA sources
       const simulatorTeams: SimulatorTeam[] = eloList.map((elo) => {
+        const targetCode = elo.code.toUpperCase();
         const matchingFifa = teamsList.find(
-          (t) => normalizeName(t.teamName) === normalizeName(elo.nameEn)
+          (t) => getTeamCode(t.teamName) === targetCode
         );
         const matchingSquad = squadsList.find(
-          (s) => normalizeName(s.name) === normalizeName(elo.nameEn)
+          (s) => getTeamCode(s.name) === targetCode
         );
 
         const appearances = matchingFifa?.appearances || 1;
         const hostTeam = matchingFifa?.hostTeam || false;
         const championships = winnerCounts[elo.nameEn.toLowerCase()] || 0;
+        const championshipDnaScore = winnerDnaScores[elo.nameEn.toLowerCase()] || 0;
 
         return {
           code: elo.code,
@@ -144,6 +150,7 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
           oneYearRatingChange: elo.oneYearRatingChange,
           appearances,
           championships,
+          championshipDnaScore,
           hostTeam,
           confederationId: elo.confederation,
           group: matchingSquad?.group || "a",

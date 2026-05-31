@@ -927,7 +927,7 @@ function SimulationGuidePanel() {
                     1. Kompozit Güç Puanı (CSR) Nedir?
                   </span>
                   <p className="text-[11px] text-zinc-400 leading-relaxed">
-                    Her ülkenin gücünü temsil eden <b>Composite Strength Rating (CSR)</b> puanı hesaplanırken sadece ELO puanına bakılmaz. ELO puanı (Grup aşamasında %55 etki), Transfermarkt kadro değerinin logaritmik ölçeği (%20), ülkenin Dünya Kupası'na katılım ve şampiyonluk sayılarıyla belirlenen turnuva DNA'sı (%10), son 1 yıllık form trendi (%5) ve eğer ev sahibiyse moral avantajı (+100 moral puanı) dinamik olarak harmanlanır.
+                    Her ülkenin gücünü temsil eden <b>Composite Strength Rating (CSR)</b> puanı hesaplanırken sadece ELO puanına bakılmaz. ELO puanı (Grup aşamasında %55 etki), Transfermarkt kadro değerinin logaritmik ölçeği (%20), ülkenin Dünya Kupası'na katılım ve şampiyonluk sayılarıyla belirlenen zaman çürütmeli turnuva DNA'sı (%10 - 1990 ve sonrası şampiyonluklara +25 DNA puanı, öncesine +5 DNA puanı uygulanır) ve son 1 yıllık form trendi (%5) dinamik olarak harmanlanır. Ev sahibi takımların (ABD, Meksika, Kanada) taraftar coşkusu ise CSR katsayısından tamamen ayrıştırılarak, o maçtaki Gol Beklentilerine (Lambda) doğrudan %15 artış olarak yansıtılır.
                   </p>
                 </div>
 
@@ -980,7 +980,7 @@ function SimulationGuidePanel() {
                     1. What is Composite Strength Rating (CSR)?
                   </span>
                   <p className="text-[11px] text-zinc-400 leading-relaxed">
-                    To evaluate each country's strength, the <b>Composite Strength Rating (CSR)</b> score is computed. It combines ELO ratings (55% weight in Group stage), logarithmic market value from Transfermarkt (20%), tournament DNA calculated from historical appearances and cup titles (10%), ELO momentum trend over the past 1 year (5%), and home advantage (+100 moral boost) dynamically.
+                    To evaluate each country's strength, the <b>Composite Strength Rating (CSR)</b> score is computed. It combines ELO ratings (55% weight in Group stage), logarithmic market value from Transfermarkt (20%), tournament DNA calculated from historical appearances and cup titles with a year-decay decay (10% - granting +25 DNA points for titles in/after 1990, and +5 points for older titles), and ELO momentum trend over the past 1 year (5%) dynamically. The home advantage moral boost is completely decoupled from the tactical CSR and directly increases the host's Goal Expectation (Lambda boosted by 15% in their matches) to prevent artificial aura bonuses.
                   </p>
                 </div>
 

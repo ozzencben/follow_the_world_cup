@@ -179,9 +179,10 @@ def _get_elo_ratings_sync() -> list:
     ratings_list = []
     tm_stats = load_transfermarkt_stats()
 
-    # Load winners to get championships count
+    # Load winners to get championships count and year-decayed DNA score
     winners_file = Path("app/data/winners.json")
     championships_map = {}
+    championship_dna_scores_map = {}
     if winners_file.exists():
         try:
             with open(winners_file, "r", encoding="utf-8") as f:
@@ -189,6 +190,10 @@ def _get_elo_ratings_sync() -> list:
                 for w in winners_data.get("winners", []):
                     name = normalize_name(w.get("country_en", ""))
                     championships_map[name] = championships_map.get(name, 0) + 1
+                    
+                    year = w.get("year", 1930)
+                    score = 25 if year >= 1990 else 5
+                    championship_dna_scores_map[name] = championship_dna_scores_map.get(name, 0) + score
         except Exception as e:
             logger.error(f"Winners read error: {e}")
 
@@ -250,6 +255,7 @@ def _get_elo_ratings_sync() -> list:
                 name_norm = normalize_name(mapping["en"])
                 appearances = appearances_map.get(name_norm, 1)
                 championships = championships_map.get(name_norm, 0)
+                championship_dna_score = championship_dna_scores_map.get(name_norm, 0)
                 rating_val = clean_value(parts[3])
                 avg_rating_val = clean_value(parts[7]) or rating_val
 
@@ -297,6 +303,7 @@ def _get_elo_ratings_sync() -> list:
                     "playerCount":          player_count,
                     "appearances":          appearances,
                     "championships":        championships,
+                    "championshipDnaScore": championship_dna_score,
                     "category":             category,
                 }
                 ratings_list.append(team_data)

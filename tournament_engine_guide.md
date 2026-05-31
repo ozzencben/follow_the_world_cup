@@ -1,101 +1,135 @@
 # 🏆 Dünya Kupası 2026 Simülasyon Motoru (TournamentEngine) Matematiksel ve Mantıksal Çalışma Rehberi
 
-Bu döküman, **FollowTheWorldCup.com** projesinin matematiksel ve mantıksal kalbi olan, tarayıcı tarafında (client-side) sıfır gecikmeyle çalışan saf TypeScript simülasyon motorunun (`TournamentEngine.ts`) ve durum yönetiminin (`useTournamentStore.ts`) nasıl çalıştığını, hangi parametreleri aldığını ve bunları nasıl işlediğini detaylıca açıklar.
+Bu döküman, **FollowTheWorldCup.com** projesinin en karmaşık ve hassas mekanizması olan saf TypeScript simülasyon motorunun (`TournamentEngine.ts`) ve onunla bütünleşik asenkron veri yönetim modelinin (`useTournamentStore.ts` & `get_elo.py`) çalışma prensiplerini detaylı bir matematiksel ve mantıksal çerçevede açıklar. 
+
+Sistemimiz, rastgele sayılar üreten basit bir şans makinesi değil; futbol gerçekliği faktörlerini (bireysel yıldız gücü, kupa tarihi pedigrisi, turnuva aşaması baskısı, ev sahibi motivasyonu ve taktiksel form) olasılık teorisinin en saygın modellerinden **Poisson Gol Beklentisi** ile harmanlayan hibrit bir analitik simülatördür.
 
 ---
 
 ## 📐 1. Kompozit Güç Puanı (CSR - Composite Strength Rating) Hesaplaması
 
-Simülasyon motoru, takımların güçlerini sadece ham FIFA sıralaması veya ELO puanı ile değerlendirmez. Bunun yerine, futbol gerçekliğini (ev sahibi avantajı, kadro derinliği, tarihsel başarı, anlık form) yansıtan **Kompozit Güç Puanı (CSR)** hesaplar.
+Simülasyon motoru, iki ülkenin gücünü karşılaştırırken sadece ham FIFA sıralaması veya anlık ELO puanlarını temel almaz. Futbolun çok parametreli doğasını temsil etmek amacıyla, takımların teknik, finansal, tarihsel ve coğrafi avantajlarını birleştiren **Kompozit Güç Puanı (CSR)** değerini dinamik olarak hesaplar.
 
 ### 🔹 CSR Matematiksel Formülü:
- Takımın gücü ($CSR$), aşağıdaki 5 farklı parametrenin ağırlıklı birleşimiyle hesaplanır:
+Her milli takım için aktif turnuva aşamasına göre hesaplanan $CSR$ puanı, aşağıdaki 4 parametrenin ağırlıklı toplamından oluşur (Ev Sahibi Paradoksu gereği seyirci motivasyonu bu taktiksel puanlama zemininden ayrıştırılmıştır):
 
-$$\text{CSR} = 0.55 \times R_{\text{Elo}} + 0.20 \times R_{\text{Kadro}} + 0.10 \times R_{\text{DNA}} + 0.05 \times R_{\text{Momentum}} + 0.10 \times R_{\text{EvSahibi}}$$
+$$\text{CSR} = 0.55 \times R_{\text{Elo}} + 0.20 \times R_{\text{Kadro}} + 0.10 \times R_{\text{DNA}} + 0.05 \times R_{\text{Momentum}}$$
 
 ---
 
-### 🔹 Formüldeki Parametrelerin Ayrıntılı Çalışma Mantığı:
+### 🔹 Parametrelerin Teknik Detayları ve Beslendiği Kaynaklar:
 
 #### A. Temel Teknik Güç ($R_{\text{Elo}}$ - Ağırlık: %55)
-*   **Aldığı Veri:** `2026_World_Cup_latest.tsv` dosyasındaki güncel Elo puanı.
-*   **Çalışma Mantığı:** Takımın uluslararası maçlardaki güncel teknik kalitesini temsil eden ana katsayıdır. CSR puanının omurgasını oluşturur.
+*   **Veri Kaynağı:** `2026_World_Cup_latest.tsv` dosyasındaki güncel ELO puanı (`team.rating`).
+*   **Çalışma Mantığı:** Takımın uluslararası aremadaki güncel teknik kalitesini ve taktiksel istikrarını temsil eden ana katsayıdır. CSR hesaplamasının omurgasını oluşturur.
 
-#### B. Finansal Derinlik & Yıldız Gücü ($R_{\text{Kadro}}$ - Ağırlık: %20)
-*   **Aldığı Veri:** `transfermarkt_stats.json` dosyasındaki kadro piyasa değeri (`squadValue` - Milyon € bazında).
-*   **Çalışma Mantığı:** Kadro kalitesi güce doğrusal yansımaz. Örneğin kadro değeri 1.2 Milyar € olan İngiltere, 12 Milyon € olan bir takımdan doğrusal olarak 100 kat güçlü değildir. Bu uçurumu adil bir şekilde dengelemek için **Logaritmik Ölçekleme** uygulanır:
+#### B. Kadro Derinliği ve Yıldız Gücü ($R_{\text{Kadro}}$ - Ağırlık: %20)
+*   **Veri Kaynağı:** `transfermarkt_stats.json` dosyasındaki kadro piyasa değeri (`team.squadValue` - Milyon Euro bazında).
+*   **Çalışma Mantığı:** Futbolda kadro değeri ile güç ilişkisi doğrusal değildir. Logaritmik kavis sayesinde, kadro değerlerindeki aşırı uçurumlar törpülenir, ancak yıldız oyuncuların bireysel yetenek farkı ve yedek kulübesi derinliği simülasyona tam kıvamında etki eder:
     $$R_{\text{Kadro}} = 100 \times \log_{10}(\text{squadValue} + 1)$$
-    Bu sayede yıldız oyuncuların yedek kulübesi derinliği ve bireysel yetenek farkı simülasyona gerçekçi bir oranda eklenir.
 
 #### C. Turnuva DNA'sı ($R_{\text{DNA}}$ - Ağırlık: %10)
-*   **Aldığı Veri:** `fifa_data.json` içindeki turnuva katılım sayısı (`appearances`) ve `winners.json` içindeki şampiyonluk sayısı (`championships`).
-*   **Çalışma Mantığı:** Dünya Kupası dev bir baskı sahnesidir. Brezilya, Arjantin, Almanya gibi kupa pedigrisi olan devlerin stres altında oynama tecrübesi bu parametre ile CSR'a eklenir (maksimum 150 puanla sınırlandırılmıştır):
-    $$R_{\text{DNA}} = \min(150, \, 5 \times \text{appearances} + 25 \times \text{championships})$$
+*   **Veri Kaynağı:** `fifa_data.json` içindeki Dünya Kupası katılım sayısı (`team.appearances`) ve `winners.json` içindeki şampiyonluk yılı verileri (`team.championships` & `team.championshipDnaScore`).
+*   **⏳ Uruguay Paradoksu (Zaman Çürümesi - Time Decay):**
+    Sıradan sistemlerde eski Dünya Kupası şampiyonlukları (örn: 1930) ile günümüz şampiyonlukları (örn: 2022) takıma aynı DNA ağırlığını verir. Bu tarihsel adaletsizliği önlemek için şampiyonluklar sayılırken yıl bazlı bir **DNA Zaman Çürümesi** uygulanır:
+    *   **1990 ve Sonrası Şampiyonluklar:** Takıma kupa başına **$+25$** DNA puanı kazandırır.
+    *   **1990 Öncesi Şampiyonluklar:** Takıma kupa başına **$+5$** DNA puanı kazandırır.
+    
+    Bu sayede takımların taban DNA gücü şu formülle hesaplanır (maksimum 150 puanla sınırlandırılmıştır):
+    $$\text{Taban DNA} = \min(150, \, 5 \times \text{appearances} + \text{championshipDnaScore})$$
+*   **Dinamik Turnuva Çarpanı (DNA Escalation):** Turnuvada aşamalar ilerledikçe kupa DNA'sının çarpan etkisi katlanır:
+    *   **Grup Aşaması (GROUP):** $\text{Taban DNA} \times 1.0$
+    *   **Son 32 / Son 16 (R32 / R16):** $\text{Taban DNA} \times 1.5$
+    *   **Çeyrek Final / Yarı Final / Final (QF / SF / F):** $\text{Taban DNA} \times 2.0$
 
 #### D. Form ve Momentum ($R_{\text{Momentum}}$ - Ağırlık: %5)
-*   **Aldığı Veri:** `oneYearRatingChange` (Son 1 yıldaki ELO değişimi).
-*   **Çalışma Mantığı:** Takımın son 1 yılda yükselişte mi yoksa çöküşte mi olduğunu gösterir. Artı veya eksi değer doğrudan eklenerek form durumu simüle edilir.
-
-#### E. Ev Sahibi Bonusu ($R_{\text{EvSahibi}}$ - Ağırlık: %10)
-*   **Aldığı Veri:** `hostTeam` boolean alanı (`true`/`false`).
-*   **Çalışma Mantığı:** 2026 Dünya Kupası ev sahipleri olan **ABD, Meksika ve Kanada** kendi seyircileri önünde oynadıkları için onlara doğrudan $+100$ ELO puanı değerinde moral/saha avantajı bonusu eklenir.
+*   **Veri Kaynağı:** TSV verilerindeki son 1 yıllık ELO değişim puanı (`team.oneYearRatingChange`).
+*   **Çalışma Mantığı:** Takımın son 1 yılda yükselen bir grafik mi çizdiğini yoksa çöküşte mi olduğunu belirler. Artı veya eksi yöndeki bu değişim doğrudan eklenerek form durumu simüle edilir.
 
 ---
 
-## 🥅 2. Gol Beklentisi ve Poisson Dağılımı ile Skor Üretimi
+## 🥅 2. Gol Beklentisi ($\lambda$ - Lambda) Hesaplaması
 
-İki takım (A ve B) karşılaştığında kazananı belirlemek için bir yazı-tura veya basit random kura çalıştırılmaz. Bunun yerine futbol analiz dünyasının standart kabul ettiği **Poisson Dağılımı** modeli uygulanır.
+İki takım karşı karşıya geldiğinde skorlar rassal bir kura ile değil, futbol istatistik dünyasının altın standardı olan **Poisson Dağılım Modeli** ile üretilir. Poisson dağılımını besleyen en kritik girdi, takımların o maçta atmaları beklenen gol sayısını temsil eden **Lambda ($\lambda$)** katsayılarıdır.
 
-### 🔹 Gol Beklentisi ($\lambda$ - Lambda) Hesaplaması:
-Her maç için takımların tarihsel maç başı attıkları/yedikleri gol ortalamaları (`goalsForAvg` ve `goalsAgainstAvg`) ile CSR farkı çarpılarak o maça özel beklenen gol sayısı ($\lambda$) hesaplanır:
+### 🔹 Temel Gol Beklentisi Formülleri:
+Her maç için takımların tarihsel maç başı attıkları/yedikleri gol ortalamaları (`goalsForAvg` ve `goalsAgainstAvg` - TSV dosyasından gelir) ile aralarındaki CSR farkı kullanılarak A ve B takımları için gol beklentileri ($\lambda$) hesaplanır:
 
 $$\lambda_A = \text{goalsForAvg}_A \times \text{goalsAgainstAvg}_B \times \left(1 + \frac{\text{CSR}_A - \text{CSR}_B}{1000}\right)$$
 
 $$\lambda_B = \text{goalsForAvg}_B \times \text{goalsAgainstAvg}_A \times \left(1 + \frac{\text{CSR}_B - \text{CSR}_A}{1000}\right)$$
 
-*   **Sınırlandırma (Bounding):** Beklenmeyen absürt durumları engellemek için takımların gol beklentileri ($\lambda$) matematiksel olarak en düşük **`0.25`** ve en yüksek **`4.25`** aralığına sıkıştırılır.
+---
+
+### 🔹 Gol Beklentisini Etkileyen Dinamik Realizm Filtreleri:
+
+Simülasyon motoru, yukarıdaki temel formüle ek olarak, gerçek futbol dinamiklerini yansıtmak üzere Lambda değerlerini şu filtrelerden geçirir:
+
+#### 1. Ev Sahibi Paradoksu (Decoupled Crowd Motivation - Çarpan: %15)
+*   Ev sahibi ülkelere (ABD, Meksika, Kanada) verilen doğrudan $+100$ ELO puanı bonusu, bu takımları yapay birer deve dönüştürerek rakiplere haksız "Aura" cezaları veriyordu.
+*   **Çözüm:** Ev sahibi bonusu CSR formülünden tamamen silinmiştir. Bunun yerine taraftar coşkusu doğrudan gol beklentisine (Lambda) **%15** oranında çarpan olarak eklenir:
+    $$\text{Eğer } teamA.hostTeam = \text{true} \implies \lambda_A = \lambda_A \times 1.15$$
+    $$\text{Eğer } teamB.hostTeam = \text{true} \implies \lambda_B = \lambda_B \times 1.15$$
+
+#### 2. Türkiye Paradoksu (Modern Dominasyon Zemin Filtresi - Floor: 2.0)
+*   Form grafiği yüksek ama geçmiş tarihsel istatistikleri zayıf olan takımlar (Örn: Türkiye), turnuvadaki çok zayıf rakiplere (Örn: Haiti) karşı simülatörde tarihsel gol ortalaması engeli yüzünden yeterince gol üretemiyordu.
+*   **Çözüm:** İki takım arasındaki CSR farkı **400 puandan büyükse** (`diffCSR > 400`), favori takımın Lambda gol beklentisi, kendi tarihsel gol ortalamalarına bakılmaksızın **asgari 2.0** gol seviyesine yükseltilir:
+    $$\text{Eğer } CSR_A - CSR_B > 400 \implies \lambda_A = \max(\lambda_A, \, 2.0)$$
+    $$\text{Eğer } CSR_B - CSR_A > 400 \implies \lambda_B = \max(\lambda_B, \, 2.0)$$
+    Bu zemin filtreleme (floor) işlemi, lambdaların en son `[0.25, 4.25]` arasına sıkıştırılmasından hemen önce çalıştırılır.
+
+#### 3. Deviren Bonusu (Underdog Motivation)
+*   CSR farkı $> 250$ olan maçlarda, formu yükselişte olan zayıf takıma geçici olarak **$+50$** CSR motivasyon bonusu verilir.
+
+#### 4. Şişirilmiş İstatistik Filtresi (Fake Stats Normalization)
+*   İki takım arasındaki CSR farkı **300'den büyükse**, zayıf takımın maç başı gol ortalaması (`goalsForAvg`) en fazla **1.1** olarak sınırlandırılır.
+
+#### 5. Devlerin Aurası (Juggernaut Modifier)
+*   Baz ELO puanı **2000'in üzerinde** olan dev rakiplere karşı oynayan takımların gol beklentisi ($\lambda$) doğrudan **%15** oranında düşürülür (rakip katsayısı $\times 0.85$).
+
+#### 6. Altın Jenerasyon Bonusu (Golden Generation / Wonderkids)
+*   Yaş ortalaması genç (`averageAge < 27`) ve kadro kalitesi yüksek (`squadValue > 300M €`) olan takımların gol beklentisi ($\lambda$) doğrudan **%10** artırılır (katsayı $\times 1.10$).
+
+#### 7. Efsanelerin Zırhı (Elite Plot Armor - Knockout Penalty)
+*   Eleme turlarında, baz ELO puanı **2000 ve üzerinde** olan elit devler karşısındaki tecrübesiz rakiplerin (CSR farkı $> 200$) gol beklentisi ($\lambda$) doğrudan **%20** oranında baltalanır (rakip katsayısı $\times 0.80$).
+
+#### 8. Sahne Korkusu (Stage Fright Penalty)
+*   Çok zayıf bir takım (baz ELO $< 1650$), turnuvanın süper devlerinden biriyle (baz ELO $> 1950$) eşleştiğinde zayıf takımın gol beklentisi ($\lambda$) doğrudan **%50** oranında düşürülür (katsayı $\times 0.50$).
+
+#### 9. Büyük Maç Baskısı (Variance Dampening)
+*   Çeyrek Final, Yarı Final ve Final (QF, SF, F) gibi aşamalarda her iki takımın da gol beklentisi ($\lambda$) doğrudan **%25** oranında kısılır (her iki katsayı $\times 0.75$).
+
+#### 📊 Lambda Sınırlandırma Aralığı (Lambda Bounding):
+*   Tüm filtreler uygulandıktan sonra, nihai Lambda ($\lambda$) değerleri **`0.25`** ile **`4.25`** aralığına zorla sıkıştırılır:
+    $$\lambda = \max(0.25, \, \min(4.25, \, \lambda))$$
 
 ---
 
-### 🔹 Poisson ve Sınırlandırma (Truncation) Algoritması:
-Poisson olasılık formülü ($P(X=k) = \frac{\lambda^k e^{-\lambda}}{k!}$) kullanılarak Knuth Algoritması yardımıyla takımların atacağı gol sayıları rassal olarak üretilir.
+## 🎲 3. Knuth Poisson Algoritması ve Kesin Skor Sınırları
 
-*   **Truncated Poisson (Max 6 Gol):** Standart Poisson teorik olarak sonsuza kadar gol üretebilir. Ancak hem tarayıcı RAM'ini şişirmemek hem de futbol gerçekliğine uymayan absürt skorları (Örn: 15-0) engellemek için her takımın atabileceği maksimum gol sayısı **6 gol** ile sınırlandırılmıştır (`Math.min(6, score)`).
+Gol beklentileri ($\lambda$) belirlendikten sonra, takımların maçta atacağı gol sayıları olasılık teorisindeki Poisson Dağılım formülünü simüle eden **Knuth Algoritması** kullanılarak hesaplanır.
 
----
-
-### 🔹 Eleme Turlarında Eşitlik Çözücü (Penaltı & Uzatmalar):
-Grup aşamasında beraberlik mümkünken, Eleme Turlarında (Son 32, Son 16 vb.) bir kazanan olmak zorundadır. Maç berabere biterse:
-*   Takımların CSR farkından bir galibiyet olasılık indeksi ($p_A$) çıkarılır:
+*   Gol sayısı, Dünya Kupası tarihindeki en uçuk skorların dahi temsil edilebilmesi için en fazla **8 gol** ile sınırlandırılır (`Math.min(8, score)`).
+*   **Kesin Gol Sınırı Filtresi (Ultimate Score Cap):** CSR farkı $> 350$ ise, zayıf takımın şans eseri atabileceği maksimum gol sayısı mantıksal olarak **en fazla 1 gol** olacak şekilde kesin olarak kilitlenir:
+    $$\text{Eğer } CSR_A - CSR_B > 350 \implies \text{awayScore} = \min(1, \, \text{awayScore})$$
+*   **Eleme Turlarında Beraberlik Bozucu:** Skor berabere biterse takımların CSR farkından bir galibiyet olasılık indeksi ($p_A$) türetilir:
     $$p_A = \frac{1}{1 + 10^{-\frac{\text{CSR}_A - \text{CSR}_B}{400}}}$$
-*   PRNG üzerinden üretilen değer $p_A$'dan küçükse Ev Sahibi, büyükse Deplasman takımına ekstra 1 gol eklenerek (simüle edilmiş uzatma/penaltı golü) tur atlayan belirlenir.
+    PRNG değeri $p_A$'dan küçükse Ev Sahibi A takımına, büyükse Deplasman B takımına ekstra 1 gol eklenerek (simüle edilmiş uzatma/penaltı golü) kazanan belirlenir.
 
 ---
 
-## 🎲 3. Seeded Mulberry32 PRNG (Tekrarlanabilir Olasılık)
+## 🎲 4. Seeded Mulberry32 PRNG (Tekrarlanabilir Olasılık)
 
-Kullanıcının her sayfa yenilemesinde tamamen kaotik sonuçlar görüp inandırıcılık kaybı yaşamaması için **Mulberry32 Sözde-Rastgele Sayı Üreticisi (PRNG)** entegre edilmiştir.
+Kullanıcının her sayfa yenilemesinde tamamen farklı ve mantıksız sonuçlar görerek simülatöre olan inancını kaybetmesini önlemek amacıyla, deterministik ve tohumlanabilir **Mulberry32 PRNG (Pseudo-Random Number Generator)** kullanılmıştır.
 
-### 🔹 Neden Standart `Math.random()` Kullanmadık?
-`Math.random()` tohum (seed) kabul etmez ve her saniye tamamen farklı bir rastgelelik üretir. Bu da simülasyonu mantıksız bir slot makinesine çevirirdi.
-
-### 🔹 Mulberry32 Çalışma Mantığı:
-*   Simülasyon motoru varsayılan olarak **`2026`** tohumuyla (seed) çalıştırılır.
-*   Bu tohum değeri, bit düzeyinde matematiksel formüllerle (`imul` katsayıları ve bit kaydırmaları) kararlı ve tekrarlanabilir bir rastgele sayı dizisi üretir:
-    ```typescript
-    let t = (seedValue += 0x6d2b79f5);
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-    ```
-*   **Sonuç:** Sayfa kaç kere yenilenirse yenilensin, `2026` tohumu kullanıldığı sürece maç sonuçları **birebir aynı** kalır. ELO'su yüksek devler mantıklı bir şekilde gruptan çıkar.
-*   **Paralel Evrenler (🎲 TAHMİNİ YENİLE):** Kullanıcı bu butona bastığında rastgele yeni bir tohum (Örn: `72491`) üretilir. ELO katsayıları yine aynı kalır ancak Mulberry32 rastgele dizisi değiştiği için, futbolun doğasındaki kararlı sürprizler içeren **farklı ama yine kendi içinde son derece mantıklı** yeni bir turnuva ağacı simüle edilir.
+*   Varsayılan tohum (seed) değeri **`2026`**'dır ve her sayfa yenilemede sonuçların kararlı bir biçimde birebir aynı kalmasını sağlar.
+*   **🎲 TAHMİNİ YENİLE (Paralel Evrenler):** Kullanıcı bu butona bastığında, tamamen yeni ve rastgele bir tohum değeri (örn. `74129`) seçilir ve futbolun doğasındaki sürprizleri ve farklı senaryoları barındıran **yeni ve kararlı bir paralel evren** simüle edilir.
 
 ---
 
-## 🔄 4. Zincirleme Cascade (Topological Ripple) Etkisi
+## 🔄 5. Zincirleme Cascade (Topological Ripple) Akışı
 
-Kullanıcı arayüzde herhangi bir maçın skorunu değiştirdiğinde (override), turnuva ağacı geleceğe doğru anlık olarak tekrardan oynatılır.
+Kullanıcı arayüzde herhangi bir maça elle müdahale ettiğinde (skoru override ettiğinde), bu değişiklik turnuvanın geleceğine doğru topolojik bir dalga şeklinde anlık olarak yayılır:
 
 ```mermaid
 graph TD
@@ -114,16 +148,6 @@ graph TD
     UserOverride --> GStandings
 ```
 
-### 🔹 Uç Durum (Edge-Case) Güvenlik Filtreleri:
-1.  **Strict 3rd-Place Tie-Breakers (En İyi 3.ler Kabusu):** 48 takımlı yeni formatta 12 gruptan en iyi 8 üçüncü seçilmek zorundadır. Sıralama motoru şu kriterleri katı bir sıra ile kontrol eder:
-    $$\text{Puan} \rightarrow \text{Net Averaj (GD)} \rightarrow \text{Atılan Gol} \rightarrow \text{CSR Güç Katsayısı Fallback}$$
-    Eğer tüm istatistikler eşitse, rastgele kura çekmek yerine **CSR katsayısı yüksek olan (güçlü olan) takım** üst tura geçirilir.
-2.  **Override Reset Mekanizması:** Örneğin siz Son 16'da `İspanya - Hırvatistan` maçını override ettiniz ve Hırvatistan'ı üst tura çıkardınız. Daha sonra grup aşamasına gidip bir skoru değiştirdiniz ve İspanya'nın Son 16'daki rakibi Hırvatistan yerine İtalya oldu. 
-    *   *Mekanizma:* Sistem, Son 16 eşleşmesinde takımların değiştiğini anlar, eski Hırvatistan override'ını **güvenli bir şekilde sıfırlar** ve İspanya - İtalya maçını tohumlu Poisson ile tertemiz baştan oynatır. Böylece hayalet takımların finallerde oynaması engellenir.
-
----
-
-## 💾 5. Zustand Store Entegrasyonu ve Performans
-
-*   **Toplu İşleme (Batching):** Zustand store, tüm veri birleştirme ve simülasyon adımlarını tek bir state güncellemesinde toplu (batch) olarak yapar.
-*   **0ms Gecikme:** Saf TypeScript motoru, 104 maçın tamamının oynatılması dahil tüm cascade zincirini tarayıcıda **1 milisaniyenin altında** hesaplar. Main-thread bloke olmaz, arayüzde donma veya takılma yaşanmaz.
+### 🔹 Uç Durum (Edge-Case) Güvenlik Mekanizmaları:
+1.  **En İyi Üçüncüler Eşitlik Çözücü:** 12 gruptan en iyi 8 üçüncü seçilirken sırasıyla: **Puan $\rightarrow$ Net Averaj $\rightarrow$ Atılan Gol $\rightarrow$ CSR Güç Katsayısı** kriterlerine bakılır. Her şey eşitse, rastgele kura yerine daha güçlü olan (yüksek CSR'lı) takım üst tura geçirilir.
+2.  **Override Reset Mekanizması:** Kullanıcı daha önce Son 16'daki bir maçı override etmişse ve ardından geriye dönüp grup aşamasında yaptığı değişiklik nedeniyle o Son 16 maçının eşleşen takımları değişmişse; sistem eski geçersiz override'ı otomatik olarak **sessizce sıfırlar (reset)** ve yeni takımlarla deterministik Poisson simülasyonunu baştan çalıştırır.

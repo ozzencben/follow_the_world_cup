@@ -201,14 +201,16 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
       .then(([teamsRes, squadsRes, roundsRes, winnersRes, eloRes, fixturesRes]) => {
         setEloFixtures(fixturesRes.data || []);
 
+        const targetCode = getTeamCode(teamName);
+
         const foundTeam = teamsRes.data.teams.find(
-          t => normalizeName(t.teamName) === normalizeName(teamName)
+          t => getTeamCode(t.teamName) === targetCode
         );
         if (!foundTeam) throw new Error(isTr ? "Takım veritabanında bulunamadı." : "Team not found in database.");
         setTeamInfo(foundTeam);
 
         const foundSquad = squadsRes.data.find(
-          s => normalizeName(s.name) === normalizeName(teamName)
+          s => getTeamCode(s.name) === targetCode
         );
         setSquadInfo(foundSquad || null);
 
@@ -217,7 +219,7 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
             .filter(s => s.group === foundSquad.group)
             .map(sq => {
               const memberTeam = teamsRes.data.teams.find(
-                t => normalizeName(t.teamName) === normalizeName(sq.name)
+                t => getTeamCode(t.teamName) === getTeamCode(sq.name)
               );
               return {
                 squad: sq,
@@ -236,14 +238,14 @@ export default function TeamDetailModal({ teamName, isOpen, onClose, onSelectTea
         const matches: Match[] = [];
         roundsRes.data.forEach(round => {
           round.tournaments?.forEach(m => {
-            if (normalizeName(m.homeSquadName) === normalizeName(teamName) || normalizeName(m.awaySquadName) === normalizeName(teamName)) {
+            if (getTeamCode(m.homeSquadName) === targetCode || getTeamCode(m.awaySquadName) === targetCode) {
               matches.push(m);
             }
           });
         });
         setTeamMatches(matches.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()));
 
-        setChampionships(winnersRes.data.winners.filter(w => normalizeName(w.country_en) === normalizeName(teamName)));
+        setChampionships(winnersRes.data.winners.filter(w => getTeamCode(w.country_en) === targetCode));
 
         const teamCode = getTeamCode(teamName);
         if (teamCode) {
