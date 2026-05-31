@@ -96,6 +96,10 @@ async def get_creators():
             "id": c.get("id"),
             "name": c.get("name"),
             "bracketString": c.get("bracketString"),
+            "roleTr": c.get("roleTr"),
+            "roleEn": c.get("roleEn"),
+            "commentTr": c.get("commentTr"),
+            "commentEn": c.get("commentEn"),
         }
         for c in creators_data
     ]

@@ -126,7 +126,11 @@ export default function Home({ onSelectTeam }: HomeProps) {
   const isTr = currentLang.startsWith("tr");
 
   // Consume real, dynamic data loaded from Zustand tournament store
-  const { teams, loading: storeLoading } = useTournamentStore();
+  const { teams, loading: storeLoading, creatorsList, fetchCreators } = useTournamentStore();
+
+  useEffect(() => {
+    fetchCreators();
+  }, [fetchCreators]);
 
   // State variables for interactive Poisson match sandbox
   const [homeTeamCode, setHomeTeamCode] = useState<string>("AR");
@@ -817,6 +821,148 @@ export default function Home({ onSelectTeam }: HomeProps) {
           </div>
         </div>
 
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════
+          ANALYST REVIEWS & COMMENTARY PREVIEW
+      ══════════════════════════════════════════════════════════ */}
+      <div>
+        <div className="swiss-divider mb-6">
+          {isTr ? "🎙️ ONAYLI YORUMCU GÖRÜŞLERİ & ANALİZLERİ" : "🎙️ VERIFIED CREATOR REVIEWS & BRACKET ANALYSIS"}
+        </div>
+
+        <div
+          className="p-6 md:p-8 space-y-8"
+          style={{
+            background: "#1A1916",
+            border: "1.5px solid #1A1916",
+            boxShadow: "5px 5px 0px #A78BFA",
+          }}
+        >
+          {/* Section Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-4">
+            <div>
+              <span className="neon-badge font-mono tracking-widest text-[9px] uppercase" style={{ color: "#A78BFA", borderColor: "#A78BFA40", background: "#A78BFA10" }}>
+                ● {isTr ? "ANALİST KÖŞESİ / CANLI YORUMLAR" : "ANALYST CORNER / LIVE REVIEWS"}
+              </span>
+              <h2 className="text-white font-black text-sm tracking-[0.12em] uppercase mt-2">
+                {isTr ? "Yorumcuların Öne Çıkan Turnuva Analizleri" : "Featured Commentator Tournament Analyses"}
+              </h2>
+            </div>
+            <span className="text-[10px] font-mono text-[#A78BFA] font-bold shrink-0 self-start sm:self-center select-none animate-retro-blink">
+              {isTr ? "YENİ YORUMLAR AKTİF" : "NEW REVIEWS LIVE"}
+            </span>
+          </div>
+
+          {/* Grid of Reviews */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {creatorsList.map((review, idx) => {
+              const avatarText = review.name
+                .split(" ")
+                .map((w) => w[0])
+                .join("")
+                .slice(0, 2)
+                .toUpperCase();
+              
+              // Dynamic color schemes for the brutalist monograms
+              const avatarColor = idx === 0 ? "#00FF87" : idx === 1 ? "#A78BFA" : "#00E5FF";
+              const role = isTr ? (review.roleTr || "Spor Yazarı / Analist") : (review.roleEn || "Sports Analyst / Writer");
+              const quote = isTr 
+                ? (review.commentTr || "“Turnuva simülasyon ağacımı resmi olarak kilitledim. AI tahmin motoru karşısındaki performansını incelemek için sabırsızlanıyorum!”") 
+                : (review.commentEn || "“I officially locked in my tournament tree predictions. Looking forward to testing my bracket against the AI Monte Carlo engine!”");
+              
+              const hasPrediction = review.bracketString !== null && review.bracketString.trim() !== "";
+              const badgeText = hasPrediction 
+                ? (isTr ? "TAHMİN YAYINDA" : "PREDICTION LIVE") 
+                : (isTr ? "TAHMİN BEKLENİYOR" : "PREDICTION PENDING");
+              const badgeColor = hasPrediction ? "#00FF87" : "#00E5FF";
+
+              return (
+                <div 
+                  key={review.id || idx} 
+                  className="bg-zinc-950 border border-zinc-800 p-5 flex flex-col justify-between space-y-4 hover:border-zinc-700 transition-colors"
+                  style={{
+                    boxShadow: `3px 3px 0px ${badgeColor}20`
+                  }}
+                >
+                  {/* Creator Header Info */}
+                  <div className="flex items-center gap-3">
+                    <div 
+                      className="w-10 h-10 flex items-center justify-center font-mono font-black text-xs border border-zinc-700 text-zinc-950 select-none shrink-0"
+                      style={{
+                        background: avatarColor,
+                        boxShadow: "2px 2px 0px #000"
+                      }}
+                    >
+                      {avatarText}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-[11px] font-extrabold text-white truncate leading-tight uppercase">{review.name}</div>
+                      <div className="text-[8px] font-bold text-zinc-500 tracking-wider uppercase mt-0.5">{role}</div>
+                    </div>
+                  </div>
+
+                  {/* Quote body */}
+                  <p className="text-[10px] text-zinc-400 font-medium italic leading-relaxed flex-grow">
+                    {quote}
+                  </p>
+
+                  {/* Badge Status & Action */}
+                  <div className="pt-3 border-t border-zinc-900 flex items-center justify-between">
+                    <span 
+                      className="text-[7.5px] font-black tracking-widest uppercase px-2 py-0.5 border"
+                      style={{
+                        borderColor: `${badgeColor}40`,
+                        background: `${badgeColor}10`,
+                        color: badgeColor
+                      }}
+                    >
+                      ● {badgeText}
+                    </span>
+                    <a 
+                      href="#/creators"
+                      onClick={e => {
+                        e.preventDefault();
+                        window.location.hash = "#/creators";
+                      }}
+                      className="text-[7.5px] font-black font-mono text-zinc-400 hover:text-white uppercase tracking-widest flex items-center gap-1 cursor-pointer"
+                    >
+                      {isTr ? "İNCELE →" : "INSPECT →"}
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Full-Width call to action redirect button */}
+          <div className="pt-2 flex justify-center">
+            <a
+              href="#/creators"
+              onClick={e => {
+                e.preventDefault();
+                window.location.hash = "#/creators";
+              }}
+              className="swiss-btn-primary w-full max-w-md justify-center text-center py-3.5 uppercase font-black text-xs tracking-widest animate-neon-pulse"
+              style={{
+                background: "transparent",
+                color: "#A78BFA",
+                borderColor: "#A78BFA",
+                boxShadow: "4px 4px 0px rgba(167, 139, 250, 0.25)"
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = "rgba(167, 139, 250, 0.05)";
+                e.currentTarget.style.boxShadow = "2px 2px 0px rgba(167, 139, 250, 0.4)";
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.boxShadow = "4px 4px 0px rgba(167, 139, 250, 0.25)";
+              }}
+            >
+              📣 {isTr ? "TÜM YORUMCULARI & TAHMİNLERİNİ KEŞFET" : "EXPLORE ALL CREATORS & BRACKETS"}
+            </a>
+          </div>
+        </div>
       </div>
 
       {/* ═══════════════════════════════════════════════════════

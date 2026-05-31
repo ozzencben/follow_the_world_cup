@@ -12,6 +12,10 @@ export interface Creator {
   id: string;
   name: string;
   bracketString: string | null;
+  roleTr?: string;
+  roleEn?: string;
+  commentTr?: string;
+  commentEn?: string;
 }
 
 interface TournamentState {
