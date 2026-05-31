@@ -468,7 +468,7 @@ function TeamAnalyticsPanel({ teams }: TeamAnalyticsPanelProps) {
     let color = "#A78BFA"; // purple/violet default
 
     // PRIORITY 1: Historic Legend
-    if (matchesTotal >= 800 && (championships > 0 || appearances >= 15)) {
+    if (matchesTotal >= 750 && (championships > 0 || appearances >= 15)) {
       categoryKey = "LEGEND";
       color = "#A78BFA"; // violet
       explanation = isTr
@@ -760,8 +760,8 @@ function TeamAnalyticsPanel({ teams }: TeamAnalyticsPanelProps) {
               <p className="mt-1 text-zinc-400">
                 <strong>{isTr ? "Nasıl Belirlenir?:" : "How It's Determined?:"}</strong>{" "}
                 {isTr
-                  ? "Takımın tarihsel maç sayısı 800+ olmalı VE en az 1 şampiyonluğu ya da 15+ turnuva katılımı bulunmalıdır. (Not: Bu statü mutlak hiyerarşiye sahiptir, form durumundan bağımsız olarak diğer tüm kategorileri ezer)."
-                  : "Historically played matches must be 800+ AND have at least 1 championship title or 15+ tournament appearances. (Note: This status possesses absolute hierarchy, overriding all other categories regardless of form trends)."}
+                  ? "Takımın tarihsel maç sayısı 750+ olmalı VE en az 1 şampiyonluğu ya da 15+ turnuva katılımı bulunmalıdır. (Not: Bu statü mutlak hiyerarşiye sahiptir, form durumundan bağımsız olarak diğer tüm kategorileri ezer)."
+                  : "Historically played matches must be 750+ AND have at least 1 championship title or 15+ tournament appearances. (Note: This status possesses absolute hierarchy, overriding all other categories regardless of form trends)."}
               </p>
               <p className="mt-1 text-zinc-400">
                 <strong>{isTr ? "Neyi Belirliyor?:" : "What It Determines?:"}</strong>{" "}

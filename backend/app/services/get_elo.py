@@ -150,8 +150,8 @@ def calculate_team_category(
     """
     Takımların güç ve profil kategorilerini hiyerarşik öncelik mantığıyla belirler.
     """
-    # ÖNCELİK 1 (Tarihi Efsane): Toplam Maç >= 800 VE (Şampiyonluk > 0 VEYA Katılım >= 15)
-    if matches_total >= 800 and (championships > 0 or appearances >= 15):
+    # ÖNCELİK 1 (Tarihi Efsane): Toplam Maç >= 750 VE (Şampiyonluk > 0 VEYA Katılım >= 15)
+    if matches_total >= 750 and (championships > 0 or appearances >= 15):
         return "Historic Legend"
 
     # ÖNCELİK 2 (Gizli Potansiyel): Güncel ELO < 1900 VE Kadro Değeri > 300M VE Şampiyonluk == 0
