@@ -60,9 +60,17 @@ export default function MatchCard({ match }: MatchCardProps) {
       <div className="flex items-center justify-between px-4 py-2 border-b-2 border-black bg-zinc-950 font-mono text-[9px] tracking-wider text-zinc-400">
         <div className="flex items-center space-x-2">
           <span className="w-1.5 h-1.5 bg-[#00E5FF] rounded-full" />
-          <span className="font-extrabold uppercase text-white">{match.stage} STAGE</span>
+          <span className="font-extrabold uppercase text-white">
+            {match.stage === "GROUP"
+              ? (currentLang.startsWith("tr") ? `GRUP AŞAMASI • ${match.roundId}. TUR` : `GROUP STAGE • ROUND ${match.roundId}`)
+              : `${match.stage} STAGE`}
+          </span>
           <span className="text-zinc-600 font-medium">|</span>
-          <span className="text-zinc-500 font-bold uppercase">{match.id}</span>
+          <span className="text-zinc-500 font-bold uppercase">
+            {match.stage === "GROUP"
+              ? (currentLang.startsWith("tr") ? `GRUP ${match.id.split("-")[1]}` : `GROUP ${match.id.split("-")[1]}`)
+              : match.id}
+          </span>
         </div>
 
         {match.isOverridden && (

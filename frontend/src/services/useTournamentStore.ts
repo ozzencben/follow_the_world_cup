@@ -201,6 +201,7 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
               userAwayScore: null,
               winnerCode: null,
               nextMatchId: null,
+              roundId: round.id,
             });
           });
         }

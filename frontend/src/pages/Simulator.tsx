@@ -380,11 +380,41 @@ export default function Simulator({ onRouteChange }: { onRouteChange?: (route: s
                 </div>
 
                 {filteredMatches.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {filteredMatches.map((match) => (
-                      <MatchCard key={match.id} match={match} />
-                    ))}
-                  </div>
+                  activeStage === "GROUP" ? (
+                    <div className="space-y-12">
+                      {[1, 2, 3].map((rId) => {
+                        const roundMatches = filteredMatches.filter((m) => m.roundId === rId);
+                        if (roundMatches.length === 0) return null;
+                        return (
+                          <div key={rId} className="space-y-5">
+                            {/* Siber-brutalist round divider heading */}
+                            <div className="flex items-center justify-between border-b-2 border-zinc-950 pb-2">
+                              <span
+                                className="font-mono text-[9px] md:text-[10px] font-black tracking-widest text-zinc-950 px-3.5 py-1.5 border-2 border-zinc-950 shadow-[2px_2px_0_#000]"
+                                style={{ background: "#00FF87" }}
+                              >
+                                {isTr ? `0${rId} • GRUP TURU KARŞILAŞMALARI` : `0${rId} • GROUP STAGE ROUND`}
+                              </span>
+                              <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-wider font-mono">
+                                {isTr ? `${roundMatches.length} MAÇ` : `${roundMatches.length} MATCHES`}
+                              </span>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              {roundMatches.map((match) => (
+                                <MatchCard key={match.id} match={match} />
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {filteredMatches.map((match) => (
+                        <MatchCard key={match.id} match={match} />
+                      ))}
+                    </div>
+                  )
                 ) : (
                   <div className="py-20 text-center bg-zinc-900/40 border-2 border-zinc-800 shadow-[4px_4px_0_rgba(0,0,0,0.2)] flex flex-col items-center justify-center space-y-4">
                     <span className="text-3xl">⏳</span>
