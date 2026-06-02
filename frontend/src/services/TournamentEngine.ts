@@ -191,11 +191,20 @@ export function simulateMatch(
         lambdaA *= 0.85;
     }
 
+    // Otobüsü Çekme (Low-Block Bias / Underdog Tactical Lockdown)
+    if (csrA - csrB > 300) {
+        lambdaB = Math.min(lambdaB, 0.75);
+        lambdaA *= 0.85;
+    } else if (csrB - csrA > 300) {
+        lambdaA = Math.min(lambdaA, 0.75);
+        lambdaB *= 0.85;
+    }
+
     // Altın Jenerasyon Bonusu (Golden Generation / Wonderkids)
-    if (teamA.averageAge < 27 && teamA.squadValue > 300) {
+    if (teamA.averageAge < 27 && teamA.squadValue > 500) {
         lambdaA *= 1.10;
     }
-    if (teamB.averageAge < 27 && teamB.squadValue > 300) {
+    if (teamB.averageAge < 27 && teamB.squadValue > 500) {
         lambdaB *= 1.10;
     }
 
@@ -258,7 +267,7 @@ export function simulateMatch(
     // Handle Knockout Stage Tie-Breakers (no draws)
     if (stage !== "GROUP" && homeScore === awayScore) {
         // 50% CSR weight + 50% luck simulation for extra-time/penalties
-        const pA = 1 / (1 + Math.pow(10, -(csrA - csrB) / 400));
+        const pA = 1 / (1 + Math.pow(10, -(csrA - csrB) / 220));
         if (rand() < pA) {
             homeScore += 1; // Simulated extra time goal or penalty win
         } else {
