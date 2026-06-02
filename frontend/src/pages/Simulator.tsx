@@ -53,6 +53,8 @@ export default function Simulator({ onRouteChange }: { onRouteChange?: (route: s
   const [activeStage, setActiveStage] = useState<StageType>("GROUP");
   const [copied, setCopied] = useState(false);
   const [comment, setComment] = useState("");
+  const [selectedGroupFilter, setSelectedGroupFilter] = useState<string | null>(null);
+  const [selectedRoundFilter, setSelectedRoundFilter] = useState<number | null>(null);
   const token = (() => {
     const href = window.location.href;
     const match = href.match(/[?&]token=([^&#]*)/);
@@ -100,7 +102,18 @@ export default function Simulator({ onRouteChange }: { onRouteChange?: (route: s
     }
   };
 
-  const filteredMatches = matches.filter((m) => m.stage === activeStage);
+  const filteredMatches = matches.filter((m) => {
+    if (m.stage !== activeStage) return false;
+    if (activeStage === "GROUP") {
+      if (selectedGroupFilter && m.id.split("-")[1].toUpperCase() !== selectedGroupFilter.toUpperCase()) {
+        return false;
+      }
+      if (selectedRoundFilter && m.roundId !== selectedRoundFilter) {
+        return false;
+      }
+    }
+    return true;
+  });
   const overriddenCount = matches.filter((m) => m.isOverridden).length;
   const groups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
 
@@ -379,6 +392,78 @@ export default function Simulator({ onRouteChange }: { onRouteChange?: (route: s
                   })}
                 </div>
 
+                {/* ══ DYNAMIC QUICK TABS AND GROUP PILLS ══ */}
+                {activeStage === "GROUP" && (
+                  <div className="bg-zinc-950 border-2 border-black p-4 space-y-4 shadow-[4px_4px_0px_#1A1916]">
+                    {/* A. ROUND QUICK-TABS */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-800">
+                      <span className="text-[10px] font-mono text-[#00E5FF] font-black uppercase tracking-wider">
+                        {isTr ? "⚡ TUR SEÇİMİ (ROUND FILTER)" : "⚡ ROUND SELECTOR"}
+                      </span>
+                      <div className="flex flex-wrap gap-1.5 select-none">
+                        {[
+                          { value: null, label: isTr ? "TÜMÜ" : "ALL" },
+                          { value: 1, label: isTr ? "1. TUR" : "ROUND 1" },
+                          { value: 2, label: isTr ? "2. TUR" : "ROUND 2" },
+                          { value: 3, label: isTr ? "3. TUR" : "ROUND 3" }
+                        ].map((btn) => {
+                          const isBtnActive = selectedRoundFilter === btn.value;
+                          return (
+                            <button
+                              key={btn.label}
+                              onClick={() => setSelectedRoundFilter(btn.value)}
+                              className={`px-2.5 py-1 text-[9px] font-mono font-black border transition-all cursor-pointer ${
+                                isBtnActive
+                                  ? "bg-[#00FF87] text-zinc-950 border-[#00FF87] shadow-[1.5px_1.5px_0px_#000]"
+                                  : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-zinc-200"
+                              }`}
+                              style={{ borderRadius: "0px" }}
+                            >
+                              {btn.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* B. GROUP QUICK-PILLS (A to L) */}
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-[10px] font-mono text-[#FFE600] font-black uppercase tracking-wider">
+                          {isTr ? "🔍 GRUP ODAĞI (GROUP FOCUS)" : "🔍 GROUP FOCUS"}
+                        </span>
+                        {selectedGroupFilter && (
+                          <button
+                            onClick={() => setSelectedGroupFilter(null)}
+                            className="px-1.5 py-0.5 bg-red-950/20 border border-red-900 text-[#FF2D78] font-mono text-[8px] font-black uppercase cursor-pointer hover:bg-[#FF2D78] hover:text-white"
+                          >
+                            {isTr ? "KAPAT" : "CLEAR"}
+                          </button>
+                        )}
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {groups.map((g) => {
+                          const isPillActive = selectedGroupFilter === g;
+                          return (
+                            <button
+                              key={g}
+                              onClick={() => setSelectedGroupFilter(isPillActive ? null : g)}
+                              className={`w-7 h-7 flex items-center justify-center font-mono font-black text-xs border transition-all cursor-pointer ${
+                                isPillActive
+                                  ? "bg-[#FFE600] text-zinc-950 border-[#FFE600] shadow-[1.5px_1.5px_0px_#000]"
+                                  : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+                              }`}
+                              style={{ borderRadius: "0px" }}
+                            >
+                              {g}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {filteredMatches.length > 0 ? (
                   activeStage === "GROUP" ? (
                     <div className="space-y-12">
@@ -550,7 +635,7 @@ function TeamAnalyticsPanel({ teams }: TeamAnalyticsPanelProps) {
   });
 
   // Calculate HUD counters
-  const wonderkidsCount = teams.filter((t) => t.averageAge < 27 && t.squadValue > 300).length;
+  const wonderkidsCount = teams.filter((t) => t.averageAge < 27 && t.squadValue > 500).length;
   const potentialCount = mappedTeams.filter((t) => t.label === labels.POTENTIAL).length;
   const legendCount = mappedTeams.filter((t) => t.label === labels.LEGEND).length;
 
@@ -577,8 +662,8 @@ function TeamAnalyticsPanel({ teams }: TeamAnalyticsPanelProps) {
           </span>
           <p className="text-[9px] text-zinc-400 mt-2 leading-relaxed">
             {isTr
-              ? "Kadro değeri 300M € üstü ve yaş ortalaması 27'den küçük wonderkid kadrolar."
-              : "Wonderkid squads with squad value over €300M and average age under 27."}
+              ? "Kadro değeri 500M € üstü ve yaş ortalaması 27'den küçük wonderkid kadrolar."
+              : "Wonderkid squads with squad value over €500M and average age under 27."}
           </p>
         </div>
 
@@ -1059,7 +1144,7 @@ function SimulationGuidePanel() {
               </div>
 
               <p className="text-xs text-zinc-300 leading-relaxed font-medium">
-                Geleneksel Poisson simülasyonlarında "Bileşik Varyans (Compounding Variance)" sorunu nedeniyle favori takımlar çok kolay elenir ve turnuva sonuna doğru absürt finaller oluşur. Tahmin motorumuzda bu sapmaları sıfırlayan <b>9 adet özel hiper-realizm kuralı</b> aktiftir:
+                Geleneksel Poisson simülasyonlarında "Bileşik Varyans (Compounding Variance)" sorunu nedeniyle favori takımlar çok kolay elenir ve turnuva sonuna doğru absürt finaller oluşur. Tahmin motorumuzda bu sapmaları sıfırlayan <b>10 adet özel hiper-realizm kuralı</b> aktiftir:
               </p>
 
               <div className="space-y-4 pt-4">
@@ -1072,7 +1157,7 @@ function SimulationGuidePanel() {
                   },
                   {
                     title: "Altın Wonderkid Jenerasyonu (Golden Generation)",
-                    desc: "Kadro yaş ortalaması genç (< 27) ve Transfermarkt değeri yüksek (> 300M €) olan parlak jenerasyonlara (Örn: Türkiye, Fas) gol beklentilerinde (Lambda) %10 oranında pozitif bonus yansıtılır. Bu sayede sürpriz yapma şansları artar.",
+                    desc: "Kadro yaş ortalaması genç (< 27) ve Transfermarkt değeri yüksek (> 500M €) olan parlak jenerasyonlara (Örn: Türkiye, Fas) gol beklentilerinde (Lambda) %10 oranında pozitif bonus yansıtılır. Bu sayede sürpriz yapma şansları artar.",
                     badge: "AKTİF",
                     color: "#FFE600",
                   },
@@ -1081,6 +1166,12 @@ function SimulationGuidePanel() {
                     desc: "CSR farkı 250'den büyük olan aşırı dengesiz Davut vs Golyat eşleşmelerinde, zayıf takımın son 1 yıllık form trendi pozitifse sahaya ekstra +50 moral motivasyon gücüyle çıkması sağlanır. Bu, inandırıcı ve gerilimli sürprizlerin kapısını aralar.",
                     badge: "AKTİF",
                     color: "#00E5FF",
+                  },
+                  {
+                    title: "Otobüsü Çekme (Low-Block Bias / Underdog Lockdown)",
+                    desc: "CSR farkı 300'ü aşan dev vs zayıf maçlarında, zayıf takımın defansif planı gereği gol beklentisi maks 0.75'e sınırlanır ve devin gol beklentisi zayıf takımın düşük bloğu nedeniyle %15 oranında törpülenir.",
+                    badge: "AKTİF",
+                    color: "#A78BFA",
                   },
                   {
                     title: "Büyük Maç Baskısı & Stres Kontrolü (Variance Dampening)",
@@ -1151,7 +1242,7 @@ function SimulationGuidePanel() {
               </div>
 
               <p className="text-xs text-zinc-300 leading-relaxed font-medium">
-                In traditional Poisson simulations, the favorite teams are often too easily knocked out due to "Compounding Variance", leading to absurd finals. In our prediction engine, <b>9 custom hyper-realism rules</b> are active:
+                In traditional Poisson simulations, the favorite teams are often too easily knocked out due to "Compounding Variance", leading to absurd finals. In our prediction engine, <b>10 custom hyper-realism rules</b> are active:
               </p>
 
               <div className="space-y-4 pt-4">
@@ -1164,7 +1255,7 @@ function SimulationGuidePanel() {
                   },
                   {
                     title: "Golden Generation Wonderkids",
-                    desc: "Young wonderkid squads (average age < 27) with high Transfermarkt squad values (> €300M) like Turkey or Morocco receive a +10% expected goal (Lambda) boost, enhancing their dark horse odds.",
+                    desc: "Young wonderkid squads (average age < 27) with high Transfermarkt squad values (> €500M) like Turkey or Morocco receive a +10% expected goal (Lambda) boost, enhancing their dark horse odds.",
                     badge: "ACTIVE",
                     color: "#FFE600",
                   },
@@ -1173,6 +1264,12 @@ function SimulationGuidePanel() {
                     desc: "In highly unbalanced matches where the CSR difference is over 250 points, if the underdog's 1-year ELO trend is positive, they gain +50 motivation CSR points on the pitch, making historic upsets possible.",
                     badge: "ACTIVE",
                     color: "#00E5FF",
+                  },
+                  {
+                    title: "Low-Block Bias (Underdog Lockdown)",
+                    desc: "In matches with a CSR difference over 300 points, the underdog's expected goals is capped at 0.75 in regular time to model low-block tactics, and the giant's expected goals is scaled down by 15% due to space restrictions.",
+                    badge: "ACTIVE",
+                    color: "#A78BFA",
                   },
                   {
                     title: "Variance Dampening (Late-stage Stress)",

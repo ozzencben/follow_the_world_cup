@@ -93,13 +93,22 @@ function computeProbabilities(teamA: any, teamB: any) {
   let lambdaA = goalsForA * goalsAgainstB * (1 + diffCSR / 1000);
   let lambdaB = goalsForB * goalsAgainstA * (1 + diffCSR / -1000);
   
+  // Otobüsü Çekme (Low-Block Bias / Underdog Tactical Lockdown)
+  if (tempCSR_A - tempCSR_B > 300) {
+    lambdaB = Math.min(lambdaB, 0.75);
+    lambdaA *= 0.85;
+  } else if (tempCSR_B - tempCSR_A > 300) {
+    lambdaA = Math.min(lambdaA, 0.75);
+    lambdaB *= 0.85;
+  }
+
   // Juggernaut modifier
   if (teamA.rating > 2000) lambdaB *= 0.85;
   if (teamB.rating > 2000) lambdaA *= 0.85;
   
   // Wonderkids/averageAge bonus
-  if (teamA.averageAge < 27 && teamA.squadValue > 300) lambdaA *= 1.10;
-  if (teamB.averageAge < 27 && teamB.squadValue > 300) lambdaB *= 1.10;
+  if (teamA.averageAge < 27 && teamA.squadValue > 500) lambdaA *= 1.10;
+  if (teamB.averageAge < 27 && teamB.squadValue > 500) lambdaB *= 1.10;
   
   lambdaA = Math.max(0.25, Math.min(4.25, lambdaA));
   lambdaB = Math.max(0.25, Math.min(4.25, lambdaB));
@@ -241,11 +250,20 @@ export default function Home({ onSelectTeam }: HomeProps) {
       let lambdaA = goalsForA * goalsAgainstB * (1 + diffCSR / 1000);
       let lambdaB = goalsForB * goalsAgainstA * (1 + diffCSR / -1000);
       
+      // Otobüsü Çekme (Low-Block Bias / Underdog Tactical Lockdown)
+      if (tempCSR_A - tempCSR_B > 300) {
+        lambdaB = Math.min(lambdaB, 0.75);
+        lambdaA *= 0.85;
+      } else if (tempCSR_B - tempCSR_A > 300) {
+        lambdaA = Math.min(lambdaA, 0.75);
+        lambdaB *= 0.85;
+      }
+
       if (teamA.rating > 2000) lambdaB *= 0.85;
       if (teamB.rating > 2000) lambdaA *= 0.85;
       
-      if (teamA.averageAge < 27 && teamA.squadValue > 300) lambdaA *= 1.10;
-      if (teamB.averageAge < 27 && teamB.squadValue > 300) lambdaB *= 1.10;
+      if (teamA.averageAge < 27 && teamA.squadValue > 500) lambdaA *= 1.10;
+      if (teamB.averageAge < 27 && teamB.squadValue > 500) lambdaB *= 1.10;
       
       lambdaA = Math.max(0.25, Math.min(4.25, lambdaA));
       lambdaB = Math.max(0.25, Math.min(4.25, lambdaB));
@@ -717,7 +735,8 @@ export default function Home({ onSelectTeam }: HomeProps) {
             <div className="space-y-3.5">
               {[
                 { title: isTr ? "Devlerin Aurası (Juggernaut)" : "Juggernaut Modifier", desc: isTr ? "2000 ELO üstü devlere karşı oynayan takımların gol şansları %15 oranında düşer." : "Teams competing against elite juggernauts (>2000 ELO) suffer a 15% reduction in goal expectation." },
-                { title: isTr ? "Altın Jenerasyon (Wonderkids)" : "Golden Generation Boost", desc: isTr ? "Yaş ortalaması <27 olan ve kadro değeri 300M € aşan dinamik takımlar %10 gol bonusu alır." : "Dynamic squads with average age <27 and value >300M EUR receive a 10% attacking boost." },
+                { title: isTr ? "Altın Jenerasyon (Wonderkids)" : "Golden Generation Boost", desc: isTr ? "Yaş ortalaması <27 olan ve kadro değeri 500M € aşan dinamik takımlar %10 gol bonusu alır." : "Dynamic squads with average age <27 and value >500M EUR receive a 10% attacking boost." },
+                { title: isTr ? "Otobüsü Çekme (Low-Block Bias)" : "Low-Block Bias", desc: isTr ? "CSR farkı 300'ü aşan maçlarda zayıf takımın gol beklentisi maks 0.75'e sınırlanır, devin golü %15 törpülenir." : "If CSR difference exceeds 300, the underdog's expected goals is capped at 0.75, and giant's is dampened by 15%." },
                 { title: isTr ? "Efsanelerin Zırhı (Plot Armor)" : "Elite Plot Armor", desc: isTr ? "Eleme turlarında favori devler karşısında zayıf takımların gol üretme şansı %20 oranında baskılanır." : "During knockouts, underdog goal expectation against elite powerhouses is dampened by 20%." }
               ].map((f, idx) => (
                 <div key={idx} className="flex gap-3">

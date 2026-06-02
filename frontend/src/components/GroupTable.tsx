@@ -58,10 +58,10 @@ export default function GroupTable({ groupLetter }: GroupTableProps) {
               key={team.teamCode}
               className={`flex items-center justify-between p-3 border-2 transition-all duration-150 relative ${
                 isQualifiedDirect
-                  ? "bg-zinc-900/80 border-zinc-800 hover:border-[#00FF87] hover:bg-zinc-900"
+                  ? "bg-zinc-900/80 border-[#00FF87]/20 hover:border-[#00FF87] hover:bg-zinc-900"
                   : isThirdPlacePotential
-                  ? "bg-zinc-900/60 border-zinc-800 hover:border-[#00E5FF] hover:bg-zinc-900"
-                  : "bg-zinc-950/40 border-zinc-900 hover:border-zinc-800"
+                  ? "bg-zinc-900/60 border-[#00E5FF]/20 hover:border-[#00E5FF] hover:bg-zinc-900"
+                  : "bg-zinc-950/40 border-zinc-900 hover:border-zinc-850"
               }`}
               style={{ borderRadius: "0" }}
             >

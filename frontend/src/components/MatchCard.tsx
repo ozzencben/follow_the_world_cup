@@ -51,22 +51,26 @@ export default function MatchCard({ match }: MatchCardProps) {
     <div
       className={`relative bg-zinc-900 border-2 select-none transition-all duration-200 ${
         match.isOverridden
-          ? "border-[#00FF87] shadow-[4px_4px_0px_#00FF87] -translate-x-[2px] -translate-y-[2px]"
+          ? "border-[#FFE600] shadow-[4px_4px_0px_#FFE600] -translate-x-[2px] -translate-y-[2px]"
           : "border-black hover:border-[#00E5FF] shadow-[4px_4px_0px_#1A1916] hover:shadow-[6px_6px_0px_rgba(0,229,255,0.2)]"
       }`}
       style={{ borderRadius: "0" }}
     >
       {/* Upper header ribbon indicating stage info and override badge */}
-      <div className="flex items-center justify-between px-4 py-2 border-b-2 border-black bg-zinc-950 font-mono text-[9px] tracking-wider text-zinc-400">
+      <div className={`flex items-center justify-between px-4 py-2 border-b-2 border-black font-mono text-[9px] tracking-wider transition-colors duration-200 ${
+        match.isOverridden
+          ? "bg-[#FFE600] text-black font-black"
+          : "bg-zinc-950 text-zinc-400"
+      }`}>
         <div className="flex items-center space-x-2">
-          <span className="w-1.5 h-1.5 bg-[#00E5FF] rounded-full" />
-          <span className="font-extrabold uppercase text-white">
+          <span className={`w-1.5 h-1.5 rounded-full ${match.isOverridden ? "bg-black" : "bg-[#00E5FF]"}`} />
+          <span className={`font-extrabold uppercase ${match.isOverridden ? "text-black font-black" : "text-white"}`}>
             {match.stage === "GROUP"
               ? (currentLang.startsWith("tr") ? `GRUP AŞAMASI • ${match.roundId}. TUR` : `GROUP STAGE • ROUND ${match.roundId}`)
               : `${match.stage} STAGE`}
           </span>
-          <span className="text-zinc-600 font-medium">|</span>
-          <span className="text-zinc-500 font-bold uppercase">
+          <span className={match.isOverridden ? "text-black/55 font-bold" : "text-zinc-600 font-medium"}>|</span>
+          <span className={`font-bold uppercase ${match.isOverridden ? "text-black/80 font-black" : "text-zinc-500"}`}>
             {match.stage === "GROUP"
               ? (currentLang.startsWith("tr") ? `GRUP ${match.id.split("-")[1]}` : `GROUP ${match.id.split("-")[1]}`)
               : match.id}
@@ -74,9 +78,9 @@ export default function MatchCard({ match }: MatchCardProps) {
         </div>
 
         {match.isOverridden && (
-          <div className="flex items-center space-x-1.5 bg-[#00FF87]/15 border border-[#00FF87] px-2 py-0.5 animate-pulse">
-            <span className="w-1.5 h-1.5 bg-[#00FF87] rounded-full animate-ping" />
-            <span className="text-[#00FF87] font-black tracking-widest text-[8px] uppercase">● OVERRIDDEN</span>
+          <div className="flex items-center space-x-1 bg-black text-[#FFE600] px-2 py-0.5 border border-black text-[8px] font-black shadow-[1.5px_1.5px_0px_#000] animate-pulse">
+            <span>🔒</span>
+            <span className="tracking-widest uppercase">{currentLang.startsWith("tr") ? "KİLİTLİ SENARYO" : "LOCKED SCENARIO"}</span>
           </div>
         )}
       </div>
@@ -119,30 +123,44 @@ export default function MatchCard({ match }: MatchCardProps) {
         <div className="shrink-0 flex items-center justify-center px-2">
           {isEditing ? (
             <form onSubmit={handleSave} className="flex items-center space-x-2 bg-black border-[1.5px] border-[#00E5FF] p-1.5 shadow-[2px_2px_0px_rgba(0,229,255,0.2)]">
-              <input
-                type="number"
-                min="0"
-                max="9"
-                value={editHome}
-                onChange={(e) => setEditHome(Math.max(0, parseInt(e.target.value, 10) || 0))}
-                className="w-8 h-8 text-center bg-zinc-900 border border-zinc-700 text-white font-mono font-black text-sm focus:border-[#00FF87] focus:outline-none"
-                style={{ borderRadius: "0" }}
-                required
-              />
-              <span className="text-zinc-500 font-mono font-bold text-xs">-</span>
-              <input
-                type="number"
-                min="0"
-                max="9"
-                value={editAway}
-                onChange={(e) => setEditAway(Math.max(0, parseInt(e.target.value, 10) || 0))}
-                className="w-8 h-8 text-center bg-zinc-900 border border-zinc-700 text-white font-mono font-black text-sm focus:border-[#00FF87] focus:outline-none"
-                style={{ borderRadius: "0" }}
-                required
-              />
+              <div className="flex items-center space-x-1 bg-zinc-950 border border-zinc-800 p-0.5">
+                <button
+                  type="button"
+                  onClick={() => setEditHome(prev => Math.max(0, prev - 1))}
+                  className="w-6 h-6 flex items-center justify-center bg-zinc-900 border border-zinc-850 text-white font-black hover:bg-[#FF2D78] hover:text-white cursor-pointer select-none text-[10px]"
+                >
+                  -
+                </button>
+                <span className="w-6 text-center text-white font-mono font-black text-xs">{editHome}</span>
+                <button
+                  type="button"
+                  onClick={() => setEditHome(prev => Math.min(9, prev + 1))}
+                  className="w-6 h-6 flex items-center justify-center bg-zinc-900 border border-zinc-850 text-white font-black hover:bg-[#00FF87] hover:text-black cursor-pointer select-none text-[10px]"
+                >
+                  +
+                </button>
+              </div>
+              <span className="text-zinc-500 font-mono font-bold text-xs">:</span>
+              <div className="flex items-center space-x-1 bg-zinc-950 border border-zinc-800 p-0.5">
+                <button
+                  type="button"
+                  onClick={() => setEditAway(prev => Math.max(0, prev - 1))}
+                  className="w-6 h-6 flex items-center justify-center bg-zinc-900 border border-zinc-850 text-white font-black hover:bg-[#FF2D78] hover:text-white cursor-pointer select-none text-[10px]"
+                >
+                  -
+                </button>
+                <span className="w-6 text-center text-white font-mono font-black text-xs">{editAway}</span>
+                <button
+                  type="button"
+                  onClick={() => setEditAway(prev => Math.min(9, prev + 1))}
+                  className="w-6 h-6 flex items-center justify-center bg-zinc-900 border border-zinc-850 text-white font-black hover:bg-[#00FF87] hover:text-black cursor-pointer select-none text-[10px]"
+                >
+                  +
+                </button>
+              </div>
               <button
                 type="submit"
-                className="p-1.5 bg-[#00FF87] hover:bg-[#00D06E] text-black font-black font-mono text-[9px] border border-black shadow-[1px_1px_0px_#000]"
+                className="p-1.5 bg-[#00FF87] hover:bg-[#00D06E] text-black font-black font-mono text-[9px] border border-black shadow-[1px_1px_0px_#000] cursor-pointer"
                 style={{ borderRadius: "0" }}
               >
                 {t("match.save")}
@@ -165,11 +183,11 @@ export default function MatchCard({ match }: MatchCardProps) {
                   : "cursor-not-allowed opacity-50"
               }`}
             >
-              <span className={`font-mono text-base font-black tracking-tight ${match.isOverridden ? "text-[#00FF87]" : "text-white"}`}>
+              <span className={`font-mono text-base font-black tracking-tight ${match.isOverridden ? "text-[#FFE600]" : "text-white"}`}>
                 {homeScore !== null ? homeScore : "-"}
               </span>
               <span className="text-zinc-600 font-mono font-bold text-xs">:</span>
-              <span className={`font-mono text-base font-black tracking-tight ${match.isOverridden ? "text-[#00FF87]" : "text-white"}`}>
+              <span className={`font-mono text-base font-black tracking-tight ${match.isOverridden ? "text-[#FFE600]" : "text-white"}`}>
                 {awayScore !== null ? awayScore : "-"}
               </span>
             </div>
