@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useTournamentStore } from "../services/useTournamentStore";
 import type { MatchState } from "../services/TournamentEngine";
@@ -23,6 +23,31 @@ export default function MatchCard({ match }: MatchCardProps) {
     // Local state for interactive score editing
     const [editHome, setEditHome] = useState(homeScore !== null ? homeScore : 0);
     const [editAway, setEditAway] = useState(awayScore !== null ? awayScore : 0);
+
+    const formRef = useRef<HTMLFormElement>(null);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (formRef.current && !formRef.current.contains(event.target as Node)) {
+                overrideMatchScore(match.id, editHome, editAway);
+                setIsEditing(false);
+            }
+        }
+        function handleKeyDown(event: KeyboardEvent) {
+            if (event.key === "Escape") {
+                setIsEditing(false);
+            }
+        }
+        if (isEditing) {
+            document.addEventListener("mousedown", handleClickOutside);
+            document.addEventListener("keydown", handleKeyDown);
+        }
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [isEditing, editHome, editAway, match.id, overrideMatchScore]);
+
 
     const getFlagUrl = (code: string) => {
         if (!code || code === "TBD") return "";
@@ -120,42 +145,33 @@ export default function MatchCard({ match }: MatchCardProps) {
                 {/* CLICKABLE INTERACTIVE SCORES AREA */}
                 <div className="shrink-0 flex items-center justify-center px-2">
                     {isEditing ? (
-                        <form onSubmit={handleSave} className="flex items-center space-x-1.5 bg-zinc-950 p-1 border border-[#00E5FF] shadow-[2px_2px_0px_rgba(0,229,255,0.15)]">
+                        <form ref={formRef} onSubmit={handleSave} className="flex items-center space-x-1.5 bg-zinc-950 px-3 py-1.5 border border-[#00E5FF] shadow-[2px_2px_0px_rgba(0,229,255,0.15)] select-none">
                             <input
-                                type="number"
-                                min="0"
-                                max="99"
+                                type="text"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
                                 value={editHome}
-                                onChange={e => setEditHome(Math.max(0, parseInt(e.target.value, 10) || 0))}
-                                className="w-8 h-7 text-center bg-zinc-900 border border-zinc-800 text-white font-mono font-black text-xs focus:border-[#00FF87] focus:outline-none"
+                                onChange={e => {
+                                    const val = e.target.value.replace(/\D/g, "");
+                                    setEditHome(val ? Math.min(99, parseInt(val, 10)) : 0);
+                                }}
+                                className="w-7 h-6 text-center bg-zinc-900 text-white font-mono font-black text-xs focus:outline-none focus:bg-black"
                                 style={{ borderRadius: "0px" }}
                                 autoFocus
                             />
                             <span className="text-zinc-600 font-mono font-bold text-xs">:</span>
                             <input
-                                type="number"
-                                min="0"
-                                max="99"
+                                type="text"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
                                 value={editAway}
-                                onChange={e => setEditAway(Math.max(0, parseInt(e.target.value, 10) || 0))}
-                                className="w-8 h-7 text-center bg-zinc-900 border border-zinc-800 text-white font-mono font-black text-xs focus:border-[#00FF87] focus:outline-none"
+                                onChange={e => {
+                                    const val = e.target.value.replace(/\D/g, "");
+                                    setEditAway(val ? Math.min(99, parseInt(val, 10)) : 0);
+                                }}
+                                className="w-7 h-6 text-center bg-zinc-900 text-white font-mono font-black text-xs focus:outline-none focus:bg-black"
                                 style={{ borderRadius: "0px" }}
                             />
-                            <button
-                                type="submit"
-                                className="w-7 h-7 bg-[#00FF87] text-zinc-950 flex items-center justify-center font-bold text-[10px] border border-black cursor-pointer shadow-[1px_1px_0_#000]"
-                                style={{ borderRadius: "0px" }}
-                            >
-                                ✓
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setIsEditing(false)}
-                                className="w-7 h-7 bg-zinc-850 text-zinc-400 flex items-center justify-center font-bold text-[10px] border border-zinc-700 cursor-pointer"
-                                style={{ borderRadius: "0px" }}
-                            >
-                                ✕
-                            </button>
                         </form>
                     ) : (
                         <div
