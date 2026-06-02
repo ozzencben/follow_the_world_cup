@@ -84,6 +84,55 @@ function createMulberry32(seedVal: number): () => number {
     };
 }
 
+// Calculates chronological consecutive win streaks in the current tournament run
+function getTournamentWinStreak(teamCode: string, matches: MatchState[]): number {
+    let streak = 0;
+    
+    // Filter matches involving this team that have been played/simulated
+    const teamMatches = matches.filter(m => {
+        const hasHome = m.homeTeamCode.toUpperCase() === teamCode.toUpperCase();
+        const hasAway = m.awayTeamCode.toUpperCase() === teamCode.toUpperCase();
+        if (!hasHome && !hasAway) return false;
+        
+        // Match must be completed (scores not null)
+        const homeScore = m.isOverridden ? m.userHomeScore : m.simulatedHomeScore;
+        const awayScore = m.isOverridden ? m.userAwayScore : m.simulatedAwayScore;
+        return homeScore !== null && awayScore !== null;
+    });
+
+    const getMatchOrder = (m: MatchState): number => {
+        if (m.stage === "GROUP") return m.roundId ?? 1;
+        if (m.stage === "R32") return 4;
+        if (m.stage === "R16") return 5;
+        if (m.stage === "QF") return 6;
+        if (m.stage === "SF") return 7;
+        if (m.stage === "F") return 8;
+        return 0;
+    };
+
+    // Sort from most recent to oldest
+    teamMatches.sort((a, b) => getMatchOrder(b) - getMatchOrder(a));
+
+    for (const m of teamMatches) {
+        const homeScore = m.isOverridden ? m.userHomeScore : m.simulatedHomeScore;
+        const awayScore = m.isOverridden ? m.userAwayScore : m.simulatedAwayScore;
+        if (homeScore === null || awayScore === null) continue;
+
+        const isHome = m.homeTeamCode.toUpperCase() === teamCode.toUpperCase();
+        const isWin = isHome ? homeScore > awayScore : awayScore > homeScore;
+
+        if (isWin) {
+            streak++;
+        } else {
+            // Draw or loss breaks the streak
+            break;
+        }
+    }
+
+    return streak;
+}
+
+
 /**
  * 1. COMPOSITE STRENGTH RATING (CSR) CALCULATION
  * Evaluates a team based on Elo, squad value (logarithmic), DNA, momentum, and host advantages.
@@ -142,11 +191,35 @@ export function simulateMatch(
     teamA: SimulatorTeam,
     teamB: SimulatorTeam,
     stage: "GROUP" | "R32" | "R16" | "QF" | "SF" | "F",
-    randomFn?: () => number
+    randomFn?: () => number,
+    streakA: number = 0,
+    streakB: number = 0
 ): { homeScore: number; awayScore: number; winnerCode: string } {
     const rand = randomFn || Math.random;
     let csrA = calculateCSR(teamA, stage);
     let csrB = calculateCSR(teamB, stage);
+
+    // Dynamic Win Streak Form Modifier (Dinamik Form Serileri)
+    // Normal team gets +12 CSR per win (max +60)
+    // Giant team (ELO >= 1950) gets a supercharged exponential bonus (up to +280 CSR) -> Durdurulamaz Dev (Unstoppable Juggernaut)
+    const getStreakBonus = (team: SimulatorTeam, streak: number) => {
+        if (streak <= 0) return 0;
+        const isGiant = team.rating >= 1950;
+        if (isGiant) {
+            // Supercharged non-linear exponential-like momentum for giants
+            if (streak === 1) return 30;
+            if (streak === 2) return 75;
+            if (streak === 3) return 130;
+            if (streak === 4) return 200;
+            return 280; // Capped at +280 CSR for 5+ wins
+        } else {
+            // Normal team gets +12 CSR per win (max +60)
+            return Math.min(60, streak * 12);
+        }
+    };
+
+    csrA += getStreakBonus(teamA, streakA);
+    csrB += getStreakBonus(teamB, streakB);
 
     const parseChange = (changeStr: string) => {
         const cleaned = changeStr.replace("−", "-").replace("+", "").trim();
@@ -183,11 +256,22 @@ export function simulateMatch(
     let lambdaA = goalsForA * goalsAgainstB * (1 + diffCSR / 1000);
     let lambdaB = goalsForB * goalsAgainstA * (1 + diffCSR / -1000);
 
-    // Devlerin Aurası (Juggernaut Modifier)
-    if (teamA.rating > 2000) {
+    // Devlerin Aurası (Juggernaut Modifier):
+    // Dev takımların (baz ELO >= 1950) yaydığı baskı. Galibiyet serisi arttıkça aura gücü katlanarak artar.
+    if (teamA.rating >= 1950) {
+        const baseAura = teamA.rating >= 2000 ? 0.85 : 0.90;
+        // Her galibiyet serisi adımı rakibin gol atma olasılığını ekstra %6 düşürür (maksimum %30 ekstra düşüş)
+        const streakReduction = Math.min(0.30, streakA * 0.06);
+        lambdaB *= Math.max(0.55, baseAura - streakReduction);
+    } else if (teamA.rating > 2000) {
         lambdaB *= 0.85;
     }
-    if (teamB.rating > 2000) {
+
+    if (teamB.rating >= 1950) {
+        const baseAura = teamB.rating >= 2000 ? 0.85 : 0.90;
+        const streakReduction = Math.min(0.30, streakB * 0.06);
+        lambdaA *= Math.max(0.55, baseAura - streakReduction);
+    } else if (teamB.rating > 2000) {
         lambdaA *= 0.85;
     }
 
@@ -218,14 +302,22 @@ export function simulateMatch(
         }
     }
 
-    // Sahne Korkusu (Stage Fright Penalty):
-    // Zayıf takımın baz ELO < 1650 ise VE rakibinin baz ELO > 1950 ise; zayıf takımın Lambda'sı %50 oranında düşürülür.
-    if (teamA.rating < 1650 && teamB.rating > 1950) {
-        lambdaA *= 0.5;
-    }
-    if (teamB.rating < 1650 && teamA.rating > 1950) {
-        lambdaB *= 0.5;
-    }
+    // Sahne Korkusu & Dev Korkusu (Stage Fright & Juggernaut Terror Penalty):
+    // Rakip bir dev ise (baz ELO >= 1950) ve bu dev kazanma serisindeyse korku eşiği ve etkisi genişler.
+    const applyStageFright = (weakTeam: SimulatorTeam, strongTeam: SimulatorTeam, strongStreak: number): number => {
+        // Eğer devin serisi varsa korku sınırı ELO 1650'den daha yukarıya (1750'ye kadar) çekilir
+        const frightThreshold = strongStreak > 0 ? 1750 : 1650;
+        if (weakTeam.rating < frightThreshold && strongTeam.rating >= 1950) {
+            // Seri arttıkça korku katsayısı daha da derinleşir (normalde %50 düşüş, seriyle %65'e varan düşüş)
+            const baseMultiplier = 0.50;
+            const streakFactor = Math.min(0.15, strongStreak * 0.03);
+            return baseMultiplier - streakFactor;
+        }
+        return 1.0;
+    };
+
+    lambdaA *= applyStageFright(teamA, teamB, streakB);
+    lambdaB *= applyStageFright(teamB, teamA, streakA);
 
     // Büyük Maç Baskısı (Variance Dampening)
     if (stage === "QF" || stage === "SF" || stage === "F") {
@@ -423,24 +515,30 @@ export class TournamentEngine {
         const statesMap = new Map(existingStates.map((s) => [s.id, { ...s }]));
 
         // ==========================================
-        // 1. SIMULATE MISSING GROUP MATCHES
+        // 1. SIMULATE MISSING GROUP MATCHES CHRONOLOGICALLY (ROUND-BY-ROUND)
         // ==========================================
-        statesMap.forEach((m) => {
-            if (m.stage === "GROUP" && !m.isOverridden) {
-                if (m.simulatedHomeScore === null || m.simulatedAwayScore === null) {
-                    const tA = this.getTeam(m.homeTeamCode);
-                    const tB = this.getTeam(m.awayTeamCode);
-                    if (tA && tB) {
-                        const matchSeed = hashStringTo32BitInt(`${seed}_${m.id}`);
-                        const matchRandom = createMulberry32(matchSeed);
-                        const res = simulateMatch(tA, tB, "GROUP", matchRandom);
-                        m.simulatedHomeScore = res.homeScore;
-                        m.simulatedAwayScore = res.awayScore;
-                        m.winnerCode = res.winnerCode;
+        for (let rId = 1; rId <= 3; rId++) {
+            statesMap.forEach((m) => {
+                if (m.stage === "GROUP" && m.roundId === rId && !m.isOverridden) {
+                    if (m.simulatedHomeScore === null || m.simulatedAwayScore === null) {
+                        const tA = this.getTeam(m.homeTeamCode);
+                        const tB = this.getTeam(m.awayTeamCode);
+                        if (tA && tB) {
+                            const currentMatches = Array.from(statesMap.values());
+                            const streakA = getTournamentWinStreak(m.homeTeamCode, currentMatches);
+                            const streakB = getTournamentWinStreak(m.awayTeamCode, currentMatches);
+
+                            const matchSeed = hashStringTo32BitInt(`${seed}_${m.id}`);
+                            const matchRandom = createMulberry32(matchSeed);
+                            const res = simulateMatch(tA, tB, "GROUP", matchRandom, streakA, streakB);
+                            m.simulatedHomeScore = res.homeScore;
+                            m.simulatedAwayScore = res.awayScore;
+                            m.winnerCode = res.winnerCode;
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
 
         // ==========================================
         // 2. COMPUTE RANKINGS & ADVANCED TEAMS
@@ -568,9 +666,13 @@ export class TournamentEngine {
                 const tA = this.getTeam(updatedMatch.homeTeamCode);
                 const tB = this.getTeam(updatedMatch.awayTeamCode);
                 if (tA && tB) {
+                    const currentMatches = Array.from(statesMap.values());
+                    const streakA = getTournamentWinStreak(updatedMatch.homeTeamCode, currentMatches);
+                    const streakB = getTournamentWinStreak(updatedMatch.awayTeamCode, currentMatches);
+
                     const matchSeed = hashStringTo32BitInt(`${seed}_${matchId}`);
                     const matchRandom = createMulberry32(matchSeed);
-                    const res = simulateMatch(tA, tB, "R32", matchRandom);
+                    const res = simulateMatch(tA, tB, "R32", matchRandom, streakA, streakB);
                     updatedMatch.simulatedHomeScore = res.homeScore;
                     updatedMatch.simulatedAwayScore = res.awayScore;
                     updatedMatch.winnerCode = res.winnerCode;
@@ -642,9 +744,13 @@ export class TournamentEngine {
                     const tA = this.getTeam(updatedMatch.homeTeamCode);
                     const tB = this.getTeam(updatedMatch.awayTeamCode);
                     if (tA && tB) {
+                        const currentMatches = Array.from(statesMap.values());
+                        const streakA = getTournamentWinStreak(updatedMatch.homeTeamCode, currentMatches);
+                        const streakB = getTournamentWinStreak(updatedMatch.awayTeamCode, currentMatches);
+
                         const matchSeed = hashStringTo32BitInt(`${seed}_${matchId}`);
                         const matchRandom = createMulberry32(matchSeed);
-                        const res = simulateMatch(tA, tB, stage, matchRandom);
+                        const res = simulateMatch(tA, tB, stage, matchRandom, streakA, streakB);
                         updatedMatch.simulatedHomeScore = res.homeScore;
                         updatedMatch.simulatedAwayScore = res.awayScore;
                         updatedMatch.winnerCode = res.winnerCode;
