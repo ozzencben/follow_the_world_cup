@@ -63,6 +63,27 @@ function log10(val: number): number {
     return Math.log(val) / Math.LN10;
 }
 
+// Stable 32-bit FNV-1a like string hashing function
+function hashStringTo32BitInt(str: string): number {
+    let hash = 2166136261;
+    for (let i = 0; i < str.length; i++) {
+        hash ^= str.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+    }
+    return hash >>> 0;
+}
+
+// Deterministic Mulberry32 generator for isolated matches
+function createMulberry32(seedVal: number): () => number {
+    let state = seedVal;
+    return () => {
+        let t = (state += 0x6d2b79f5);
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+}
+
 /**
  * 1. COMPOSITE STRENGTH RATING (CSR) CALCULATION
  * Evaluates a team based on Elo, squad value (logarithmic), DNA, momentum, and host advantages.
@@ -392,15 +413,6 @@ export class TournamentEngine {
     public runFullCascade(existingStates: MatchState[], seed: number = 2026): MatchState[] {
         const statesMap = new Map(existingStates.map((s) => [s.id, { ...s }]));
 
-        // Mulberry32 Pseudo-Random Number Generator (PRNG) sequence
-        let seedValue = seed;
-        const seededRandom = () => {
-            let t = (seedValue += 0x6d2b79f5);
-            t = Math.imul(t ^ (t >>> 15), t | 1);
-            t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-        };
-
         // ==========================================
         // 1. SIMULATE MISSING GROUP MATCHES
         // ==========================================
@@ -410,7 +422,9 @@ export class TournamentEngine {
                     const tA = this.getTeam(m.homeTeamCode);
                     const tB = this.getTeam(m.awayTeamCode);
                     if (tA && tB) {
-                        const res = simulateMatch(tA, tB, "GROUP", seededRandom);
+                        const matchSeed = hashStringTo32BitInt(`${seed}_${m.id}`);
+                        const matchRandom = createMulberry32(matchSeed);
+                        const res = simulateMatch(tA, tB, "GROUP", matchRandom);
                         m.simulatedHomeScore = res.homeScore;
                         m.simulatedAwayScore = res.awayScore;
                         m.winnerCode = res.winnerCode;
@@ -545,7 +559,9 @@ export class TournamentEngine {
                 const tA = this.getTeam(updatedMatch.homeTeamCode);
                 const tB = this.getTeam(updatedMatch.awayTeamCode);
                 if (tA && tB) {
-                    const res = simulateMatch(tA, tB, "R32", seededRandom);
+                    const matchSeed = hashStringTo32BitInt(`${seed}_${matchId}`);
+                    const matchRandom = createMulberry32(matchSeed);
+                    const res = simulateMatch(tA, tB, "R32", matchRandom);
                     updatedMatch.simulatedHomeScore = res.homeScore;
                     updatedMatch.simulatedAwayScore = res.awayScore;
                     updatedMatch.winnerCode = res.winnerCode;
@@ -617,7 +633,9 @@ export class TournamentEngine {
                     const tA = this.getTeam(updatedMatch.homeTeamCode);
                     const tB = this.getTeam(updatedMatch.awayTeamCode);
                     if (tA && tB) {
-                        const res = simulateMatch(tA, tB, stage, seededRandom);
+                        const matchSeed = hashStringTo32BitInt(`${seed}_${matchId}`);
+                        const matchRandom = createMulberry32(matchSeed);
+                        const res = simulateMatch(tA, tB, stage, matchRandom);
                         updatedMatch.simulatedHomeScore = res.homeScore;
                         updatedMatch.simulatedAwayScore = res.awayScore;
                         updatedMatch.winnerCode = res.winnerCode;
