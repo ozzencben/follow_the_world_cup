@@ -5,7 +5,7 @@ import GroupTable from "../components/GroupTable";
 import MatchCard from "../components/MatchCard";
 import CreatorsSubView from "./CreatorsSubView";
 import { useTournamentStore } from "../services/useTournamentStore";
-import { calculateCSR } from "../services/TournamentEngine";
+import { calculateCSR, type SimulatorTeam, type MatchState } from "../services/TournamentEngine";
 
 type SubTabType = "groups" | "matches" | "analytics" | "guide" | "creators";
 type StageType = "GROUP" | "R32" | "R16" | "QF" | "SF" | "F";
@@ -40,6 +40,190 @@ const STAGE_COLORS: Record<StageType, string> = {
   F: "#A78BFA",
 };
 
+const STAGE_ORDER: StageType[] = ["R32", "R16", "QF", "SF", "F"];
+
+// Compact Node component to render within the visual bracket tree
+function BracketNode({
+  match,
+  isTr,
+  isReadOnly,
+  teams,
+  overrideMatchScore,
+  resetMatch,
+}: {
+  match: MatchState;
+  isTr: boolean;
+  isReadOnly: boolean;
+  teams: SimulatorTeam[];
+  overrideMatchScore: (id: string, home: number, away: number) => void;
+  resetMatch: (id: string) => void;
+}) {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const homeTeam = teams.find((t) => t.code.toUpperCase() === match.homeTeamCode.toUpperCase());
+  const awayTeam = teams.find((t) => t.code.toUpperCase() === match.awayTeamCode.toUpperCase());
+
+  const homeScore = match.isOverridden ? match.userHomeScore : match.simulatedHomeScore;
+  const awayScore = match.isOverridden ? match.userAwayScore : match.simulatedAwayScore;
+
+  const [editHome, setEditHome] = useState(homeScore !== null ? homeScore : 0);
+  const [editAway, setEditAway] = useState(awayScore !== null ? awayScore : 0);
+
+  const getFlagUrl = (code: string) => {
+    if (!code || code === "TBD") return "";
+    return `https://api.fifa.com/api/v3/picture/flags-sq-1/${code.toUpperCase()}`;
+  };
+
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    overrideMatchScore(match.id, editHome, editAway);
+    setIsEditing(false);
+  };
+
+  const isHomeWinner = homeScore !== null && awayScore !== null && homeScore > awayScore;
+  const isAwayWinner = homeScore !== null && awayScore !== null && awayScore > homeScore;
+
+  const hasParticipants = match.homeTeamCode !== "TBD" && match.awayTeamCode !== "TBD";
+
+  return (
+    <div
+      className={`w-[190px] shrink-0 border-2 text-[10px] font-sans relative transition-all duration-150 select-none bg-zinc-950 ${
+        match.isOverridden
+          ? "border-[#FFE600] shadow-[2.5px_2.5px_0px_#FFE600]"
+          : "border-zinc-800 hover:border-[#00E5FF] shadow-[2.5px_2.5px_0px_rgba(0,0,0,0.4)]"
+      }`}
+    >
+      {/* Node Header */}
+      <div className={`px-2 py-0.5 font-mono text-[8px] flex items-center justify-between border-b ${
+        match.isOverridden ? "bg-[#FFE600] text-black font-black border-[#FFE600]" : "bg-zinc-900 text-zinc-500 border-zinc-800"
+      }`}>
+        <span className="font-extrabold">{match.id}</span>
+        {match.isOverridden && <span>🔒</span>}
+      </div>
+
+      {/* Node Body */}
+      {isEditing ? (
+        <form onSubmit={handleSave} className="p-1.5 space-y-1.5">
+          <div className="flex items-center justify-between gap-1">
+            <span className="font-mono text-[8px] text-zinc-400 truncate max-w-[50px]">{homeTeam?.abbr || "HOM"}</span>
+            <div className="flex items-center space-x-1">
+              <button
+                type="button"
+                onClick={() => setEditHome((p) => Math.max(0, p - 1))}
+                className="w-4 h-4 flex items-center justify-center bg-zinc-800 text-white font-black text-[9px] hover:bg-[#FF2D78] cursor-pointer"
+              >-</button>
+              <span className="w-4 text-center font-mono text-[10px] font-black text-white">{editHome}</span>
+              <button
+                type="button"
+                onClick={() => setEditHome((p) => Math.min(9, p + 1))}
+                className="w-4 h-4 flex items-center justify-center bg-zinc-800 text-white font-black text-[9px] hover:bg-[#00FF87] hover:text-black cursor-pointer"
+              >+</button>
+            </div>
+          </div>
+          <div className="flex items-center justify-between gap-1">
+            <span className="font-mono text-[8px] text-zinc-400 truncate max-w-[50px]">{awayTeam?.abbr || "AWY"}</span>
+            <div className="flex items-center space-x-1">
+              <button
+                type="button"
+                onClick={() => setEditAway((p) => Math.max(0, p - 1))}
+                className="w-4 h-4 flex items-center justify-center bg-zinc-800 text-white font-black text-[9px] hover:bg-[#FF2D78] cursor-pointer"
+              >-</button>
+              <span className="w-4 text-center font-mono text-[10px] font-black text-white">{editAway}</span>
+              <button
+                type="button"
+                onClick={() => setEditAway((p) => Math.min(9, p + 1))}
+                className="w-4 h-4 flex items-center justify-center bg-zinc-800 text-white font-black text-[9px] hover:bg-[#00FF87] hover:text-black cursor-pointer"
+              >+</button>
+            </div>
+          </div>
+          <div className="flex items-center gap-1.5 pt-0.5">
+            <button
+              type="submit"
+              className="flex-1 py-0.5 bg-[#00FF87] hover:bg-[#00D06E] text-black font-black font-mono text-[8px] border border-black cursor-pointer"
+            >
+              OK
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsEditing(false)}
+              className="px-1.5 py-0.5 bg-zinc-800 hover:bg-zinc-700 text-white font-black font-mono text-[8px] border border-zinc-700 cursor-pointer"
+            >
+              X
+            </button>
+          </div>
+        </form>
+      ) : (
+        <div
+          onClick={() => {
+            if (!isReadOnly && hasParticipants) {
+              setEditHome(homeScore !== null ? homeScore : 0);
+              setEditAway(awayScore !== null ? awayScore : 0);
+              setIsEditing(true);
+            }
+          }}
+          className={`p-1.5 space-y-1 ${hasParticipants && !isReadOnly ? "cursor-pointer hover:bg-zinc-900/50" : "cursor-not-allowed opacity-85"}`}
+        >
+          {/* Home Section */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-1.5 min-w-0">
+              {homeTeam ? (
+                <img
+                  src={getFlagUrl(homeTeam.code)}
+                  alt={homeTeam.nameEn}
+                  className="w-4.5 h-3 object-cover border border-black"
+                />
+              ) : (
+                <div className="w-4.5 h-3 bg-zinc-900 border border-zinc-800 flex items-center justify-center text-[7px] text-zinc-600 font-mono">?</div>
+              )}
+              <span className={`font-black tracking-wide truncate max-w-[100px] ${isHomeWinner ? "text-[#00FF87]" : homeTeam ? "text-zinc-200" : "text-zinc-600"}`}>
+                {homeTeam ? (isTr ? homeTeam.nameTr : homeTeam.nameEn).toUpperCase() : "TBD"}
+              </span>
+            </div>
+            <span className={`font-mono font-black ${isHomeWinner ? "text-[#00FF87]" : "text-zinc-300"}`}>
+              {homeScore !== null ? homeScore : "-"}
+            </span>
+          </div>
+
+          {/* Away Section */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-1.5 min-w-0">
+              {awayTeam ? (
+                <img
+                  src={getFlagUrl(awayTeam.code)}
+                  alt={awayTeam.nameEn}
+                  className="w-4.5 h-3 object-cover border border-black"
+                />
+              ) : (
+                <div className="w-4.5 h-3 bg-zinc-900 border border-zinc-800 flex items-center justify-center text-[7px] text-zinc-600 font-mono">?</div>
+              )}
+              <span className={`font-black tracking-wide truncate max-w-[100px] ${isAwayWinner ? "text-[#00FF87]" : awayTeam ? "text-zinc-200" : "text-zinc-600"}`}>
+                {awayTeam ? (isTr ? awayTeam.nameTr : awayTeam.nameEn).toUpperCase() : "TBD"}
+              </span>
+            </div>
+            <span className={`font-mono font-black ${isAwayWinner ? "text-[#00FF87]" : "text-zinc-300"}`}>
+              {awayScore !== null ? awayScore : "-"}
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Floating reset hover button */}
+      {match.isOverridden && !isEditing && !isReadOnly && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            resetMatch(match.id);
+          }}
+          className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 bg-[#FF2D78] hover:bg-[#D8105B] border border-black flex items-center justify-center text-white font-extrabold text-[7px] cursor-pointer shadow-[1px_1px_0_#000]"
+          title={isTr ? "Skoru sıfırla" : "Reset score"}
+        >
+          ✖
+        </button>
+      )}
+    </div>
+  );
+}
+
 export default function Simulator({ onRouteChange }: { onRouteChange?: (route: string) => void }) {
   const { i18n } = useTranslation();
   const isTr = (i18n.language || "en").startsWith("tr");
@@ -55,6 +239,7 @@ export default function Simulator({ onRouteChange }: { onRouteChange?: (route: s
   const [comment, setComment] = useState("");
   const [selectedGroupFilter, setSelectedGroupFilter] = useState<string | null>(null);
   const [selectedRoundFilter, setSelectedRoundFilter] = useState<number | null>(null);
+  const [knockoutViewMode, setKnockoutViewMode] = useState<"list" | "bracket">("bracket");
   const token = (() => {
     const href = window.location.href;
     const match = href.match(/[?&]token=([^&#]*)/);
@@ -76,6 +261,8 @@ export default function Simulator({ onRouteChange }: { onRouteChange?: (route: s
     publishError,
     publishCreatorBracket,
     viewingCreatorName,
+    overrideMatchScore,
+    resetMatch,
   } = useTournamentStore();
 
   const STAGE_LABELS = isTr ? STAGE_LABELS_TR : STAGE_LABELS_EN;
@@ -464,6 +651,38 @@ export default function Simulator({ onRouteChange }: { onRouteChange?: (route: s
                   </div>
                 )}
 
+                {activeStage !== "GROUP" && (
+                  <div className="flex items-center justify-between border-b-2 border-zinc-900 pb-3 select-none">
+                    <span className="text-[10px] font-mono text-[#00E5FF] font-black uppercase tracking-wider">
+                      {isTr ? "⚡ GÖRÜNÜM MODU" : "⚡ VIEW MODE"}
+                    </span>
+                    <div className="flex bg-zinc-950 p-1 border-2 border-black">
+                      <button
+                        onClick={() => setKnockoutViewMode("list")}
+                        className={`px-3 py-1.5 text-[9px] font-mono font-black uppercase tracking-widest transition-all cursor-pointer ${
+                          knockoutViewMode === "list"
+                            ? "bg-[#FFE600] text-black shadow-[1.5px_1.5px_0_#000]"
+                            : "text-zinc-500 hover:text-zinc-300"
+                        }`}
+                        style={{ borderRadius: "0px" }}
+                      >
+                        📋 {isTr ? "MAÇ LİSTESİ" : "MATCH LIST"}
+                      </button>
+                      <button
+                        onClick={() => setKnockoutViewMode("bracket")}
+                        className={`px-3 py-1.5 text-[9px] font-mono font-black uppercase tracking-widest transition-all cursor-pointer ${
+                          knockoutViewMode === "bracket"
+                            ? "bg-[#00FF87] text-black shadow-[1.5px_1.5px_0_#000]"
+                            : "text-zinc-500 hover:text-zinc-300"
+                        }`}
+                        style={{ borderRadius: "0px" }}
+                      >
+                        🌿 {isTr ? "TURNUVA AĞACI" : "BRACKET TREE"}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 {filteredMatches.length > 0 ? (
                   activeStage === "GROUP" ? (
                     <div className="space-y-12">
@@ -494,11 +713,56 @@ export default function Simulator({ onRouteChange }: { onRouteChange?: (route: s
                       })}
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {filteredMatches.map((match) => (
-                        <MatchCard key={match.id} match={match} />
-                      ))}
-                    </div>
+                    knockoutViewMode === "list" ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-up">
+                        {filteredMatches.map((match) => (
+                          <MatchCard key={match.id} match={match} />
+                        ))}
+                      </div>
+                    ) : (
+                      /* VISUAL BRACKET TREE VIEW */
+                      <div className="space-y-4 animate-fade-up">
+                        <div className="w-full overflow-x-auto select-none py-6 px-4 bg-zinc-950 border-2 border-zinc-900 shadow-[4px_4px_0_#1A1916] custom-scrollbar">
+                          <div className="flex gap-12 min-w-[1000px]" style={{ height: activeStage === "R32" ? "1050px" : activeStage === "R16" ? "650px" : activeStage === "QF" ? "420px" : activeStage === "SF" ? "280px" : "190px" }}>
+                            {STAGE_ORDER.slice(STAGE_ORDER.indexOf(activeStage)).map((stage) => {
+                              const stageMatches = matches
+                                .filter((m) => m.stage === stage)
+                                .sort((a, b) => {
+                                  const numA = parseInt(a.id.split("-")[1], 10);
+                                  const numB = parseInt(b.id.split("-")[1], 10);
+                                  return numA - numB;
+                                });
+                              const color = STAGE_COLORS[stage];
+                              return (
+                                <div key={stage} className="flex-1 flex flex-col min-w-[190px] h-full">
+                                  {/* Column Header */}
+                                  <div className="text-center pb-2 border-b-2 border-zinc-900 mb-4 flex items-center justify-center space-x-1.5 font-mono">
+                                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
+                                    <span className="text-[9px] font-black uppercase tracking-wider" style={{ color: color }}>
+                                      {STAGE_LABELS[stage]}
+                                    </span>
+                                  </div>
+                                  {/* Column Nodes */}
+                                  <div className="flex-1 flex flex-col justify-around py-2">
+                                    {stageMatches.map((m) => (
+                                      <BracketNode
+                                        key={m.id}
+                                        match={m}
+                                        isTr={isTr}
+                                        isReadOnly={isReadOnly}
+                                        teams={teams}
+                                        overrideMatchScore={overrideMatchScore}
+                                        resetMatch={resetMatch}
+                                      />
+                                    ))}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    )
                   )
                 ) : (
                   <div className="py-20 text-center bg-zinc-900/40 border-2 border-zinc-800 shadow-[4px_4px_0_rgba(0,0,0,0.2)] flex flex-col items-center justify-center space-y-4">
