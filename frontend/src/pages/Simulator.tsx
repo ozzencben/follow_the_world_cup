@@ -103,54 +103,42 @@ function BracketNode({
 
       {/* Node Body */}
       {isEditing ? (
-        <form onSubmit={handleSave} className="p-1.5 space-y-1.5">
-          <div className="flex items-center justify-between gap-1">
-            <span className="font-mono text-[8px] text-zinc-400 truncate max-w-[50px]">{homeTeam?.abbr || "HOM"}</span>
-            <div className="flex items-center space-x-1">
-              <button
-                type="button"
-                onClick={() => setEditHome((p) => Math.max(0, p - 1))}
-                className="w-4 h-4 flex items-center justify-center bg-zinc-800 text-white font-black text-[9px] hover:bg-[#FF2D78] cursor-pointer"
-              >-</button>
-              <span className="w-4 text-center font-mono text-[10px] font-black text-white">{editHome}</span>
-              <button
-                type="button"
-                onClick={() => setEditHome((p) => Math.min(9, p + 1))}
-                className="w-4 h-4 flex items-center justify-center bg-zinc-800 text-white font-black text-[9px] hover:bg-[#00FF87] hover:text-black cursor-pointer"
-              >+</button>
-            </div>
-          </div>
-          <div className="flex items-center justify-between gap-1">
-            <span className="font-mono text-[8px] text-zinc-400 truncate max-w-[50px]">{awayTeam?.abbr || "AWY"}</span>
-            <div className="flex items-center space-x-1">
-              <button
-                type="button"
-                onClick={() => setEditAway((p) => Math.max(0, p - 1))}
-                className="w-4 h-4 flex items-center justify-center bg-zinc-800 text-white font-black text-[9px] hover:bg-[#FF2D78] cursor-pointer"
-              >-</button>
-              <span className="w-4 text-center font-mono text-[10px] font-black text-white">{editAway}</span>
-              <button
-                type="button"
-                onClick={() => setEditAway((p) => Math.min(9, p + 1))}
-                className="w-4 h-4 flex items-center justify-center bg-zinc-800 text-white font-black text-[9px] hover:bg-[#00FF87] hover:text-black cursor-pointer"
-              >+</button>
-            </div>
-          </div>
-          <div className="flex items-center gap-1.5 pt-0.5">
-            <button
-              type="submit"
-              className="flex-1 py-0.5 bg-[#00FF87] hover:bg-[#00D06E] text-black font-black font-mono text-[8px] border border-black cursor-pointer"
-            >
-              OK
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsEditing(false)}
-              className="px-1.5 py-0.5 bg-zinc-800 hover:bg-zinc-700 text-white font-black font-mono text-[8px] border border-zinc-700 cursor-pointer"
-            >
-              X
-            </button>
-          </div>
+        <form onSubmit={handleSave} className="flex items-center justify-center space-x-1.5 p-2 bg-zinc-950">
+          <input
+            type="number"
+            min="0"
+            max="99"
+            value={editHome}
+            onChange={(e) => setEditHome(Math.max(0, parseInt(e.target.value, 10) || 0))}
+            className="w-7 h-6 text-center bg-zinc-900 border border-zinc-800 text-white font-mono font-black text-[10px] focus:border-[#00FF87] focus:outline-none"
+            style={{ borderRadius: "0px" }}
+            autoFocus
+          />
+          <span className="text-zinc-600 font-mono font-bold text-[10px]">:</span>
+          <input
+            type="number"
+            min="0"
+            max="99"
+            value={editAway}
+            onChange={(e) => setEditAway(Math.max(0, parseInt(e.target.value, 10) || 0))}
+            className="w-7 h-6 text-center bg-zinc-900 border border-zinc-800 text-white font-mono font-black text-[10px] focus:border-[#00FF87] focus:outline-none"
+            style={{ borderRadius: "0px" }}
+          />
+          <button
+            type="submit"
+            className="w-6 h-6 bg-[#00FF87] text-zinc-950 flex items-center justify-center font-bold text-[10px] border border-black cursor-pointer shadow-[1px_1px_0_#000]"
+            style={{ borderRadius: "0px" }}
+          >
+            ✓
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsEditing(false)}
+            className="w-6 h-6 bg-zinc-850 text-zinc-400 flex items-center justify-center font-bold text-[10px] border border-zinc-700 cursor-pointer"
+            style={{ borderRadius: "0px" }}
+          >
+            ✕
+          </button>
         </form>
       ) : (
         <div

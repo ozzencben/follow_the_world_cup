@@ -122,48 +122,41 @@ export default function MatchCard({ match }: MatchCardProps) {
         {/* CLICKABLE INTERACTIVE SCORES AREA */}
         <div className="shrink-0 flex items-center justify-center px-2">
           {isEditing ? (
-            <form onSubmit={handleSave} className="flex items-center space-x-2 bg-black border-[1.5px] border-[#00E5FF] p-1.5 shadow-[2px_2px_0px_rgba(0,229,255,0.2)]">
-              <div className="flex items-center space-x-1 bg-zinc-950 border border-zinc-800 p-0.5">
-                <button
-                  type="button"
-                  onClick={() => setEditHome(prev => Math.max(0, prev - 1))}
-                  className="w-6 h-6 flex items-center justify-center bg-zinc-900 border border-zinc-850 text-white font-black hover:bg-[#FF2D78] hover:text-white cursor-pointer select-none text-[10px]"
-                >
-                  -
-                </button>
-                <span className="w-6 text-center text-white font-mono font-black text-xs">{editHome}</span>
-                <button
-                  type="button"
-                  onClick={() => setEditHome(prev => Math.min(9, prev + 1))}
-                  className="w-6 h-6 flex items-center justify-center bg-zinc-900 border border-zinc-850 text-white font-black hover:bg-[#00FF87] hover:text-black cursor-pointer select-none text-[10px]"
-                >
-                  +
-                </button>
-              </div>
-              <span className="text-zinc-500 font-mono font-bold text-xs">:</span>
-              <div className="flex items-center space-x-1 bg-zinc-950 border border-zinc-800 p-0.5">
-                <button
-                  type="button"
-                  onClick={() => setEditAway(prev => Math.max(0, prev - 1))}
-                  className="w-6 h-6 flex items-center justify-center bg-zinc-900 border border-zinc-850 text-white font-black hover:bg-[#FF2D78] hover:text-white cursor-pointer select-none text-[10px]"
-                >
-                  -
-                </button>
-                <span className="w-6 text-center text-white font-mono font-black text-xs">{editAway}</span>
-                <button
-                  type="button"
-                  onClick={() => setEditAway(prev => Math.min(9, prev + 1))}
-                  className="w-6 h-6 flex items-center justify-center bg-zinc-900 border border-zinc-850 text-white font-black hover:bg-[#00FF87] hover:text-black cursor-pointer select-none text-[10px]"
-                >
-                  +
-                </button>
-              </div>
+            <form onSubmit={handleSave} className="flex items-center space-x-1.5 bg-zinc-950 p-1 border border-[#00E5FF] shadow-[2px_2px_0px_rgba(0,229,255,0.15)]">
+              <input
+                type="number"
+                min="0"
+                max="99"
+                value={editHome}
+                onChange={e => setEditHome(Math.max(0, parseInt(e.target.value, 10) || 0))}
+                className="w-8 h-7 text-center bg-zinc-900 border border-zinc-800 text-white font-mono font-black text-xs focus:border-[#00FF87] focus:outline-none"
+                style={{ borderRadius: "0px" }}
+                autoFocus
+              />
+              <span className="text-zinc-600 font-mono font-bold text-xs">:</span>
+              <input
+                type="number"
+                min="0"
+                max="99"
+                value={editAway}
+                onChange={e => setEditAway(Math.max(0, parseInt(e.target.value, 10) || 0))}
+                className="w-8 h-7 text-center bg-zinc-900 border border-zinc-800 text-white font-mono font-black text-xs focus:border-[#00FF87] focus:outline-none"
+                style={{ borderRadius: "0px" }}
+              />
               <button
                 type="submit"
-                className="p-1.5 bg-[#00FF87] hover:bg-[#00D06E] text-black font-black font-mono text-[9px] border border-black shadow-[1px_1px_0px_#000] cursor-pointer"
-                style={{ borderRadius: "0" }}
+                className="w-7 h-7 bg-[#00FF87] text-zinc-950 flex items-center justify-center font-bold text-[10px] border border-black cursor-pointer shadow-[1px_1px_0_#000]"
+                style={{ borderRadius: "0px" }}
               >
-                {t("match.save")}
+                ✓
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsEditing(false)}
+                className="w-7 h-7 bg-zinc-850 text-zinc-400 flex items-center justify-center font-bold text-[10px] border border-zinc-700 cursor-pointer"
+                style={{ borderRadius: "0px" }}
+              >
+                ✕
               </button>
             </form>
           ) : (
