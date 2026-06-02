@@ -1187,7 +1187,7 @@ function SimulationGuidePanel() {
                   },
                   {
                     title: "Sahne Korkusu Cezası (Stage Fright Penalty)",
-                    desc: "Eğer bir takımın baz ELO'su 1650'den düşük, rakibinin ELO'su ise 1950'den büyükse; zayıf takımın gol beklentisi (Lambda) acımasızca %50 oranında tırpanlanır. Dev sahneye çıkan zayıf ekiplerin tecrübesizliği bu nerf kuralıyla simüle edilir.",
+                    desc: "Baz ELO'su < 1650 olan takımlar, baz ELO'su > 1950 olan devlere karşı oynarken gol beklentileri %50 tırpanlanır. Eğer dev takım galibiyet serisindeyse, bu korku sınırı 1750 ELO'ya genişler ve rakiplerin gol beklentisi seriye bağlı olarak %65'e kadar (0.35x çarpanı) düşer.",
                     badge: "AKTİF",
                     color: "#FF2D78",
                   },
@@ -1208,6 +1208,18 @@ function SimulationGuidePanel() {
                     desc: "Ev sahiplerine (ABD, Meksika, Kanada) verilen +100 moral puanı korunur. Ancak ev sahibi elit ELO seviyesine (1950 ELO) sahip değilse, moralsel CSR puanı maksimum 1950 ile sınırlandırılarak turnuvayı haksızca ve gerçek dışı şekilde domine etmeleri engellenir.",
                     badge: "AKTİF",
                     color: "#00FF87",
+                  },
+                  {
+                    title: "Dinamik Turnuva Form Serileri (Tournament Win Streaks)",
+                    desc: "Turnuva boyunca üst üste galibiyet alan takımların yakaladığı performans ve morali modeller. Standart takımlar için her ardışık galibiyet CSR puanına +12 form bonusu ekler (maksimum +60 CSR). Bu seriler grup aşamasında kronolojik olarak taranır.",
+                    badge: "AKTİF",
+                    color: "#00FF87",
+                  },
+                  {
+                    title: "Durdurulamaz Dev & Dev Korkusu (Unstoppable Giant / Juggernaut)",
+                    desc: "Galibiyet serisi yakalayan dev takımlar (baz ELO >= 1950) doğrusal olmayan, agresif bir bonus (+280 CSR'ye kadar!) kazanır. Ayrıca, serisi olan devlerin yaydığı ezici aura, rakibin gol beklentisini ekstra %30'a kadar baskılar ve rakiplerin Sahne Korkusu tetiklenme sınırını 1750 ELO'ya kadar yükselterek psikolojik olarak onları kilitler.",
+                    badge: "AKTİF",
+                    color: "#00E5FF",
                   },
                 ].map((rule, idx) => (
                   <div key={idx} className="bg-black/40 border border-zinc-800/60 p-4 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -1285,7 +1297,7 @@ function SimulationGuidePanel() {
                   },
                   {
                     title: "Stage Fright Nerf",
-                    desc: "If a weak team (base ELO < 1650) plays an elite giant (base ELO > 1950) in a knockout round, the underdog's expected goals (Lambda) is nerfed by 50% to simulate lack of experience on the big stage.",
+                    desc: "Underdogs (base ELO < 1650) playing giants (base ELO > 1950) have their expected goals nerfed by 50%. If the giant is on a win streak, this fear threshold expands to 1750 ELO, and the underdog's scoring chance drops by up to 65% based on streak.",
                     badge: "ACTIVE",
                     color: "#FF2D78",
                   },
@@ -1306,6 +1318,18 @@ function SimulationGuidePanel() {
                     desc: "Hosts (USA, Mexico, Canada) receive a +100 ELO moral boost. However, if the host is not an elite football nation (base ELO < 1950), their total CSR is capped at 1950, preventing unrealistic world cup runs.",
                     badge: "ACTIVE",
                     color: "#00FF87",
+                  },
+                  {
+                    title: "Dynamic Tournament Win Streaks",
+                    desc: "Models momentum and morale from consecutive wins in the current tournament. For regular teams, each successive victory grants a +12 form bonus to their CSR rating (capped at +60 CSR). These streaks are calculated chronologically during group stages.",
+                    badge: "ACTIVE",
+                    color: "#00FF87",
+                  },
+                  {
+                    title: "Unstoppable Giant & Juggernaut Terror",
+                    desc: "Winning giant teams (base ELO >= 1950) gain an aggressive, non-linear strength bonus (up to +280 CSR). They emit a supercharged aura that dampens opponent expected goals by up to an extra 30% and raises the opponent's Stage Fright threshold to 1750 ELO, paralyzing them.",
+                    badge: "ACTIVE",
+                    color: "#00E5FF",
                   },
                 ].map((rule, idx) => (
                   <div key={idx} className="bg-black/40 border border-zinc-800/60 p-4 flex flex-col sm:flex-row sm:items-start justify-between gap-4">

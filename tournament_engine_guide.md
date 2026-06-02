@@ -46,6 +46,11 @@ $$\text{CSR} = 0.55 \times R_{\text{Elo}} + 0.20 \times R_{\text{Kadro}} + 0.10 
 *   **Veri Kaynağı:** TSV verilerindeki son 1 yıllık ELO değişim puanı (`team.oneYearRatingChange`).
 *   **Çalışma Mantığı:** Takımın son 1 yılda yükselen bir grafik mi çizdiğini yoksa çöküşte mi olduğunu belirler. Artı veya eksi yöndeki bu değişim doğrudan eklenerek form durumu simüle edilir.
 
+#### E. Dinamik Turnuva Form Serileri (Tournament Win Streaks)
+*   **Veri Kaynağı:** Turnuva boyunca oynanan ve tamamlanan güncel maçların kronolojik geçmişi.
+*   **Çalışma Mantığı:** Turnuvada o ana kadar peş peşe galibiyetler alan takımların yakaladığı moral ve ritmi modeller. Standart takımlar için galibiyet başına $+12$ CSR (maksimum $+60$ CSR) form bonusu verilir. Dev takımlar (baz ELO $\ge 1950$) için ise bu bonus katlanarak **$+280$ CSR** seviyesine kadar ulaşır (Durdurulamaz Dev Modeli). Bu bonus doğrudan takımların o maçtaki kompozit gücüne eklenir:
+    $$\text{CSR}_{\text{final}} = \text{CSR}_{\text{base}} + \text{StreakBonus}$$
+
 ---
 
 ## 🥅 2. Gol Beklentisi ($\lambda$ - Lambda) Hesaplaması
@@ -84,20 +89,29 @@ Simülasyon motoru, yukarıdaki temel formüle ek olarak, gerçek futbol dinamik
 #### 4. Şişirilmiş İstatistik Filtresi (Fake Stats Normalization)
 *   İki takım arasındaki CSR farkı **300'den büyükse**, zayıf takımın maç başı gol ortalaması (`goalsForAvg`) en fazla **1.1** olarak sınırlandırılır.
 
-#### 5. Devlerin Aurası (Juggernaut Modifier)
-*   Baz ELO puanı **2000'in üzerinde** olan dev rakiplere karşı oynayan takımların gol beklentisi ($\lambda$) doğrudan **%15** oranında düşürülür (rakip katsayısı $\times 0.85$).
+#### 5. Devlerin Aurası (Juggernaut Modifier & Supercharged Aura)
+*   Baz ELO puanı **1950'nin üzerinde** olan dev rakiplere karşı oynayan takımların gol beklentisi ($\lambda$) normalde %10 ile %15 oranında baskılanır. Eğer dev takım turnuvada peş peşe galibiyet serisi yakalamışsa, **ezici aura gücü katlanarak artar**. Galibiyet başına rakibin gol beklentisi ekstra %6 (maksimum %30 ek düşüşle, toplamda %45 baskılama!) tırpanlanır:
+    $$\lambda_{\text{rakip}} = \lambda_{\text{rakip}} \times \max(0.55, \, \text{baseAura} - 0.06 \times \text{streak})$$
 
 #### 6. Altın Jenerasyon Bonusu (Golden Generation / Wonderkids)
-*   Yaş ortalaması genç (`averageAge < 27`) ve kadro kalitesi yüksek (`squadValue > 300M €`) olan takımların gol beklentisi ($\lambda$) doğrudan **%10** artırılır (katsayı $\times 1.10$).
+*   Yaş ortalaması genç (`averageAge < 27`) ve kadro kalitesi yüksek (`squadValue > 500M €`) olan takımların gol beklentisi ($\lambda$) doğrudan **%10** artırılır (katsayı $\times 1.10$).
 
 #### 7. Efsanelerin Zırhı (Elite Plot Armor - Knockout Penalty)
 *   Eleme turlarında, baz ELO puanı **2000 ve üzerinde** olan elit devler karşısındaki tecrübesiz rakiplerin (CSR farkı $> 200$) gol beklentisi ($\lambda$) doğrudan **%20** oranında baltalanır (rakip katsayısı $\times 0.80$).
 
-#### 8. Sahne Korkusu (Stage Fright Penalty)
-*   Çok zayıf bir takım (baz ELO $< 1650$), turnuvanın süper devlerinden biriyle (baz ELO $> 1950$) eşleştiğinde zayıf takımın gol beklentisi ($\lambda$) doğrudan **%50** oranında düşürülür (katsayı $\times 0.50$).
+#### 8. Sahne Korkusu & Dev Korkusu (Stage Fright & Juggernaut Terror Penalty)
+*   Baz ELO'su $< 1650$ olan tecrübesiz takımlar, baz ELO'su $> 1950$ olan bir dünya deviyle eşleştiğinde gol beklentileri ($\lambda$) normalde **%50** oranında düşürülür. Eğer dev takım galibiyet serisindeyse, **korku eşiği 1750 ELO sınırına kadar yükselir** ve rakiplerin gol beklentisi serinin büyüklüğüne bağlı olarak **%65'e kadar (0.35x çarpanı)** baskılanır.
 
 #### 9. Büyük Maç Baskısı (Variance Dampening)
 *   Çeyrek Final, Yarı Final ve Final (QF, SF, F) gibi aşamalarda her iki takımın da gol beklentisi ($\lambda$) doğrudan **%25** oranında kısılır (her iki katsayı $\times 0.75$).
+
+#### 10. Durdurulamaz Dev Bonusu (Unstoppable Giant / Juggernaut CSR Boost)
+*   Galibiyet serisi yakalayan devlerin (baz ELO $\ge 1950$) kompozit gücündeki (CSR) doğrusal olmayan, agresif form patlamasıdır. Seri uzadıkça devlerin gücü durdurulamaz bir şekilde tırmanır:
+    *   1 Win Streak: $+30$ CSR
+    *   2 Wins Streak: $+75$ CSR
+    *   3 Wins Streak: $+130$ CSR
+    *   4 Wins Streak: $+200$ CSR
+    *   5+ Wins Streak: **$+280$ CSR** *(Maksimum Tavan)*
 
 #### 📊 Lambda Sınırlandırma Aralığı (Lambda Bounding):
 *   Tüm filtreler uygulandıktan sonra, nihai Lambda ($\lambda$) değerleri **`0.25`** ile **`4.25`** aralığına zorla sıkıştırılır:
