@@ -5,6 +5,8 @@
  * Decoupled from UI rendering, highly optimized, and suitable for Web Worker execution.
  */
 
+import { getRealScore } from "./realScores";
+
 export interface SimulatorTeam {
     code: string;
     nameEn: string;
@@ -40,7 +42,10 @@ export interface MatchState {
     winnerCode: string | null;
     nextMatchId: string | null; // ID of the match the winner moves to
     roundId?: number; // Dynamic group round ID (1, 2, or 3)
+    realHomeScore?: number | null;
+    realAwayScore?: number | null;
 }
+
 
 export interface GroupStanding {
     teamCode: string;
@@ -520,10 +525,17 @@ export class TournamentEngine {
         for (let rId = 1; rId <= 3; rId++) {
             statesMap.forEach((m) => {
                 if (m.stage === "GROUP" && m.roundId === rId && !m.isOverridden) {
-                    if (m.simulatedHomeScore === null || m.simulatedAwayScore === null) {
-                        const tA = this.getTeam(m.homeTeamCode);
-                        const tB = this.getTeam(m.awayTeamCode);
-                        if (tA && tB) {
+                    const tA = this.getTeam(m.homeTeamCode);
+                    const tB = this.getTeam(m.awayTeamCode);
+                    if (tA && tB) {
+                        const realScore = getRealScore(tA.nameEn, tB.nameEn);
+                        if (realScore) {
+                            m.simulatedHomeScore = realScore.homeScore;
+                            m.simulatedAwayScore = realScore.awayScore;
+                            m.winnerCode = realScore.homeScore > realScore.awayScore ? m.homeTeamCode : (realScore.awayScore > realScore.homeScore ? m.awayTeamCode : null);
+                            m.realHomeScore = realScore.homeScore;
+                            m.realAwayScore = realScore.awayScore;
+                        } else if (m.simulatedHomeScore === null || m.simulatedAwayScore === null) {
                             const currentMatches = Array.from(statesMap.values());
                             const streakA = getTournamentWinStreak(m.homeTeamCode, currentMatches);
                             const streakB = getTournamentWinStreak(m.awayTeamCode, currentMatches);
@@ -662,20 +674,33 @@ export class TournamentEngine {
             }
 
             // Simulate if needed
-            if (!updatedMatch.isOverridden && (updatedMatch.simulatedHomeScore === null || updatedMatch.simulatedAwayScore === null)) {
+            if (!updatedMatch.isOverridden) {
                 const tA = this.getTeam(updatedMatch.homeTeamCode);
                 const tB = this.getTeam(updatedMatch.awayTeamCode);
                 if (tA && tB) {
-                    const currentMatches = Array.from(statesMap.values());
-                    const streakA = getTournamentWinStreak(updatedMatch.homeTeamCode, currentMatches);
-                    const streakB = getTournamentWinStreak(updatedMatch.awayTeamCode, currentMatches);
+                    const realScore = getRealScore(tA.nameEn, tB.nameEn);
+                    if (realScore) {
+                        updatedMatch.simulatedHomeScore = realScore.homeScore;
+                        updatedMatch.simulatedAwayScore = realScore.awayScore;
+                        if (realScore.homePenaltyScore !== undefined && realScore.awayPenaltyScore !== undefined) {
+                            updatedMatch.winnerCode = realScore.homePenaltyScore > realScore.awayPenaltyScore ? updatedMatch.homeTeamCode : updatedMatch.awayTeamCode;
+                        } else {
+                            updatedMatch.winnerCode = realScore.homeScore > realScore.awayScore ? updatedMatch.homeTeamCode : updatedMatch.awayTeamCode;
+                        }
+                        updatedMatch.realHomeScore = realScore.homeScore;
+                        updatedMatch.realAwayScore = realScore.awayScore;
+                    } else if (updatedMatch.simulatedHomeScore === null || updatedMatch.simulatedAwayScore === null) {
+                        const currentMatches = Array.from(statesMap.values());
+                        const streakA = getTournamentWinStreak(updatedMatch.homeTeamCode, currentMatches);
+                        const streakB = getTournamentWinStreak(updatedMatch.awayTeamCode, currentMatches);
 
-                    const matchSeed = hashStringTo32BitInt(`${seed}_${matchId}`);
-                    const matchRandom = createMulberry32(matchSeed);
-                    const res = simulateMatch(tA, tB, "R32", matchRandom, streakA, streakB);
-                    updatedMatch.simulatedHomeScore = res.homeScore;
-                    updatedMatch.simulatedAwayScore = res.awayScore;
-                    updatedMatch.winnerCode = res.winnerCode;
+                        const matchSeed = hashStringTo32BitInt(`${seed}_${matchId}`);
+                        const matchRandom = createMulberry32(matchSeed);
+                        const res = simulateMatch(tA, tB, "R32", matchRandom, streakA, streakB);
+                        updatedMatch.simulatedHomeScore = res.homeScore;
+                        updatedMatch.simulatedAwayScore = res.awayScore;
+                        updatedMatch.winnerCode = res.winnerCode;
+                    }
                 } else {
                     updatedMatch.winnerCode = updatedMatch.homeTeamCode !== "TBD" ? updatedMatch.homeTeamCode : "TBD";
                 }
@@ -740,20 +765,33 @@ export class TournamentEngine {
                 }
 
                 // Simulate
-                if (!updatedMatch.isOverridden && (updatedMatch.simulatedHomeScore === null || updatedMatch.simulatedAwayScore === null)) {
+                if (!updatedMatch.isOverridden) {
                     const tA = this.getTeam(updatedMatch.homeTeamCode);
                     const tB = this.getTeam(updatedMatch.awayTeamCode);
                     if (tA && tB) {
-                        const currentMatches = Array.from(statesMap.values());
-                        const streakA = getTournamentWinStreak(updatedMatch.homeTeamCode, currentMatches);
-                        const streakB = getTournamentWinStreak(updatedMatch.awayTeamCode, currentMatches);
+                        const realScore = getRealScore(tA.nameEn, tB.nameEn);
+                        if (realScore) {
+                            updatedMatch.simulatedHomeScore = realScore.homeScore;
+                            updatedMatch.simulatedAwayScore = realScore.awayScore;
+                            if (realScore.homePenaltyScore !== undefined && realScore.awayPenaltyScore !== undefined) {
+                                updatedMatch.winnerCode = realScore.homePenaltyScore > realScore.awayPenaltyScore ? updatedMatch.homeTeamCode : updatedMatch.awayTeamCode;
+                            } else {
+                                updatedMatch.winnerCode = realScore.homeScore > realScore.awayScore ? updatedMatch.homeTeamCode : updatedMatch.awayTeamCode;
+                            }
+                            updatedMatch.realHomeScore = realScore.homeScore;
+                            updatedMatch.realAwayScore = realScore.awayScore;
+                        } else if (updatedMatch.simulatedHomeScore === null || updatedMatch.simulatedAwayScore === null) {
+                            const currentMatches = Array.from(statesMap.values());
+                            const streakA = getTournamentWinStreak(updatedMatch.homeTeamCode, currentMatches);
+                            const streakB = getTournamentWinStreak(updatedMatch.awayTeamCode, currentMatches);
 
-                        const matchSeed = hashStringTo32BitInt(`${seed}_${matchId}`);
-                        const matchRandom = createMulberry32(matchSeed);
-                        const res = simulateMatch(tA, tB, stage, matchRandom, streakA, streakB);
-                        updatedMatch.simulatedHomeScore = res.homeScore;
-                        updatedMatch.simulatedAwayScore = res.awayScore;
-                        updatedMatch.winnerCode = res.winnerCode;
+                            const matchSeed = hashStringTo32BitInt(`${seed}_${matchId}`);
+                            const matchRandom = createMulberry32(matchSeed);
+                            const res = simulateMatch(tA, tB, stage, matchRandom, streakA, streakB);
+                            updatedMatch.simulatedHomeScore = res.homeScore;
+                            updatedMatch.simulatedAwayScore = res.awayScore;
+                            updatedMatch.winnerCode = res.winnerCode;
+                        }
                     } else {
                         updatedMatch.winnerCode = updatedMatch.homeTeamCode !== "TBD" ? updatedMatch.homeTeamCode : "TBD";
                     }

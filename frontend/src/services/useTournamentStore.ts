@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import api from "./api";
 import { TournamentEngine } from "./TournamentEngine";
+import { getRealScore } from "./realScores";
 import type {
   SimulatorTeam,
   MatchState,
@@ -189,19 +190,23 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
             const team = simulatorTeams.find((t) => t.code === homeCode);
             const grp = team ? team.group.toUpperCase() : "A";
 
+            const realScore = getRealScore(m.homeSquadName, m.awaySquadName);
+
             groupMatches.push({
               id: `G-${grp}-${m.id}`,
               stage: "GROUP",
               homeTeamCode: homeCode,
               awayTeamCode: awayCode,
               isOverridden: false,
-              simulatedHomeScore: null,
-              simulatedAwayScore: null,
+              simulatedHomeScore: realScore ? realScore.homeScore : null,
+              simulatedAwayScore: realScore ? realScore.awayScore : null,
               userHomeScore: null,
               userAwayScore: null,
-              winnerCode: null,
+              winnerCode: realScore ? (realScore.homeScore > realScore.awayScore ? homeCode : (realScore.awayScore > realScore.homeScore ? awayCode : null)) : null,
               nextMatchId: null,
               roundId: round.id,
+              realHomeScore: realScore ? realScore.homeScore : null,
+              realAwayScore: realScore ? realScore.awayScore : null,
             });
           });
         }

@@ -1,0 +1,28 @@
+2026-06-08 10:02:11.540 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-06-08 10:02:11.541 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-06-08 10:02:11.541 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-06-08 10:02:11.542 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-06-08 10:02:11.852 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-06-08 10:02:11.853 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-06-08 10:02:11.854 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-06-08 10:02:11.854 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-06-08 12:49:58.049 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-06-08 12:49:58.050 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-06-08 12:49:58.051 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-06-08 12:49:58.049 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-06-08 12:49:58.052 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-06-08 12:49:58.050 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-06-08 12:49:58.051 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-06-08 12:49:58.052 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-06-08 17:03:18.551 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-06-08 17:03:18.557 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-06-08 17:03:18.567 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-06-08 17:03:18.567 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-06-08 17:03:18.853 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-06-08 17:03:18.853 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-06-08 17:03:18.854 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-06-08 17:03:18.857 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2026-06-10 08:59:52.332 | INFO     | app.utils.logger:setup_app_logging:88 - Structured logging initialized via Loguru successfully.
+2026-06-10 08:59:52.332 | INFO     | app.core.lifespan:lifespan:14 - Initializing FollowTheWorldCup.com Backend Application...
+2026-06-10 08:59:52.333 | INFO     | app.core.lifespan:lifespan:15 - FastAPI lifespan startup hook completed.
+2026-06-10 08:59:52.333 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.

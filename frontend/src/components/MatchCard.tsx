@@ -83,17 +83,19 @@ export default function MatchCard({ match }: MatchCardProps) {
             {/* Upper header ribbon indicating stage info and override badge */}
             <div className={`flex items-center justify-between px-4 py-2 border-b-2 border-black font-mono text-[9px] tracking-wider transition-colors duration-200 ${match.isOverridden
                     ? "bg-[#FFE600] text-black font-black"
-                    : "bg-zinc-950 text-zinc-400"
+                    : match.realHomeScore !== undefined && match.realHomeScore !== null
+                        ? "bg-[#00FF87] text-zinc-950 font-black"
+                        : "bg-zinc-950 text-zinc-400"
                 }`}>
                 <div className="flex items-center space-x-2">
-                    <span className={`w-1.5 h-1.5 rounded-full ${match.isOverridden ? "bg-black" : "bg-[#00E5FF]"}`} />
-                    <span className={`font-extrabold uppercase ${match.isOverridden ? "text-black font-black" : "text-white"}`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${match.isOverridden ? "bg-black" : (match.realHomeScore !== undefined && match.realHomeScore !== null ? "bg-zinc-950" : "bg-[#00E5FF]")}`} />
+                    <span className={`font-extrabold uppercase ${match.isOverridden ? "text-black font-black" : (match.realHomeScore !== undefined && match.realHomeScore !== null ? "text-zinc-950 font-black" : "text-white")}`}>
                         {match.stage === "GROUP"
                             ? (currentLang.startsWith("tr") ? `GRUP AŞAMASI • ${match.roundId}. TUR` : `GROUP STAGE • ROUND ${match.roundId}`)
                             : `${match.stage} STAGE`}
                     </span>
-                    <span className={match.isOverridden ? "text-black/55 font-bold" : "text-zinc-600 font-medium"}>|</span>
-                    <span className={`font-bold uppercase ${match.isOverridden ? "text-black/80 font-black" : "text-zinc-500"}`}>
+                    <span className={match.isOverridden ? "text-black/55 font-bold" : (match.realHomeScore !== undefined && match.realHomeScore !== null ? "text-zinc-950/40 font-bold" : "text-zinc-600 font-medium")}>|</span>
+                    <span className={`font-bold uppercase ${match.isOverridden ? "text-black/80 font-black" : (match.realHomeScore !== undefined && match.realHomeScore !== null ? "text-zinc-950/80 font-black" : "text-zinc-500")}`}>
                         {match.stage === "GROUP"
                             ? (currentLang.startsWith("tr") ? `GRUP ${match.id.split("-")[1]}` : `GROUP ${match.id.split("-")[1]}`)
                             : match.id}
@@ -104,6 +106,13 @@ export default function MatchCard({ match }: MatchCardProps) {
                     <div className="flex items-center space-x-1 bg-black text-[#FFE600] px-2 py-0.5 border border-black text-[8px] font-black shadow-[1.5px_1.5px_0px_#000] animate-pulse">
                         <span>🔒</span>
                         <span className="tracking-widest uppercase">{currentLang.startsWith("tr") ? "KİLİTLİ SENARYO" : "LOCKED SCENARIO"}</span>
+                    </div>
+                )}
+
+                {!match.isOverridden && match.realHomeScore !== undefined && match.realHomeScore !== null && (
+                    <div className="flex items-center space-x-1 bg-black text-[#00FF87] px-2 py-0.5 border border-black text-[8px] font-black shadow-[1.5px_1.5px_0px_#000]">
+                        <span>🟢</span>
+                        <span className="tracking-widest uppercase">{currentLang.startsWith("tr") ? "RESMİ SKOR" : "OFFICIAL RESULT"}</span>
                     </div>
                 )}
             </div>
@@ -189,11 +198,23 @@ export default function MatchCard({ match }: MatchCardProps) {
                                         : "cursor-not-allowed opacity-50"
                                 }`}
                         >
-                            <span className={`font-mono text-base font-black tracking-tight ${match.isOverridden ? "text-[#FFE600]" : "text-white"}`}>
+                            <span className={`font-mono text-base font-black tracking-tight ${
+                                    match.isOverridden
+                                        ? "text-[#FFE600]"
+                                        : match.realHomeScore !== undefined && match.realHomeScore !== null
+                                            ? "text-[#00FF87] [text-shadow:0_0_8px_rgba(0,255,135,0.4)]"
+                                            : "text-white"
+                                }`}>
                                 {homeScore !== null ? homeScore : "-"}
                             </span>
                             <span className="text-zinc-600 font-mono font-bold text-xs">:</span>
-                            <span className={`font-mono text-base font-black tracking-tight ${match.isOverridden ? "text-[#FFE600]" : "text-white"}`}>
+                            <span className={`font-mono text-base font-black tracking-tight ${
+                                    match.isOverridden
+                                        ? "text-[#FFE600]"
+                                        : match.realHomeScore !== undefined && match.realHomeScore !== null
+                                            ? "text-[#00FF87] [text-shadow:0_0_8px_rgba(0,255,135,0.4)]"
+                                            : "text-white"
+                                }`}>
                                 {awayScore !== null ? awayScore : "-"}
                             </span>
                         </div>

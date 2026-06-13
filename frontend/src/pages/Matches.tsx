@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import api from "../services/api";
+import { getRealScore } from "../services/realScores";
 
 interface Match {
   id: number;
@@ -265,7 +266,10 @@ export default function Matches({ onSelectTeam }: MatchesProps) {
             const awayMapped = getMapped(match.awaySquadName);
             const homeInfo = teamsMap[homeMapped];
             const awayInfo = teamsMap[awayMapped];
-            const hasScore = match.homeScore !== null && match.awayScore !== null;
+            const realScore = getRealScore(match.homeSquadName, match.awaySquadName);
+            const displayHomeScore = realScore ? realScore.homeScore : match.homeScore;
+            const displayAwayScore = realScore ? realScore.awayScore : match.awayScore;
+            const hasScore = displayHomeScore !== null && displayAwayScore !== null;
             const homeColor = homeInfo?.teamEnrichmentData?.primaryColor || "#1A1916";
 
             return (
@@ -329,7 +333,7 @@ export default function Matches({ onSelectTeam }: MatchesProps) {
                         fontVariantNumeric: "tabular-nums",
                         textShadow: "0 0 8px rgba(0,255,135,0.4)",
                       }}>
-                        {match.homeScore} — {match.awayScore}
+                        {displayHomeScore} — {displayAwayScore}
                       </div>
                     ) : (
                       <div style={{
