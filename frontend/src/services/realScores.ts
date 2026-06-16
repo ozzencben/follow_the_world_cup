@@ -57,13 +57,13 @@ export const REAL_SCORES: Record<string, RealScore> = {
     "australia-turkiye": { homeScore: 2, awayScore: 0 },
 
     // Katar 1 - 1 İsviçre
-    "qatar-switzerland": { homeScore: 1, awayScore: 1 },
+    "qatar-switzerl": { homeScore: 1, awayScore: 1 },
 
     // Haiti 0 - 1 İskoçya
-    "haiti-scotland": { homeScore: 0, awayScore: 1 },
+    "haiti-scotl": { homeScore: 0, awayScore: 1 },
 
     // Hollanda 2 - 2 Japonya
-    "japan-netherlands": { homeScore: 2, awayScore: 2 },
+    "japan-netherls": { homeScore: 2, awayScore: 2 },
 
     // Fildişi Sahili 1 - 0 Ekvador
     "cotedivoire-ecuador": { homeScore: 1, awayScore: 0 },
@@ -75,7 +75,7 @@ export const REAL_SCORES: Record<string, RealScore> = {
     "belgium-egypt": { homeScore: 1, awayScore: 1 },
 
     // İran 2 - 2 Yeni Zelanda
-    "iriran-newzealand": { homeScore: 2, awayScore: 2 }
+    "iriran-newzeal": { homeScore: 2, awayScore: 2 }
 };
 
 // Bir maç için gerçek skor var mı diye kontrol eden fonksiyon
