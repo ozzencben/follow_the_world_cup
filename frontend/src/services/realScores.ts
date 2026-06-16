@@ -48,7 +48,13 @@ export const REAL_SCORES: Record<string, RealScore> = {
     "caboverde-spain": { homeScore: 0, awayScore: 0 },
 
     // Almanya 7 - 1 Curaçao
-    "curacao-germany": { homeScore: 1, awayScore: 7 }
+    "curacao-germany": { homeScore: 1, awayScore: 7 },
+
+    //Suudi Arabistan 1 - 1 Uruguay
+    "saduiarabia-uruguay"{ homeScore: 1, awayScore: 1 },
+
+    //Avustralya 2 - 0 Türkiye
+    "australia-turkey": { homeScore: 2, awayScore: 0 }
 };
 
 // Bir maç için gerçek skor var mı diye kontrol eden fonksiyon
