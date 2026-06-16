@@ -42,7 +42,10 @@ export const REAL_SCORES: Record<string, RealScore> = {
     "paraguay-usa": { homeScore: 4, awayScore: 1 },
 
     // Brezilya 1 - 1 Fas
-    "brazil-morocco": { homeScore: 1, awayScore: 1 }
+    "brazil-morocco": { homeScore: 1, awayScore: 1 },
+
+    //Ispanya 0 - 0 Yeşil Burun Adaları
+    "spain-caboverde": { homeScore: 0, awayScore: 0 }
 };
 
 // Bir maç için gerçek skor var mı diye kontrol eden fonksiyon
